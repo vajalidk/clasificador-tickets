@@ -71,13 +71,29 @@ El script, al ejecutarse:
    **rollback instantaneo** a una version anterior (editando el JSON para
    apuntar a un `.joblib` mas viejo) sin reentrenar ni redeployar codigo.
 
-Metricas obtenidas en la corrida de referencia (250 tickets, semilla 42):
+Metricas de la version actual (700 tickets, semilla 42 - ver 1.4.1):
 
-- **Categoria**: accuracy 0.98 en test (50 ejemplos).
-- **Urgencia**: accuracy 0.90 en test (50 ejemplos).
+- **Categoria**: accuracy 0.99 en test (140 ejemplos).
+- **Urgencia**: accuracy 0.91 en test (140 ejemplos).
 
 (El detalle completo por clase se imprime en consola al ejecutar el script y
 queda tambien guardado dentro de `models/latest.json`.)
+
+#### 1.2.1 Por que se amplio el dataset de 250 a 700 tickets
+
+Con el dataset original (250 tickets, ~10-12 plantillas por categoria) el
+modelo funcionaba bien en el propio dataset de prueba, pero fallaba con
+frases parafraseadas que un usuario real escribiria de forma distinta a las
+plantillas (por ejemplo, "me cobraron dos veces" en vez de "cargo
+duplicado"). Esto es exactamente el sintoma de un dataset con poca
+variedad lexica, no un problema del algoritmo. La solucion no fue cambiar
+de modelo, sino **ampliar el vocabulario de entrenamiento**:
+`generar_dataset.py` paso de ~10-12 a ~20-22 plantillas por categoria (mas
+sinonimos, mas formas de preguntar/quejarse/pedir informacion) y de 250 a
+700 tickets generados. El resultado: el modelo generaliza mejor a
+redacciones que nunca vio en las plantillas exactas, sin necesidad de
+cambiar `entrenar_modelo.py` en absoluto — el mismo pipeline TF-IDF + SVM
+simplemente aprende mejor con mas datos de entrada.
 
 ### 1.3 Por que un modelo clasico (TF-IDF + SVM) y no un LLM via API
 
@@ -283,6 +299,27 @@ baja=verde, tanto en el SQL de `obtener_estadisticas()` como en el
 JavaScript del dashboard) en vez de colores genericos por posicion — asi
 la urgencia alta siempre se lee como "alerta" sin importar cuantos
 tickets tenga cada categoria en un momento dado.
+
+**Criterio de color usado (por que no es un color por barra):** para la
+grafica de "Tickets por categoria" (comparar magnitudes entre categorias)
+se usa un **solo tono** (`#6c8cff`) en todas las barras — el eje X ya
+distingue las categorias, y pintar cada barra de un color distinto no
+aporta informacion nueva, solo ruido visual ("color categorico" tiene
+sentido cuando el color en si mismo es el dato que se quiere resaltar, no
+aqui). En cambio, "Tickets por urgencia" es semanticamente un estado
+(bueno/alerta/critico), asi que ahi si se usa una paleta de 3 colores fija
+con significado (rojo=alta, ambar=media, verde=baja) — es la misma paleta
+en `dashboard.html` y `nuevo_ticket.html` para que un color signifique lo
+mismo en toda la aplicacion.
+
+**Responsividad:** el layout completo (tarjetas, graficas, tabla) tiene
+puntos de quiebre explicitos en CSS (`@media max-width: 980px / 760px /
+480px`) en vez de depender solo de `auto-fit`/`minmax`, que se veia
+irregular en anchos intermedios (ej. media pantalla en un monitor grande).
+Ademas, cada `<canvas>` de Chart.js vive dentro de un `div` con altura fija
+y `position: relative`, con `maintainAspectRatio: false` — nunca se le
+pone `max-height` directo al `<canvas>`, que es la causa mas comun de que
+un grafico se vea deforme al cambiar el ancho de la ventana.
 
 ### 2.4 Base de datos (Supabase / Postgres)
 

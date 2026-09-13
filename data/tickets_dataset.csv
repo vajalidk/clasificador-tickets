@@ -1,251 +1,701 @@
 texto,categoria,urgencia
-"Es critico, necesito una respuesta hoy mismo. El sistema muestra datos desactualizados desde hace 10 dias.",soporte técnico,alta
-En algun momento les agradeceria revisar esto: El metodo de pago fue rechazado pero igual me generaron el cobro.,facturación,baja
-Agradeceria una respuesta en los proximos dias. La aplicacion no carga las imagenes y se queda en blanco.,soporte técnico,media
-"Agradeceria una respuesta en los proximos dias. No puedo iniciar sesion en el servicio web desde ayer, me marca error de servidor.",soporte técnico,media
-"Es critico, necesito una respuesta hoy mismo. mi cuenta consume demasiada memoria y se congela el navegador.",soporte técnico,alta
-"Cuando tengan oportunidad, Tienen alguna guia para empezar a usar el servicio web.",información general,media
-"Necesito ayuda inmediata, esto esta afectando mi trabajo. Llevo 8 dias esperando respuesta y nadie me contesta, es inaceptable.",queja,alta
-Agradeceria una respuesta en los proximos dias. Cuanto tiempo tarda en procesarse una solicitud de baja.,información general,media
-"Urgente: Estoy muy decepcionado con la calidad de la plataforma, no cumple lo prometido.",queja,alta
-En algun momento les agradeceria revisar esto: Por que el precio de mi cuenta subio sin previo aviso.,facturación,baja
-Necesito una copia de la factura del mes pasado para mi contabilidad.,facturación,media
-"Es critico, necesito una respuesta hoy mismo. Quiero solicitar el reembolso del pago duplicado del pedido 8007.",facturación,alta
-Urgente: Cancele mi cuenta hace 5 dias y todavia me siguen cobrando.,queja,alta
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. El descuento que me ofrecieron no se aplico en la factura 6482.",facturación,alta
-"Solo quiero comentar lo siguiente, no es urgente. El soporte tecnico cerro mi ticket sin resolver el problema.",queja,baja
-"Solo quiero comentar lo siguiente, no es urgente. Que metodos de pago aceptan para el sistema.",información general,baja
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. Necesito una copia de la factura del mes pasado para mi contabilidad.",facturación,alta
-Agradeceria una respuesta en los proximos dias. Necesito la factura fiscal con los datos de mi empresa para el pedido 2133.,facturación,media
-"Cuando tengan oportunidad, Quiero presentar una queja formal por el trato recibido en la sucursal.",queja,media
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. mi cuenta consume demasiada memoria y se congela el navegador.",soporte técnico,alta
-Urgente: El metodo de pago fue rechazado pero igual me generaron el cobro.,facturación,alta
-No reconozco un cargo de $95 en mi tarjeta relacionado con el sistema.,facturación,baja
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. No puedo iniciar sesion en mi suscripcion desde ayer, me marca error de servidor.",soporte técnico,alta
-"No es una emergencia, pero me gustaria resolverlo pronto. El metodo de pago fue rechazado pero igual me generaron el cobro.",facturación,media
-"Es critico, necesito una respuesta hoy mismo. Recibo el error 500 al intentar guardar los cambios en el plan premium.",soporte técnico,alta
-"Es critico, necesito una respuesta hoy mismo. El servicio al cliente me trato de forma grosera en el chat de soporte.",queja,alta
-"Cuando puedan, sin urgencia: Como contacto al equipo de ventas para una demo.",información general,baja
-En algun momento les agradeceria revisar esto: No reconozco un cargo de $299 en mi tarjeta relacionado con la app movil.,facturación,baja
-"No es una emergencia, pero me gustaria resolverlo pronto. No logro restablecer mi contrasena, el enlace del correo esta roto.",soporte técnico,media
-No reconozco un cargo de $228 en mi tarjeta relacionado con el sistema.,facturación,media
-Existe alguna app movil disponible para la app movil.,información general,baja
-Esto es una emergencia para mi negocio. El servicio al cliente me trato de forma grosera en el chat de soporte.,queja,alta
-El plan premium se cierra solo cada vez que intento subir un archivo.,soporte técnico,baja
-Urgente: el plan premium consume demasiada memoria y se congela el navegador.,soporte técnico,alta
-"Cuando puedan, sin urgencia: Solicito la cancelacion de mi suscripcion y el reembolso proporcional.",facturación,baja
-"Cuando tengan oportunidad, Cancele mi cuenta hace 2 dias y todavia me siguen cobrando.",queja,media
-"Sin ninguna prisa, Cuanto tiempo tarda en procesarse una solicitud de baja.",información general,baja
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. Pedi hablar con un supervisor y me colgaron la llamada.",queja,alta
-"Es critico, necesito una respuesta hoy mismo. Podrian confirmarme si el servicio esta disponible en mi pais.",información general,alta
-Agradeceria una respuesta en los proximos dias. No reconozco un cargo de $408 en mi tarjeta relacionado con el servicio web.,facturación,media
-Se me renovo la suscripcion automaticamente y no queria renovarla.,facturación,media
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. No logro restablecer mi contrasena, el enlace del correo esta roto.",soporte técnico,alta
-Existe alguna app movil disponible para el sistema.,información general,baja
-"Necesito ayuda inmediata, esto esta afectando mi trabajo. La sincronizacion entre el celular y la web de el plan premium no funciona.",soporte técnico,alta
-Como puedo cambiar el correo asociado a mi cuenta.,información general,baja
-"Cuando tengan oportunidad, Se me renovo la suscripcion automaticamente y no queria renovarla.",facturación,media
-Agradeceria una respuesta en los proximos dias. La sincronizacion entre el celular y la web de el servicio web no funciona.,soporte técnico,media
-En algun momento les agradeceria revisar esto: Podrian confirmarme si el servicio esta disponible en mi pais.,información general,baja
-Solicito la cancelacion de mi suscripcion y el reembolso proporcional.,facturación,media
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. Estoy muy decepcionado con la calidad de mi cuenta, no cumple lo prometido.",queja,alta
-Esto es una emergencia para mi negocio. Perdi acceso a mi cuenta despues de la ultima actualizacion.,soporte técnico,alta
-Urgente: Mi factura del pedido 4164 no coincide con el plan que contrate.,facturación,alta
-"Necesito ayuda inmediata, esto esta afectando mi trabajo. Quiero presentar una queja formal por el trato recibido en la sucursal.",queja,alta
-"No es una emergencia, pero me gustaria resolverlo pronto. Como contacto al equipo de ventas para una demo.",información general,media
-"Cuando tengan oportunidad, No puedo iniciar sesion en mi suscripcion desde ayer, me marca error de servidor.",soporte técnico,media
-"Sin ninguna prisa, Llevo 14 dias esperando respuesta y nadie me contesta, es inaceptable.",queja,baja
-"No es una emergencia, pero me gustaria resolverlo pronto. Donde puedo consultar los terminos y condiciones del servicio.",información general,media
-En algun momento les agradeceria revisar esto: Cuanto tiempo tarda en procesarse una solicitud de baja.,información general,baja
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. El servicio al cliente me trato de forma grosera en el chat de soporte.",queja,alta
-Solicito la cancelacion de mi suscripcion y el reembolso proporcional.,facturación,media
-"Sin ninguna prisa, el servicio web se cierra solo cada vez que intento subir un archivo.",soporte técnico,baja
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. Es la peor experiencia que he tenido con un servicio en linea.",queja,alta
-"Agradeceria una respuesta en los proximos dias. No logro restablecer mi contrasena, el enlace del correo esta roto.",soporte técnico,media
-"Cuando puedan, sin urgencia: La sincronizacion entre el celular y la web de el panel de control no funciona.",soporte técnico,baja
-"Solo quiero comentar lo siguiente, no es urgente. Que metodos de pago aceptan para el servicio web.",información general,baja
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. La aplicacion no carga las imagenes y se queda en blanco.",soporte técnico,alta
-Que metodos de pago aceptan para el sistema.,información general,media
-En algun momento les agradeceria revisar esto: La integracion con la API deja de responder despues de unos minutos.,soporte técnico,baja
-"Necesito ayuda inmediata, esto esta afectando mi trabajo. Pedi hablar con un supervisor y me colgaron la llamada.",queja,alta
-Me cobraron $332 de mas en la factura de este mes y no entiendo por que.,facturación,media
-Necesito informacion sobre las tarifas para mas de 10 usuarios.,información general,media
-"Solo quiero comentar lo siguiente, no es urgente. Existe alguna app movil disponible para el servicio web.",información general,baja
-Agradeceria una respuesta en los proximos dias. Es la peor experiencia que he tenido con un servicio en linea.,queja,media
-"Es critico, necesito una respuesta hoy mismo. No puedo iniciar sesion en el sistema desde ayer, me marca error de servidor.",soporte técnico,alta
-"Cuando puedan, sin urgencia: Como puedo actualizar mis datos de facturacion.",información general,baja
-"Cuando puedan, sin urgencia: Cuanto tiempo tarda en procesarse una solicitud de baja.",información general,baja
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. Esta es la tercera vez que reporto el mismo problema con el panel de control y nadie lo resuelve.",queja,alta
-Pedi hablar con un supervisor y me colgaron la llamada.,queja,baja
-En algun momento les agradeceria revisar esto: Cuales son los horarios de atencion al cliente.,información general,baja
-"Sin ninguna prisa, Donde puedo consultar los terminos y condiciones del servicio.",información general,baja
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. Quiero cambiar el plan de facturacion de mensual a anual.",facturación,alta
-"Sin ninguna prisa, El servicio al cliente me trato de forma grosera en el chat de soporte.",queja,baja
-"No es una emergencia, pero me gustaria resolverlo pronto. Existe alguna app movil disponible para el panel de control.",información general,media
-"Sin ninguna prisa, Como puedo cambiar el correo asociado a mi cuenta.",información general,baja
-"Cuando tengan oportunidad, Quiero cambiar el plan de facturacion de mensual a anual.",facturación,media
-"Es critico, necesito una respuesta hoy mismo. Por que el precio de mi suscripcion subio sin previo aviso.",facturación,alta
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. Quiero presentar una queja formal por el trato recibido en la sucursal.",queja,alta
-Agradeceria una respuesta en los proximos dias. Solicito la cancelacion de mi suscripcion y el reembolso proporcional.,facturación,media
-"Solo quiero comentar lo siguiente, no es urgente. Tienen alguna guia para empezar a usar el plan premium.",información general,baja
-Urgente: No me llega el correo de verificacion para activar mi cuenta.,soporte técnico,alta
-"No es una emergencia, pero me gustaria resolverlo pronto. No puedo iniciar sesion en el servicio web desde ayer, me marca error de servidor.",soporte técnico,media
-Esto es una emergencia para mi negocio. Esta es la tercera vez que reporto el mismo problema con el plan premium y nadie lo resuelve.,queja,alta
-"Cuando puedan, sin urgencia: Como puedo actualizar mis datos de facturacion.",información general,baja
-Urgente: Recibo el error 500 al intentar guardar los cambios en la plataforma.,soporte técnico,alta
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. Por que el precio de el sistema subio sin previo aviso.",facturación,alta
-"Cuando tengan oportunidad, La sincronizacion entre el celular y la web de la app movil no funciona.",soporte técnico,media
-"Solo quiero comentar lo siguiente, no es urgente. Donde puedo consultar los terminos y condiciones del servicio.",información general,baja
-Donde puedo consultar los terminos y condiciones del servicio.,información general,media
-Agradeceria una respuesta en los proximos dias. No reconozco un cargo de $190 en mi tarjeta relacionado con el sistema.,facturación,media
-Esto es una emergencia para mi negocio. Solicito la cancelacion de mi suscripcion y el reembolso proporcional.,facturación,alta
-"No es una emergencia, pero me gustaria resolverlo pronto. El descuento que me ofrecieron no se aplico en la factura 5649.",facturación,media
-"No es una emergencia, pero me gustaria resolverlo pronto. No logro restablecer mi contrasena, el enlace del correo esta roto.",soporte técnico,media
-"Cuando tengan oportunidad, Tienen alguna guia para empezar a usar el servicio web.",información general,media
-Agradeceria una respuesta en los proximos dias. Recibo el error 500 al intentar guardar los cambios en mi cuenta.,soporte técnico,media
-"Cuando tengan oportunidad, Tienen alguna guia para empezar a usar la plataforma.",información general,media
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. Solicito la cancelacion de mi suscripcion y el reembolso proporcional.",facturación,alta
-"Cuando tengan oportunidad, Cancele mi cuenta hace 4 dias y todavia me siguen cobrando.",queja,media
-"Cuando tengan oportunidad, Necesito una copia de la factura del mes pasado para mi contabilidad.",facturación,media
-Agradeceria una respuesta en los proximos dias. Cancele mi cuenta hace 9 dias y todavia me siguen cobrando.,queja,media
-"Solo quiero comentar lo siguiente, no es urgente. Solicito la cancelacion de mi suscripcion y el reembolso proporcional.",facturación,baja
-"Cuando puedan, sin urgencia: Solicito la cancelacion de mi suscripcion y el reembolso proporcional.",facturación,baja
-"Cuando tengan oportunidad, El metodo de pago fue rechazado pero igual me generaron el cobro.",facturación,media
-"No es una emergencia, pero me gustaria resolverlo pronto. Como contacto al equipo de ventas para una demo.",información general,media
-"Es critico, necesito una respuesta hoy mismo. Perdi acceso a mi cuenta despues de la ultima actualizacion.",soporte técnico,alta
-"Es critico, necesito una respuesta hoy mismo. Perdi acceso a mi cuenta despues de la ultima actualizacion.",soporte técnico,alta
-Esto es una emergencia para mi negocio. Ya escribi tres veces por este mismo tema y siempre me responden lo mismo sin ayudar.,queja,alta
-Como puedo actualizar mis datos de facturacion.,información general,media
-"No es una emergencia, pero me gustaria resolverlo pronto. Necesito informacion sobre las tarifas para mas de 10 usuarios.",información general,media
-"Solo quiero comentar lo siguiente, no es urgente. No reconozco un cargo de $19 en mi tarjeta relacionado con mi cuenta.",facturación,baja
-En algun momento les agradeceria revisar esto: Que metodos de pago aceptan para mi suscripcion.,información general,baja
-"Sin ninguna prisa, El descuento que me ofrecieron no se aplico en la factura 1744.",facturación,baja
-Agradeceria una respuesta en los proximos dias. el sistema consume demasiada memoria y se congela el navegador.,soporte técnico,media
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. el plan premium consume demasiada memoria y se congela el navegador.",soporte técnico,alta
-"Es critico, necesito una respuesta hoy mismo. No reconozco un cargo de $30 en mi tarjeta relacionado con el servicio web.",facturación,alta
-Esto es una emergencia para mi negocio. la plataforma se cierra solo cada vez que intento subir un archivo.,soporte técnico,alta
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. El servicio al cliente me trato de forma grosera en el chat de soporte.",queja,alta
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. Perdi acceso a mi cuenta despues de la ultima actualizacion.",soporte técnico,alta
-"No es una emergencia, pero me gustaria resolverlo pronto. Esta es la tercera vez que reporto el mismo problema con la plataforma y nadie lo resuelve.",queja,media
-"No es una emergencia, pero me gustaria resolverlo pronto. Cancele mi cuenta hace 11 dias y todavia me siguen cobrando.",queja,media
-Esto es una emergencia para mi negocio. Es la peor experiencia que he tenido con un servicio en linea.,queja,alta
-En algun momento les agradeceria revisar esto: Tienen alguna guia para empezar a usar mi cuenta.,información general,baja
-En algun momento les agradeceria revisar esto: Cuales son los horarios de atencion al cliente.,información general,baja
-La aplicacion no carga las imagenes y se queda en blanco.,soporte técnico,media
-"Necesito ayuda inmediata, esto esta afectando mi trabajo. La integracion con la API deja de responder despues de unos minutos.",soporte técnico,alta
-Urgente: el servicio web se cierra solo cada vez que intento subir un archivo.,soporte técnico,alta
-"No es una emergencia, pero me gustaria resolverlo pronto. Estoy muy decepcionado con la calidad de la app movil, no cumple lo prometido.",queja,media
-"Es critico, necesito una respuesta hoy mismo. Ya escribi tres veces por este mismo tema y siempre me responden lo mismo sin ayudar.",queja,alta
-Agradeceria una respuesta en los proximos dias. Quiero presentar una queja formal por el trato recibido en la sucursal.,queja,media
-"Cuando tengan oportunidad, Ya escribi tres veces por este mismo tema y siempre me responden lo mismo sin ayudar.",queja,media
-Esto es una emergencia para mi negocio. Quiero solicitar el reembolso del pago duplicado del pedido 9824.,facturación,alta
-"Sin ninguna prisa, Como puedo cambiar el correo asociado a mi cuenta.",información general,baja
-Esto es una emergencia para mi negocio. La integracion con la API deja de responder despues de unos minutos.,soporte técnico,alta
-Como contacto al equipo de ventas para una demo.,información general,baja
-Agradeceria una respuesta en los proximos dias. El servicio al cliente me trato de forma grosera en el chat de soporte.,queja,media
-"Es critico, necesito una respuesta hoy mismo. Ya escribi tres veces por este mismo tema y siempre me responden lo mismo sin ayudar.",queja,alta
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. El soporte tecnico cerro mi ticket sin resolver el problema.",queja,alta
-"Necesito ayuda inmediata, esto esta afectando mi trabajo. el plan premium se cierra solo cada vez que intento subir un archivo.",soporte técnico,alta
-Urgente: Pedi hablar con un supervisor y me colgaron la llamada.,queja,alta
-Necesito la factura fiscal con los datos de mi empresa para el pedido 9201.,facturación,media
-Esto es una emergencia para mi negocio. No reconozco un cargo de $212 en mi tarjeta relacionado con la plataforma.,facturación,alta
-Agradeceria una respuesta en los proximos dias. Necesito la factura fiscal con los datos de mi empresa para el pedido 8170.,facturación,media
-"Cuando tengan oportunidad, El metodo de pago fue rechazado pero igual me generaron el cobro.",facturación,media
-Urgente: No reconozco un cargo de $214 en mi tarjeta relacionado con el panel de control.,facturación,alta
-El panel de control se cierra solo cada vez que intento subir un archivo.,soporte técnico,media
-"Cuando puedan, sin urgencia: Tienen alguna guia para empezar a usar la app movil.",información general,baja
-"Cuando tengan oportunidad, Donde puedo consultar los terminos y condiciones del servicio.",información general,media
-"Cuando puedan, sin urgencia: Necesito informacion sobre las tarifas para mas de 10 usuarios.",información general,baja
-"Necesito ayuda inmediata, esto esta afectando mi trabajo. Ya escribi tres veces por este mismo tema y siempre me responden lo mismo sin ayudar.",queja,alta
-"No es una emergencia, pero me gustaria resolverlo pronto. El servicio al cliente me trato de forma grosera en el chat de soporte.",queja,media
-"No es una emergencia, pero me gustaria resolverlo pronto. Mi factura del pedido 8933 no coincide con el plan que contrate.",facturación,media
-"No es una emergencia, pero me gustaria resolverlo pronto. Es la peor experiencia que he tenido con un servicio en linea.",queja,media
-"Cuando puedan, sin urgencia: Como puedo actualizar mis datos de facturacion.",información general,baja
-"Necesito ayuda inmediata, esto esta afectando mi trabajo. Esta es la tercera vez que reporto el mismo problema con el panel de control y nadie lo resuelve.",queja,alta
-"Cuando tengan oportunidad, Quisiera saber si el panel de control tiene version para empresas.",información general,media
-"No es una emergencia, pero me gustaria resolverlo pronto. La integracion con la API deja de responder despues de unos minutos.",soporte técnico,media
-Mi factura del pedido 7381 no coincide con el plan que contrate.,facturación,media
-Esto es una emergencia para mi negocio. Me cobraron $142 de mas en la factura de este mes y no entiendo por que.,facturación,alta
-"Cuando tengan oportunidad, Como puedo actualizar mis datos de facturacion.",información general,media
-Urgente: el servicio web se cierra solo cada vez que intento subir un archivo.,soporte técnico,alta
-"Necesito ayuda inmediata, esto esta afectando mi trabajo. Necesito una copia de la factura del mes pasado para mi contabilidad.",facturación,alta
-Esto es una emergencia para mi negocio. La integracion con la API deja de responder despues de unos minutos.,soporte técnico,alta
-"Necesito ayuda inmediata, esto esta afectando mi trabajo. Me cobraron $306 de mas en la factura de este mes y no entiendo por que.",facturación,alta
-"Es critico, necesito una respuesta hoy mismo. Pedi hablar con un supervisor y me colgaron la llamada.",queja,alta
-"Es critico, necesito una respuesta hoy mismo. Recibo el error 500 al intentar guardar los cambios en el servicio web.",soporte técnico,alta
-Urgente: Quiero presentar una queja formal por el trato recibido en la sucursal.,queja,alta
-"No es una emergencia, pero me gustaria resolverlo pronto. mi suscripcion consume demasiada memoria y se congela el navegador.",soporte técnico,media
-En algun momento les agradeceria revisar esto: Cuanto tiempo tarda en procesarse una solicitud de baja.,información general,baja
-"Solo quiero comentar lo siguiente, no es urgente. Necesito informacion sobre las tarifas para mas de 10 usuarios.",información general,baja
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. Mi factura del pedido 9540 no coincide con el plan que contrate.",facturación,alta
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. El servicio al cliente me trato de forma grosera en el chat de soporte.",queja,alta
-"Es critico, necesito una respuesta hoy mismo. Estoy muy decepcionado con la calidad de mi cuenta, no cumple lo prometido.",queja,alta
-"Necesito ayuda inmediata, esto esta afectando mi trabajo. Por que el precio de la app movil subio sin previo aviso.",facturación,alta
-"No es una emergencia, pero me gustaria resolverlo pronto. Donde puedo consultar los terminos y condiciones del servicio.",información general,media
-Como contacto al equipo de ventas para una demo.,información general,media
-"Necesito ayuda inmediata, esto esta afectando mi trabajo. La integracion con la API deja de responder despues de unos minutos.",soporte técnico,alta
-El plan premium se cierra solo cada vez que intento subir un archivo.,soporte técnico,media
-Agradeceria una respuesta en los proximos dias. el panel de control se cierra solo cada vez que intento subir un archivo.,soporte técnico,media
-"Cuando puedan, sin urgencia: Por que el precio de el panel de control subio sin previo aviso.",facturación,baja
-En algun momento les agradeceria revisar esto: El soporte tecnico cerro mi ticket sin resolver el problema.,queja,baja
-"No es una emergencia, pero me gustaria resolverlo pronto. Estoy muy decepcionado con la calidad de mi cuenta, no cumple lo prometido.",queja,media
-"Necesito ayuda inmediata, esto esta afectando mi trabajo. Perdi acceso a mi cuenta despues de la ultima actualizacion.",soporte técnico,alta
-Esto es una emergencia para mi negocio. Quiero presentar una queja formal por el trato recibido en la sucursal.,queja,alta
-"Necesito ayuda inmediata, esto esta afectando mi trabajo. Ya escribi tres veces por este mismo tema y siempre me responden lo mismo sin ayudar.",queja,alta
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. Esta es la tercera vez que reporto el mismo problema con mi suscripcion y nadie lo resuelve.",queja,alta
-"Cuando tengan oportunidad, Como puedo cambiar el correo asociado a mi cuenta.",información general,media
-Quiero cambiar el plan de facturacion de mensual a anual.,facturación,media
-Agradeceria una respuesta en los proximos dias. Mi factura del pedido 5106 no coincide con el plan que contrate.,facturación,media
-Urgente: El soporte tecnico cerro mi ticket sin resolver el problema.,queja,alta
-Donde puedo consultar los terminos y condiciones del servicio.,información general,baja
-"Cuando tengan oportunidad, Cuales son los horarios de atencion al cliente.",información general,media
-"Necesito ayuda inmediata, esto esta afectando mi trabajo. Pedi hablar con un supervisor y me colgaron la llamada.",queja,alta
-"Es critico, necesito una respuesta hoy mismo. Estoy muy decepcionado con la calidad de el panel de control, no cumple lo prometido.",queja,alta
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. No logro restablecer mi contrasena, el enlace del correo esta roto.",soporte técnico,alta
-"No es una emergencia, pero me gustaria resolverlo pronto. La sincronizacion entre el celular y la web de el plan premium no funciona.",soporte técnico,media
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. Me cobraron $223 de mas en la factura de este mes y no entiendo por que.",facturación,alta
-Urgente: Quiero cambiar el plan de facturacion de mensual a anual.,facturación,alta
-Esto es una emergencia para mi negocio. la app movil consume demasiada memoria y se congela el navegador.,soporte técnico,alta
-"Cuando tengan oportunidad, Estoy muy decepcionado con la calidad de el servicio web, no cumple lo prometido.",queja,media
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. El descuento que me ofrecieron no se aplico en la factura 5097.",facturación,alta
-"Solo quiero comentar lo siguiente, no es urgente. Por que el precio de la plataforma subio sin previo aviso.",facturación,baja
-"Sin ninguna prisa, Existe alguna app movil disponible para la app movil.",información general,baja
-"No es una emergencia, pero me gustaria resolverlo pronto. Quiero presentar una queja formal por el trato recibido en la sucursal.",queja,media
-Solicito la cancelacion de mi suscripcion y el reembolso proporcional.,facturación,media
-"Cuando puedan, sin urgencia: Recibo el error 500 al intentar guardar los cambios en mi cuenta.",soporte técnico,baja
-Agradeceria una respuesta en los proximos dias. El boton de exportar datos no responde en ningun navegador.,soporte técnico,media
-Donde puedo consultar los terminos y condiciones del servicio.,información general,baja
-"Necesito ayuda inmediata, esto esta afectando mi trabajo. Quiero solicitar el reembolso del pago duplicado del pedido 6574.",facturación,alta
-Agradeceria una respuesta en los proximos dias. Existe alguna app movil disponible para el sistema.,información general,media
-Urgente: Solicito la cancelacion de mi suscripcion y el reembolso proporcional.,facturación,alta
-"No es una emergencia, pero me gustaria resolverlo pronto. Tienen alguna guia para empezar a usar mi suscripcion.",información general,media
-"No es una emergencia, pero me gustaria resolverlo pronto. No me llega el correo de verificacion para activar mi cuenta.",soporte técnico,media
-Cancele mi cuenta hace 2 dias y todavia me siguen cobrando.,queja,media
-"Cuando puedan, sin urgencia: Donde puedo consultar los terminos y condiciones del servicio.",información general,baja
-Urgente: Solicito la cancelacion de mi suscripcion y el reembolso proporcional.,facturación,alta
-En algun momento les agradeceria revisar esto: Donde puedo consultar los terminos y condiciones del servicio.,información general,baja
-"Sin ninguna prisa, Necesito informacion sobre las tarifas para mas de 10 usuarios.",información general,baja
-"No es una emergencia, pero me gustaria resolverlo pronto. el plan premium se cierra solo cada vez que intento subir un archivo.",soporte técnico,media
-Esto es una emergencia para mi negocio. Perdi acceso a mi cuenta despues de la ultima actualizacion.,soporte técnico,alta
-Pedi hablar con un supervisor y me colgaron la llamada.,queja,media
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. No me llega el correo de verificacion para activar mi cuenta.",soporte técnico,alta
-Esto es una emergencia para mi negocio. mi cuenta consume demasiada memoria y se congela el navegador.,soporte técnico,alta
 "Cuando puedan, sin urgencia: Como puedo cambiar el correo asociado a mi cuenta.",información general,baja
-Agradeceria una respuesta en los proximos dias. Cuales son los horarios de atencion al cliente.,información general,media
-Esto es una emergencia para mi negocio. La integracion con la API deja de responder despues de unos minutos.,soporte técnico,alta
-Me cobraron $337 de mas en la factura de este mes y no entiendo por que.,facturación,media
-Urgente: Quiero presentar una queja formal por el trato recibido en la sucursal.,queja,alta
-"Es critico, necesito una respuesta hoy mismo. La integracion con la API deja de responder despues de unos minutos.",soporte técnico,alta
-Como puedo cambiar el correo asociado a mi cuenta.,información general,baja
-Esto es una emergencia para mi negocio. El soporte tecnico cerro mi ticket sin resolver el problema.,queja,alta
-Agradeceria una respuesta en los proximos dias. Existe alguna app movil disponible para la app movil.,información general,media
-"Por favor atiendan esto lo antes posible, no puedo esperar mas. Cancele mi cuenta hace 5 dias y todavia me siguen cobrando.",queja,alta
-"Necesito ayuda inmediata, esto esta afectando mi trabajo. Es la peor experiencia que he tenido con un servicio en linea.",queja,alta
-El boton de exportar datos no responde en ningun navegador.,soporte técnico,baja
+Agradeceria una respuesta en los proximos dias. Cada vez que llamo me transfieren con alguien distinto y repito todo de nuevo.,queja,media
+Me gustaria que lo revisaran esta semana si es posible. Los reportes de el plan premium tardan mas de 10 minutos en generarse.,soporte técnico,media
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. Se me renovo la suscripcion automaticamente y no queria renovarla.",facturación,alta
+"No es una emergencia, pero me gustaria resolverlo pronto. Solicito la cancelacion de mi suscripcion y el reembolso proporcional.",facturación,media
+"No es una emergencia, pero me gustaria resolverlo pronto. Necesito la factura a nombre de mi empresa, no a mi nombre personal.",facturación,media
+Esto es una emergencia para mi negocio. el sistema muestra un error de certificado de seguridad al conectarse.,soporte técnico,alta
+"No hay prisa alguna, solo queria dejarlo comentado: Necesito informacion sobre las tarifas para mas de 10 usuarios.",información general,baja
+El servicio al cliente me trato de forma grosera en el chat de soporte.,queja,media
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. Es la peor experiencia que he tenido con un servicio en linea.",queja,alta
+Me gustaria que lo revisaran esta semana si es posible. Que metodos de pago aceptan para la app movil.,información general,media
+"Necesito una solucion ya, esto no puede esperar. Me gustaria saber si puedo pagar el servicio web en varias mensualidades.",facturación,alta
+Cuantos usuarios puedo agregar en el plan basico de la app movil.,información general,media
+"No hay prisa alguna, solo queria dejarlo comentado: Como contacto al equipo de ventas para una demo.",información general,baja
+"Sin ninguna prisa, Necesito la factura a nombre de mi empresa, no a mi nombre personal.",facturación,baja
+"No es una emergencia, pero me gustaria resolverlo pronto. Me siento estafado, pague por un servicio premium que nunca funciono bien.",queja,media
+"Cuando tengan oportunidad, Estoy a punto de cancelar mi cuenta por lo mal que me han atendido.",queja,media
+"Cuando tengan oportunidad, Como contacto al equipo de ventas para una demo.",información general,media
+"Cuando tengan oportunidad, Solicito la cancelacion de mi suscripcion y el reembolso proporcional.",facturación,media
+"No es una emergencia, pero me gustaria resolverlo pronto. Perdi acceso a mi cuenta despues de la ultima actualizacion.",soporte técnico,media
+"No es una emergencia, pero me gustaria resolverlo pronto. Podrian confirmarme si el servicio esta disponible en mi pais.",información general,media
+"Cuando puedan, sin urgencia: Donde puedo ver el historial completo de mis pedidos anteriores.",información general,baja
+"Agradeceria una respuesta en los proximos dias. Llevo 6 dias esperando respuesta y nadie me contesta, es inaceptable.",queja,media
+"Cuando puedan, sin urgencia: el panel de control consume demasiada memoria y se congela el navegador.",soporte técnico,baja
+"No hay prisa alguna, solo queria dejarlo comentado: Como puedo invitar a un compañero de trabajo a mi cuenta de mi cuenta.",información general,baja
+"No es una emergencia, pero me gustaria resolverlo pronto. Me prometieron una solucion en 24 horas y ya pasaron 5 dias sin novedades.",queja,media
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. La pantalla se queda cargando indefinidamente al abrir la plataforma.",soporte técnico,alta
+Como puedo cambiar el correo asociado a mi cuenta.,información general,media
+"Cuando puedan, sin urgencia: Donde puedo ver el historial completo de mis pedidos anteriores.",información general,baja
+"Sin ninguna prisa, mi cuenta se cierra solo cada vez que intento subir un archivo.",soporte técnico,baja
+Agradeceria una respuesta en los proximos dias. Necesito una copia de la factura del mes pasado para mi contabilidad.,facturación,media
+"Sin ninguna prisa, El metodo de pago fue rechazado pero igual me generaron el cobro.",facturación,baja
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. El metodo de pago fue rechazado pero igual me generaron el cobro.",facturación,alta
+El representante me dejo en espera mas de una hora y luego colgo la llamada.,queja,media
+"Necesito una solucion ya, esto no puede esperar. El boton de exportar datos no responde en ningun navegador.",soporte técnico,alta
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. Me siguen cobrando mi cuenta aunque cancele el servicio hace tiempo.",facturación,alta
+"No es una emergencia, pero me gustaria resolverlo pronto. Tienen alguna guia para empezar a usar la plataforma.",información general,media
+Ofrecen algun periodo de prueba gratuito antes de contratar el sistema.,información general,baja
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. Necesito una copia de la factura del mes pasado para mi contabilidad.",facturación,alta
+Me gustaria que lo revisaran esta semana si es posible. Donde puedo consultar los terminos y condiciones del servicio.,información general,media
+"Necesito una solucion ya, esto no puede esperar. No puedo creer que despues de tantos correos nadie me haya dado una solucion.",queja,alta
+"Me gustaria que lo revisaran esta semana si es posible. Quisiera cambiar mi ciclo de facturacion, me gustaria pagar cada semana.",facturación,media
+"Es critico, necesito una respuesta hoy mismo. Me siguen cobrando el servicio web aunque cancele el servicio hace tiempo.",facturación,alta
 "Por favor atiendan esto lo antes posible, no puedo esperar mas. El soporte tecnico cerro mi ticket sin resolver el problema.",queja,alta
+En algun momento les agradeceria revisar esto: Donde puedo consultar los terminos y condiciones del servicio.,información general,baja
+"Solo quiero comentar lo siguiente, no es urgente. Me cobraron $429 de mas en la factura de este mes y no entiendo por que.",facturación,baja
+Esto es una emergencia para mi negocio. Ya escribi tres veces por este mismo tema y siempre me responden lo mismo sin ayudar.,queja,alta
+En algun momento les agradeceria revisar esto: Me cobraron $423 de mas en la factura de este mes y no entiendo por que.,facturación,baja
+"Cuando tengan oportunidad, En que idiomas esta disponible la interfaz de mi suscripcion.",información general,media
+Esto es una emergencia para mi negocio. El servicio al cliente me trato de forma grosera en el chat de soporte.,queja,alta
+Me gustaria que lo revisaran esta semana si es posible. No me llega el recibo de pago del pedido 8483 a mi correo.,facturación,media
+Agradeceria una respuesta en los proximos dias. Es la peor experiencia que he tenido con un servicio en linea.,queja,media
+Me gustaria saber si puedo pagar el servicio web en varias mensualidades.,facturación,media
+Me gustaria que lo revisaran esta semana si es posible. Cada vez que llamo me transfieren con alguien distinto y repito todo de nuevo.,queja,media
+"Solo quiero comentar lo siguiente, no es urgente. Como puedo actualizar mis datos de facturacion.",información general,baja
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. No puedo creer que despues de tantos correos nadie me haya dado una solucion.",queja,alta
+Agradeceria una respuesta en los proximos dias. Que metodos de pago aceptan para el plan premium.,información general,media
+"Cuando tengan oportunidad, Cuantos usuarios puedo agregar en el plan basico de el sistema.",información general,media
+"Sin ninguna prisa, Como contacto al equipo de ventas para una demo.",información general,baja
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. Es la peor experiencia que he tenido con un servicio en linea.",queja,alta
+"Cuando tengan oportunidad, No puedo creer que despues de tantos correos nadie me haya dado una solucion.",queja,media
+"No es una emergencia, pero me gustaria resolverlo pronto. Por que el precio de el plan premium subio sin previo aviso.",facturación,media
+"Cuando puedan, sin urgencia: Existe alguna app movil disponible para la plataforma.",información general,baja
+Agradeceria una respuesta en los proximos dias. Perdi acceso a mi cuenta despues de la ultima actualizacion.,soporte técnico,media
+Esto es una emergencia para mi negocio. Recibo el error 500 al intentar guardar los cambios en mi cuenta.,soporte técnico,alta
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. Voy a reportar esta empresa porque no respetan lo que ofrecen en su publicidad.",queja,alta
+"Sin ninguna prisa, Como contacto al equipo de ventas para una demo.",información general,baja
+"No es una emergencia, pero me gustaria resolverlo pronto. Me aparece un mensaje de error que dice 'token invalido' al entrar.",soporte técnico,media
+"Sin ninguna prisa, Recibo el error 500 al intentar guardar los cambios en mi suscripcion.",soporte técnico,baja
+En algun momento les agradeceria revisar esto: El buscador interno de el servicio web no encuentra resultados que si existen.,soporte técnico,baja
+Me gustaria que lo revisaran esta semana si es posible. No recibo las notificaciones push en mi celular desde la actualizacion.,soporte técnico,media
+"Sin ninguna prisa, El cupon de descuento que aplique no se ve reflejado en el total a pagar.",facturación,baja
+Como puedo invitar a un compañero de trabajo a mi cuenta de la app movil.,información general,media
+Me gustaria que lo revisaran esta semana si es posible. Como puedo actualizar mis datos de facturacion.,información general,media
+"Urgente: Llevo 13 dias esperando respuesta y nadie me contesta, es inaceptable.",queja,alta
+"No es una emergencia, pero me gustaria resolverlo pronto. No puedo adjuntar archivos mayores a 5 MB en la plataforma.",soporte técnico,media
+Que metodos de pago aceptan para mi cuenta.,información general,media
+"Sin ninguna prisa, La pantalla se queda cargando indefinidamente al abrir el panel de control.",soporte técnico,baja
+"Es critico, necesito una respuesta hoy mismo. El servicio al cliente me trato de forma grosera en el chat de soporte.",queja,alta
+El servicio al cliente me trato de forma grosera en el chat de soporte.,queja,media
+"Solo quiero comentar lo siguiente, no es urgente. Como contacto al equipo de ventas para una demo.",información general,baja
+"Cuando tengan oportunidad, Me podrian compartir el enlace a la documentacion tecnica de la API.",información general,media
+"Por favor prioricen mi caso, es sumamente urgente. Cancele mi cuenta hace 15 dias y todavia me siguen cobrando.",queja,alta
+"Cuando puedan, sin urgencia: Como contacto al equipo de ventas para una demo.",información general,baja
+"Cuando puedan, sin urgencia: Quisiera cambiar mi ciclo de facturacion, me gustaria pagar cada semana.",facturación,baja
+En algun momento les agradeceria revisar esto: el servicio web muestra un error de certificado de seguridad al conectarse.,soporte técnico,baja
+"No es una emergencia, pero me gustaria resolverlo pronto. El sistema muestra datos desactualizados desde hace 12 dias.",soporte técnico,media
+"Por favor prioricen mi caso, es sumamente urgente. El cupon de descuento que aplique no se ve reflejado en el total a pagar.",facturación,alta
+"Es critico, necesito una respuesta hoy mismo. El cupon de descuento que aplique no se ve reflejado en el total a pagar.",facturación,alta
+Esto es una emergencia para mi negocio. mi cuenta se cierra solo cada vez que intento subir un archivo.,soporte técnico,alta
+En algun momento les agradeceria revisar esto: Quisiera saber si mi suscripcion es compatible con Mac y con Windows.,información general,baja
+"Sin ninguna prisa, No logro restablecer mi contrasena, el enlace del correo esta roto.",soporte técnico,baja
+"Sin ninguna prisa, Cuanto tiempo tarda en procesarse una solicitud de baja.",información general,baja
+"No hay prisa alguna, solo queria dejarlo comentado: En que idiomas esta disponible la interfaz de el servicio web.",información general,baja
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. La pantalla se queda cargando indefinidamente al abrir el sistema.",soporte técnico,alta
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. Voy a reportar esta empresa porque no respetan lo que ofrecen en su publicidad.",queja,alta
+"Sin ninguna prisa, Como puedo invitar a un compañero de trabajo a mi cuenta de mi cuenta.",información general,baja
+Agradeceria una respuesta en los proximos dias. Quiero solicitar el reembolso del pago duplicado del pedido 3471.,facturación,media
+"Cuando tengan oportunidad, Estoy muy decepcionado con la calidad de el sistema, no cumple lo prometido.",queja,media
+"No es una emergencia, pero me gustaria resolverlo pronto. Me cobraron $374 de mas en la factura de este mes y no entiendo por que.",facturación,media
+"No hay prisa alguna, solo queria dejarlo comentado: Me aparece un mensaje de error que dice 'token invalido' al entrar.",soporte técnico,baja
+"Cuando tengan oportunidad, Como contacto al equipo de ventas para una demo.",información general,media
+"Sin ninguna prisa, Existe alguna app movil disponible para el servicio web.",información general,baja
+Urgente: Recibo el error 500 al intentar guardar los cambios en la app movil.,soporte técnico,alta
+"Necesito una solucion ya, esto no puede esperar. Quisiera cambiar mi ciclo de facturacion, me gustaria pagar cada semana.",facturación,alta
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. Cancele mi cuenta hace 14 dias y todavia me siguen cobrando.",queja,alta
+Necesito una copia de la factura del mes pasado para mi contabilidad.,facturación,media
+Cuanto tiempo tarda en procesarse una solicitud de baja.,información general,media
+Agradeceria una respuesta en los proximos dias. Ya escribi tres veces por este mismo tema y siempre me responden lo mismo sin ayudar.,queja,media
+En algun momento les agradeceria revisar esto: El cupon de descuento que aplique no se ve reflejado en el total a pagar.,facturación,baja
+"Por favor prioricen mi caso, es sumamente urgente. Necesito la factura a nombre de mi empresa, no a mi nombre personal.",facturación,alta
+"Sin ninguna prisa, Existe alguna app movil disponible para la app movil.",información general,baja
+"Sin ninguna prisa, No reconozco un cargo de $465 en mi tarjeta relacionado con la plataforma.",facturación,baja
+"No es una emergencia, pero me gustaria resolverlo pronto. Mi factura del pedido 1646 no coincide con el plan que contrate.",facturación,media
+"Sin ninguna prisa, Cancele mi cuenta hace 2 dias y todavia me siguen cobrando.",queja,baja
+"Por favor prioricen mi caso, es sumamente urgente. Los reportes de la app movil tardan mas de 10 minutos en generarse.",soporte técnico,alta
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. Es la peor experiencia que he tenido con un servicio en linea.",queja,alta
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. Estoy muy decepcionado con la calidad de la plataforma, no cumple lo prometido.",queja,alta
+Cuales son los horarios de atencion al cliente.,información general,baja
+"No es una emergencia, pero me gustaria resolverlo pronto. No reconozco un cargo de $15 en mi tarjeta relacionado con el servicio web.",facturación,media
+Me gustaria que lo revisaran esta semana si es posible. El sistema muestra datos desactualizados desde hace 3 dias.,soporte técnico,media
+"Necesito una solucion ya, esto no puede esperar. No puedo creer que despues de tantos correos nadie me haya dado una solucion.",queja,alta
+"Cuando puedan, sin urgencia: Como puedo actualizar mis datos de facturacion.",información general,baja
+"Sin ninguna prisa, Como puedo cambiar el correo asociado a mi cuenta.",información general,baja
+Tienen algun plan especial para estudiantes o para organizaciones sin fines de lucro.,información general,media
+"Me gustaria que lo revisaran esta semana si es posible. No puedo cambiar mi contrasena, el formulario no guarda los cambios.",soporte técnico,media
+"Cuando puedan, sin urgencia: Cuales son los horarios de atencion al cliente.",información general,baja
+"Es critico, necesito una respuesta hoy mismo. No puedo adjuntar archivos mayores a 5 MB en la app movil.",soporte técnico,alta
+Ofrecen algun periodo de prueba gratuito antes de contratar mi suscripcion.,información general,media
+"No es una emergencia, pero me gustaria resolverlo pronto. Necesito la factura fiscal con los datos de mi empresa para el pedido 1530.",facturación,media
+"Necesito una solucion ya, esto no puede esperar. No reconozco un cargo de $111 en mi tarjeta relacionado con mi suscripcion.",facturación,alta
+"Por favor prioricen mi caso, es sumamente urgente. El sistema muestra datos desactualizados desde hace 3 dias.",soporte técnico,alta
+Necesito informacion sobre las tarifas para mas de 10 usuarios.,información general,baja
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. La integracion con la API deja de responder despues de unos minutos.",soporte técnico,alta
+"Cuando tengan oportunidad, Cuales son los horarios de atencion al cliente.",información general,media
+Agradeceria una respuesta en los proximos dias. No puedo adjuntar archivos mayores a 5 MB en el panel de control.,soporte técnico,media
+"Necesito una solucion ya, esto no puede esperar. Me gustaria saber si puedo pagar mi cuenta en varias mensualidades.",facturación,alta
+Me cobraron $395 de mas en la factura de este mes y no entiendo por que.,facturación,media
+Esto es una emergencia para mi negocio. Pedi hablar con un supervisor y me colgaron la llamada.,queja,alta
+Urgente: Perdi acceso a mi cuenta despues de la ultima actualizacion.,soporte técnico,alta
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. Me aparece un mensaje de error que dice 'token invalido' al entrar.",soporte técnico,alta
+"Es critico, necesito una respuesta hoy mismo. Me prometieron una solucion en 24 horas y ya pasaron 9 dias sin novedades.",queja,alta
+"Me siento estafado, pague por un servicio premium que nunca funciono bien.",queja,media
+"No es una emergencia, pero me gustaria resolverlo pronto. Solicito la cancelacion de mi suscripcion y el reembolso proporcional.",facturación,media
+"No hay prisa alguna, solo queria dejarlo comentado: En que idiomas esta disponible la interfaz de el plan premium.",información general,baja
+"Es critico, necesito una respuesta hoy mismo. Cada vez que llamo me transfieren con alguien distinto y repito todo de nuevo.",queja,alta
+Es la peor experiencia que he tenido con un servicio en linea.,queja,media
+Me gustaria que lo revisaran esta semana si es posible. Quiero saber por que aparecen dos cargos identicos de $387 este mes.,facturación,media
+Urgente: Esta es la tercera vez que reporto el mismo problema con el plan premium y nadie lo resuelve.,queja,alta
+"Sin ninguna prisa, Cuantos usuarios puedo agregar en el plan basico de el panel de control.",información general,baja
+"Sin ninguna prisa, La integracion con la API deja de responder despues de unos minutos.",soporte técnico,baja
+"Solo quiero comentar lo siguiente, no es urgente. Que diferencia hay entre el soporte estandar y el soporte prioritario.",información general,baja
+Me gustaria que lo revisaran esta semana si es posible. No reconozco un cargo de $239 en mi tarjeta relacionado con el plan premium.,facturación,media
+"Me gustaria que lo revisaran esta semana si es posible. Estoy muy decepcionado con la calidad de el servicio web, no cumple lo prometido.",queja,media
+"Por favor prioricen mi caso, es sumamente urgente. Estoy muy decepcionado con la calidad de el panel de control, no cumple lo prometido.",queja,alta
+"No hay prisa alguna, solo queria dejarlo comentado: Nadie en el equipo de soporte parece saber como resolver mi caso.",queja,baja
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. No recibo las notificaciones push en mi celular desde la actualizacion.",soporte técnico,alta
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. El sistema muestra datos desactualizados desde hace 4 dias.",soporte técnico,alta
+La aplicacion no carga las imagenes y se queda en blanco.,soporte técnico,media
+"Solo quiero comentar lo siguiente, no es urgente. El servicio al cliente me trato de forma grosera en el chat de soporte.",queja,baja
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. No me llega el recibo de pago del pedido 9727 a mi correo.",facturación,alta
+"Me gustaria que lo revisaran esta semana si es posible. Me siento estafado, pague por un servicio premium que nunca funciono bien.",queja,media
+Me gustaria que lo revisaran esta semana si es posible. El buscador interno de el sistema no encuentra resultados que si existen.,soporte técnico,media
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. Mi factura del pedido 4893 no coincide con el plan que contrate.",facturación,alta
+Agradeceria una respuesta en los proximos dias. Donde puedo consultar los terminos y condiciones del servicio.,información general,media
+Donde puedo consultar los terminos y condiciones del servicio.,información general,baja
+"No hay prisa alguna, solo queria dejarlo comentado: Me siguen cobrando la plataforma aunque cancele el servicio hace tiempo.",facturación,baja
+Esto es una emergencia para mi negocio. Cada vez que llamo me transfieren con alguien distinto y repito todo de nuevo.,queja,alta
+Los reportes de el sistema tardan mas de 10 minutos en generarse.,soporte técnico,media
+Agradeceria una respuesta en los proximos dias. Por que el precio de el servicio web subio sin previo aviso.,facturación,media
+"Sin ninguna prisa, Como contacto al equipo de ventas para una demo.",información general,baja
+"Es critico, necesito una respuesta hoy mismo. Me siguen cobrando mi cuenta aunque cancele el servicio hace tiempo.",facturación,alta
+"Cuando tengan oportunidad, El sistema muestra datos desactualizados desde hace 10 dias.",soporte técnico,media
+Quiero cambiar el plan de facturacion de mensual a anual.,facturación,baja
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. Estoy muy decepcionado con la calidad de el servicio web, no cumple lo prometido.",queja,alta
+Como puedo invitar a un compañero de trabajo a mi cuenta de el panel de control.,información general,baja
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. Se me renovo la suscripcion automaticamente y no queria renovarla.",facturación,alta
+Ya escribi tres veces por este mismo tema y siempre me responden lo mismo sin ayudar.,queja,media
+"Cuando tengan oportunidad, Pedi hablar con un supervisor y me colgaron la llamada.",queja,media
+Me gustaria que lo revisaran esta semana si es posible. Los reportes de mi cuenta tardan mas de 10 minutos en generarse.,soporte técnico,media
+"Cuando tengan oportunidad, Me gustaria saber si puedo pagar mi cuenta en varias mensualidades.",facturación,media
+"No hay prisa alguna, solo queria dejarlo comentado: Se me renovo la suscripcion automaticamente y no queria renovarla.",facturación,baja
+Agradeceria una respuesta en los proximos dias. El cupon de descuento que aplique no se ve reflejado en el total a pagar.,facturación,media
+"Por favor prioricen mi caso, es sumamente urgente. Mi cuenta se cerro sola en medio de una sesion de trabajo, varias veces.",soporte técnico,alta
+Esto es una emergencia para mi negocio. Quiero presentar una queja formal por el trato recibido en la sucursal.,queja,alta
+La integracion con la API deja de responder despues de unos minutos.,soporte técnico,baja
+"Sin ninguna prisa, Solicito la cancelacion de mi suscripcion y el reembolso proporcional.",facturación,baja
+"Agradeceria una respuesta en los proximos dias. Estoy muy decepcionado con la calidad de mi suscripcion, no cumple lo prometido.",queja,media
+"No hay prisa alguna, solo queria dejarlo comentado: el sistema muestra un error de certificado de seguridad al conectarse.",soporte técnico,baja
+"Es critico, necesito una respuesta hoy mismo. Voy a reportar esta empresa porque no respetan lo que ofrecen en su publicidad.",queja,alta
+"Me gustaria que lo revisaran esta semana si es posible. Estoy muy decepcionado con la calidad de el panel de control, no cumple lo prometido.",queja,media
+"No es una emergencia, pero me gustaria resolverlo pronto. Me siento estafado, pague por un servicio premium que nunca funciono bien.",queja,media
+"Cuando tengan oportunidad, mi cuenta muestra un error de certificado de seguridad al conectarse.",soporte técnico,media
+El soporte tecnico cerro mi ticket sin resolver el problema.,queja,media
+"Sin ninguna prisa, Como puedo cambiar el correo asociado a mi cuenta.",información general,baja
+"Cuando puedan, sin urgencia: El representante me dejo en espera mas de una hora y luego colgo la llamada.",queja,baja
+En algun momento les agradeceria revisar esto: Que diferencia hay entre el soporte estandar y el soporte prioritario.,información general,baja
+"Por favor prioricen mi caso, es sumamente urgente. El cupon de descuento que aplique no se ve reflejado en el total a pagar.",facturación,alta
+"Por favor prioricen mi caso, es sumamente urgente. No puedo cambiar mi contrasena, el formulario no guarda los cambios.",soporte técnico,alta
+Me gustaria que lo revisaran esta semana si es posible. Quiero saber por que aparecen dos cargos identicos de $221 este mes.,facturación,media
+Me gustaria que lo revisaran esta semana si es posible. No puedo adjuntar archivos mayores a 5 MB en el servicio web.,soporte técnico,media
+"No hay prisa alguna, solo queria dejarlo comentado: Recibo el error 500 al intentar guardar los cambios en mi cuenta.",soporte técnico,baja
+"Solo quiero comentar lo siguiente, no es urgente. Tienen algun plan especial para estudiantes o para organizaciones sin fines de lucro.",información general,baja
+Urgente: Estoy a punto de cancelar mi cuenta por lo mal que me han atendido.,queja,alta
+"No es una emergencia, pero me gustaria resolverlo pronto. No puedo iniciar sesion en el servicio web desde ayer, me marca error de servidor.",soporte técnico,media
+"Esto es una emergencia para mi negocio. Mi cuenta se cerro sola en medio de una sesion de trabajo, varias veces.",soporte técnico,alta
 "Por favor atiendan esto lo antes posible, no puedo esperar mas. No logro restablecer mi contrasena, el enlace del correo esta roto.",soporte técnico,alta
-"Es critico, necesito una respuesta hoy mismo. El descuento que me ofrecieron no se aplico en la factura 1409.",facturación,alta
-No me llega el correo de verificacion para activar mi cuenta.,soporte técnico,baja
-"Cuando tengan oportunidad, Llevo 15 dias esperando respuesta y nadie me contesta, es inaceptable.",queja,media
-"Cuando tengan oportunidad, No reconozco un cargo de $213 en mi tarjeta relacionado con el servicio web.",facturación,media
-"Cuando puedan, sin urgencia: Que metodos de pago aceptan para la plataforma.",información general,baja
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. El boton de exportar datos no responde en ningun navegador.",soporte técnico,alta
+Me gustaria que lo revisaran esta semana si es posible. Cuantos usuarios puedo agregar en el plan basico de el servicio web.,información general,media
+"Es critico, necesito una respuesta hoy mismo. El servicio al cliente me trato de forma grosera en el chat de soporte.",queja,alta
+"No es una emergencia, pero me gustaria resolverlo pronto. En que idiomas esta disponible la interfaz de el plan premium.",información general,media
+"Por favor prioricen mi caso, es sumamente urgente. Necesito la factura fiscal con los datos de mi empresa para el pedido 4273.",facturación,alta
+"Esto es una emergencia para mi negocio. Estoy muy decepcionado con la calidad de la plataforma, no cumple lo prometido.",queja,alta
+Cada vez que llamo me transfieren con alguien distinto y repito todo de nuevo.,queja,media
+"Por favor prioricen mi caso, es sumamente urgente. Estoy muy decepcionado con la calidad de el plan premium, no cumple lo prometido.",queja,alta
+Agradeceria una respuesta en los proximos dias. Perdi acceso a mi cuenta despues de la ultima actualizacion.,soporte técnico,media
+"Cuando puedan, sin urgencia: Cuantos usuarios puedo agregar en el plan basico de el panel de control.",información general,baja
+"No es una emergencia, pero me gustaria resolverlo pronto. Voy a reportar esta empresa porque no respetan lo que ofrecen en su publicidad.",queja,media
+"Es critico, necesito una respuesta hoy mismo. Pedi hablar con un supervisor y me colgaron la llamada.",queja,alta
+"No hay prisa alguna, solo queria dejarlo comentado: Quisiera saber si la app movil es compatible con Mac y con Windows.",información general,baja
+"Agradeceria una respuesta en los proximos dias. No puedo iniciar sesion en el sistema desde ayer, me marca error de servidor.",soporte técnico,media
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. Me siguen cobrando la plataforma aunque cancele el servicio hace tiempo.",facturación,alta
+Urgente: El nivel de servicio ha bajado muchisimo comparado con hace un año.,queja,alta
+"No es una emergencia, pero me gustaria resolverlo pronto. Necesito una copia de la factura del mes pasado para mi contabilidad.",facturación,media
+Quiero cambiar el plan de facturacion de mensual a anual.,facturación,media
+Agradeceria una respuesta en los proximos dias. Tienen algun plan especial para estudiantes o para organizaciones sin fines de lucro.,información general,media
+"No es una emergencia, pero me gustaria resolverlo pronto. Esta es la tercera vez que reporto el mismo problema con la plataforma y nadie lo resuelve.",queja,media
+Agradeceria una respuesta en los proximos dias. Los reportes de mi suscripcion tardan mas de 10 minutos en generarse.,soporte técnico,media
+"No hay prisa alguna, solo queria dejarlo comentado: El cupon de descuento que aplique no se ve reflejado en el total a pagar.",facturación,baja
+"Cuando puedan, sin urgencia: Como puedo invitar a un compañero de trabajo a mi cuenta de el sistema.",información general,baja
+"No es una emergencia, pero me gustaria resolverlo pronto. Me aparece un mensaje de error que dice 'token invalido' al entrar.",soporte técnico,media
+"Es critico, necesito una respuesta hoy mismo. El descuento que me ofrecieron no se aplico en la factura 8673.",facturación,alta
+"Cuando tengan oportunidad, No reconozco un cargo de $68 en mi tarjeta relacionado con mi cuenta.",facturación,media
+"Cuando puedan, sin urgencia: Cuales son los horarios de atencion al cliente.",información general,baja
+"Por favor prioricen mi caso, es sumamente urgente. Voy a reportar esta empresa porque no respetan lo que ofrecen en su publicidad.",queja,alta
+Esto es una emergencia para mi negocio. El nivel de servicio ha bajado muchisimo comparado con hace un año.,queja,alta
+En algun momento les agradeceria revisar esto: Esta es la tercera vez que reporto el mismo problema con el servicio web y nadie lo resuelve.,queja,baja
+"Me gustaria que lo revisaran esta semana si es posible. Necesito la factura a nombre de mi empresa, no a mi nombre personal.",facturación,media
+Agradeceria una respuesta en los proximos dias. Me podrian compartir el enlace a la documentacion tecnica de la API.,información general,media
+Me gustaria que lo revisaran esta semana si es posible. Quiero presentar una queja formal por el trato recibido en la sucursal.,queja,media
+"Cuando tengan oportunidad, el panel de control consume demasiada memoria y se congela el navegador.",soporte técnico,media
+"No hay prisa alguna, solo queria dejarlo comentado: No recibo las notificaciones push en mi celular desde la actualizacion.",soporte técnico,baja
+Nadie en el equipo de soporte parece saber como resolver mi caso.,queja,media
+"No es una emergencia, pero me gustaria resolverlo pronto. El metodo de pago fue rechazado pero igual me generaron el cobro.",facturación,media
+"No hay prisa alguna, solo queria dejarlo comentado: Me gustaria saber si puedo pagar el sistema en varias mensualidades.",facturación,baja
+"No es una emergencia, pero me gustaria resolverlo pronto. Quiero cambiar el plan de facturacion de mensual a anual.",facturación,media
+Quiero saber por que aparecen dos cargos identicos de $117 este mes.,facturación,media
+"No hay prisa alguna, solo queria dejarlo comentado: Necesito informacion sobre las tarifas para mas de 10 usuarios.",información general,baja
+"Urgente: Necesito la factura a nombre de mi empresa, no a mi nombre personal.",facturación,alta
+Esto es una emergencia para mi negocio. Estoy a punto de cancelar mi cuenta por lo mal que me han atendido.,queja,alta
+"Cuando puedan, sin urgencia: El metodo de pago fue rechazado pero igual me generaron el cobro.",facturación,baja
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. Cada vez que llamo me transfieren con alguien distinto y repito todo de nuevo.",queja,alta
+"Necesito una solucion ya, esto no puede esperar. Por que el precio de la app movil subio sin previo aviso.",facturación,alta
+"Necesito una solucion ya, esto no puede esperar. Donde puedo ver el historial completo de mis pedidos anteriores.",información general,alta
+Urgente: Me aparece un mensaje de error que dice 'token invalido' al entrar.,soporte técnico,alta
+Ofrecen algun periodo de prueba gratuito antes de contratar el panel de control.,información general,media
+"Cuando tengan oportunidad, el plan premium se cierra solo cada vez que intento subir un archivo.",soporte técnico,media
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. No puedo adjuntar archivos mayores a 5 MB en mi cuenta.",soporte técnico,alta
+En algun momento les agradeceria revisar esto: Tienen algun plan especial para estudiantes o para organizaciones sin fines de lucro.,información general,baja
+Agradeceria una respuesta en los proximos dias. Cada vez que llamo me transfieren con alguien distinto y repito todo de nuevo.,queja,media
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. El boton de exportar datos no responde en ningun navegador.",soporte técnico,alta
+Como puedo cambiar el correo asociado a mi cuenta.,información general,media
+Necesito una copia de la factura del mes pasado para mi contabilidad.,facturación,media
+"Cuando tengan oportunidad, Se me renovo la suscripcion automaticamente y no queria renovarla.",facturación,media
+Agradeceria una respuesta en los proximos dias. Tienen algun plan especial para estudiantes o para organizaciones sin fines de lucro.,información general,media
+"Sin ninguna prisa, Cada vez que llamo me transfieren con alguien distinto y repito todo de nuevo.",queja,baja
+El descuento que me ofrecieron no se aplico en la factura 7438.,facturación,baja
+"Por favor prioricen mi caso, es sumamente urgente. El calendario de la plataforma no sincroniza bien con Google Calendar.",soporte técnico,alta
+"Agradeceria una respuesta en los proximos dias. Estoy muy decepcionado con la calidad de el panel de control, no cumple lo prometido.",queja,media
+"No hay prisa alguna, solo queria dejarlo comentado: Necesito la factura fiscal con los datos de mi empresa para el pedido 1461.",facturación,baja
+"No hay prisa alguna, solo queria dejarlo comentado: Que metodos de pago aceptan para el plan premium.",información general,baja
+"Solo quiero comentar lo siguiente, no es urgente. el panel de control se cierra solo cada vez que intento subir un archivo.",soporte técnico,baja
+En algun momento les agradeceria revisar esto: Pedi hablar con un supervisor y me colgaron la llamada.,queja,baja
+"No es una emergencia, pero me gustaria resolverlo pronto. Se me duplico el cobro anual de la plataforma, necesito que me regresen uno.",facturación,media
+En algun momento les agradeceria revisar esto: Nadie en el equipo de soporte parece saber como resolver mi caso.,queja,baja
+"Cuando puedan, sin urgencia: No recibo las notificaciones push en mi celular desde la actualizacion.",soporte técnico,baja
+Me gustaria que lo revisaran esta semana si es posible. Quiero cambiar el plan de facturacion de mensual a anual.,facturación,media
+Urgente: Quiero saber por que aparecen dos cargos identicos de $204 este mes.,facturación,alta
+"Cuando puedan, sin urgencia: Podrian confirmarme si el servicio esta disponible en mi pais.",información general,baja
+En algun momento les agradeceria revisar esto: Donde puedo consultar los terminos y condiciones del servicio.,información general,baja
+Agradeceria una respuesta en los proximos dias. Quisiera saber si la plataforma es compatible con Mac y con Windows.,información general,media
+Esto es una emergencia para mi negocio. No recibo las notificaciones push en mi celular desde la actualizacion.,soporte técnico,alta
+"Es critico, necesito una respuesta hoy mismo. Voy a reportar esta empresa porque no respetan lo que ofrecen en su publicidad.",queja,alta
+En algun momento les agradeceria revisar esto: Necesito informacion sobre las tarifas para mas de 10 usuarios.,información general,baja
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. mi suscripcion consume demasiada memoria y se congela el navegador.",soporte técnico,alta
+Me gustaria que lo revisaran esta semana si es posible. El sistema muestra datos desactualizados desde hace 3 dias.,soporte técnico,media
+"No es una emergencia, pero me gustaria resolverlo pronto. No puedo creer que despues de tantos correos nadie me haya dado una solucion.",queja,media
+"No es una emergencia, pero me gustaria resolverlo pronto. Nadie en el equipo de soporte parece saber como resolver mi caso.",queja,media
+"Cuando tengan oportunidad, Como puedo invitar a un compañero de trabajo a mi cuenta de la app movil.",información general,media
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. Se me duplico el cobro anual de el servicio web, necesito que me regresen uno.",facturación,alta
+Agradeceria una respuesta en los proximos dias. Como puedo invitar a un compañero de trabajo a mi cuenta de mi suscripcion.,información general,media
+Agradeceria una respuesta en los proximos dias. Cancele mi cuenta hace 15 dias y todavia me siguen cobrando.,queja,media
+"Cuando tengan oportunidad, Como puedo actualizar mis datos de facturacion.",información general,media
+"Por favor prioricen mi caso, es sumamente urgente. El servicio al cliente me trato de forma grosera en el chat de soporte.",queja,alta
+Que diferencia hay entre el soporte estandar y el soporte prioritario.,información general,media
+"Necesito una solucion ya, esto no puede esperar. Pedi hablar con un supervisor y me colgaron la llamada.",queja,alta
+"Solo quiero comentar lo siguiente, no es urgente. Cancele mi cuenta hace 9 dias y todavia me siguen cobrando.",queja,baja
+"Solo quiero comentar lo siguiente, no es urgente. Que diferencia hay entre el soporte estandar y el soporte prioritario.",información general,baja
+"No hay prisa alguna, solo queria dejarlo comentado: Que metodos de pago aceptan para el servicio web.",información general,baja
+Urgente: El representante me dejo en espera mas de una hora y luego colgo la llamada.,queja,alta
+"Por favor prioricen mi caso, es sumamente urgente. Se me renovo la suscripcion automaticamente y no queria renovarla.",facturación,alta
+"Por favor prioricen mi caso, es sumamente urgente. El boton de exportar datos no responde en ningun navegador.",soporte técnico,alta
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. La pantalla se queda cargando indefinidamente al abrir el panel de control.",soporte técnico,alta
+Esto es una emergencia para mi negocio. Ya escribi tres veces por este mismo tema y siempre me responden lo mismo sin ayudar.,queja,alta
+La integracion con la API deja de responder despues de unos minutos.,soporte técnico,baja
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. La pantalla se queda cargando indefinidamente al abrir mi cuenta.",soporte técnico,alta
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. Mi factura del pedido 9019 no coincide con el plan que contrate.",facturación,alta
+Urgente: El descuento que me ofrecieron no se aplico en la factura 8434.,facturación,alta
+Me gustaria que lo revisaran esta semana si es posible. Como puedo invitar a un compañero de trabajo a mi cuenta de el sistema.,información general,media
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. Estoy muy decepcionado con la calidad de el servicio web, no cumple lo prometido.",queja,alta
+El descuento que me ofrecieron no se aplico en la factura 1423.,facturación,baja
+Agradeceria una respuesta en los proximos dias. El cupon de descuento que aplique no se ve reflejado en el total a pagar.,facturación,media
+"Cuando puedan, sin urgencia: Es la peor experiencia que he tenido con un servicio en linea.",queja,baja
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. Me prometieron una solucion en 24 horas y ya pasaron 12 dias sin novedades.",queja,alta
+"Necesito una solucion ya, esto no puede esperar. el servicio web muestra un error de certificado de seguridad al conectarse.",soporte técnico,alta
+"No es una emergencia, pero me gustaria resolverlo pronto. Nadie en el equipo de soporte parece saber como resolver mi caso.",queja,media
+Agradeceria una respuesta en los proximos dias. Me prometieron una solucion en 24 horas y ya pasaron 11 dias sin novedades.,queja,media
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. El nivel de servicio ha bajado muchisimo comparado con hace un año.",queja,alta
+"Es critico, necesito una respuesta hoy mismo. Cual es la diferencia de precio entre el plan actual y el plan superior.",facturación,alta
+"Cuando tengan oportunidad, No logro restablecer mi contrasena, el enlace del correo esta roto.",soporte técnico,media
+"Sin ninguna prisa, El cupon de descuento que aplique no se ve reflejado en el total a pagar.",facturación,baja
+"Necesito una solucion ya, esto no puede esperar. La aplicacion no carga las imagenes y se queda en blanco.",soporte técnico,alta
+Me gustaria que lo revisaran esta semana si es posible. Esta es la tercera vez que reporto el mismo problema con el panel de control y nadie lo resuelve.,queja,media
+"No es una emergencia, pero me gustaria resolverlo pronto. El metodo de pago fue rechazado pero igual me generaron el cobro.",facturación,media
+"Necesito una solucion ya, esto no puede esperar. Se me duplico el cobro anual de el sistema, necesito que me regresen uno.",facturación,alta
+"No es una emergencia, pero me gustaria resolverlo pronto. Cuales son los horarios de atencion al cliente.",información general,media
+"No es una emergencia, pero me gustaria resolverlo pronto. No logro restablecer mi contrasena, el enlace del correo esta roto.",soporte técnico,media
+"Es critico, necesito una respuesta hoy mismo. Nadie en el equipo de soporte parece saber como resolver mi caso.",queja,alta
+En algun momento les agradeceria revisar esto: Quisiera saber si la app movil es compatible con Mac y con Windows.,información general,baja
+"Necesito una solucion ya, esto no puede esperar. No logro restablecer mi contrasena, el enlace del correo esta roto.",soporte técnico,alta
+Donde puedo ver el historial completo de mis pedidos anteriores.,información general,baja
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. No logro restablecer mi contrasena, el enlace del correo esta roto.",soporte técnico,alta
+Esto es una emergencia para mi negocio. Me siguen cobrando la plataforma aunque cancele el servicio hace tiempo.,facturación,alta
+Me aparece un mensaje de error que dice 'token invalido' al entrar.,soporte técnico,media
+"Por favor prioricen mi caso, es sumamente urgente. La sincronizacion entre el celular y la web de el servicio web no funciona.",soporte técnico,alta
+"No hay prisa alguna, solo queria dejarlo comentado: Quisiera saber si la app movil es compatible con Mac y con Windows.",información general,baja
+"Por favor prioricen mi caso, es sumamente urgente. Solicito la cancelacion de mi suscripcion y el reembolso proporcional.",facturación,alta
+"No es una emergencia, pero me gustaria resolverlo pronto. Necesito la factura fiscal con los datos de mi empresa para el pedido 3913.",facturación,media
+"Necesito una solucion ya, esto no puede esperar. Donde puedo consultar los terminos y condiciones del servicio.",información general,alta
+"Es critico, necesito una respuesta hoy mismo. mi suscripcion se cierra solo cada vez que intento subir un archivo.",soporte técnico,alta
+"Necesito una solucion ya, esto no puede esperar. Quiero presentar una queja formal por el trato recibido en la sucursal.",queja,alta
+"Sin ninguna prisa, Estoy a punto de cancelar mi cuenta por lo mal que me han atendido.",queja,baja
+"Cuando tengan oportunidad, Quisiera cambiar mi ciclo de facturacion, me gustaria pagar cada semana.",facturación,media
+Esto es una emergencia para mi negocio. Me aparece un mensaje de error que dice 'token invalido' al entrar.,soporte técnico,alta
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. El servicio al cliente me trato de forma grosera en el chat de soporte.",queja,alta
+"No es una emergencia, pero me gustaria resolverlo pronto. Ofrecen algun periodo de prueba gratuito antes de contratar la plataforma.",información general,media
+"No es una emergencia, pero me gustaria resolverlo pronto. la app movil se cierra solo cada vez que intento subir un archivo.",soporte técnico,media
+"Solo quiero comentar lo siguiente, no es urgente. No logro restablecer mi contrasena, el enlace del correo esta roto.",soporte técnico,baja
+Me gustaria que lo revisaran esta semana si es posible. Necesito una copia de la factura del mes pasado para mi contabilidad.,facturación,media
+Esto es una emergencia para mi negocio. Me prometieron una solucion en 24 horas y ya pasaron 14 dias sin novedades.,queja,alta
+"No es una emergencia, pero me gustaria resolverlo pronto. No reconozco un cargo de $148 en mi tarjeta relacionado con mi cuenta.",facturación,media
+"Cuando puedan, sin urgencia: El soporte tecnico cerro mi ticket sin resolver el problema.",queja,baja
+"No hay prisa alguna, solo queria dejarlo comentado: Me cobraron $316 de mas en la factura de este mes y no entiendo por que.",facturación,baja
+"Cuando puedan, sin urgencia: Me aparece un mensaje de error que dice 'token invalido' al entrar.",soporte técnico,baja
+En algun momento les agradeceria revisar esto: Tienen alguna guia para empezar a usar la plataforma.,información general,baja
+"Sin ninguna prisa, Que metodos de pago aceptan para la plataforma.",información general,baja
+En algun momento les agradeceria revisar esto: Me podrian compartir el enlace a la documentacion tecnica de la API.,información general,baja
+"Cuando tengan oportunidad, El representante me dejo en espera mas de una hora y luego colgo la llamada.",queja,media
+En algun momento les agradeceria revisar esto: Necesito una copia de la factura del mes pasado para mi contabilidad.,facturación,baja
+"Es critico, necesito una respuesta hoy mismo. Me gustaria saber si puedo pagar el plan premium en varias mensualidades.",facturación,alta
+Esto es una emergencia para mi negocio. Cancele mi cuenta hace 3 dias y todavia me siguen cobrando.,queja,alta
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. Quiero presentar una queja formal por el trato recibido en la sucursal.",queja,alta
+"Cuando tengan oportunidad, Se me duplico el cobro anual de el sistema, necesito que me regresen uno.",facturación,media
+"Por favor prioricen mi caso, es sumamente urgente. Se me duplico el cobro anual de la app movil, necesito que me regresen uno.",facturación,alta
+"Cuando tengan oportunidad, Por que el precio de el plan premium subio sin previo aviso.",facturación,media
+"En algun momento les agradeceria revisar esto: Estoy muy decepcionado con la calidad de la app movil, no cumple lo prometido.",queja,baja
+Me gustaria que lo revisaran esta semana si es posible. Necesito actualizar la tarjeta de credito con la que pago mi cuenta.,facturación,media
+"Es critico, necesito una respuesta hoy mismo. Cual es la diferencia de precio entre el plan actual y el plan superior.",facturación,alta
+"Por favor prioricen mi caso, es sumamente urgente. No logro restablecer mi contrasena, el enlace del correo esta roto.",soporte técnico,alta
+Esto es una emergencia para mi negocio. Ya escribi tres veces por este mismo tema y siempre me responden lo mismo sin ayudar.,queja,alta
+Quisiera saber si el servicio web es compatible con Mac y con Windows.,información general,media
+"Sin ninguna prisa, Estoy a punto de cancelar mi cuenta por lo mal que me han atendido.",queja,baja
+"Es critico, necesito una respuesta hoy mismo. No logro restablecer mi contrasena, el enlace del correo esta roto.",soporte técnico,alta
+El soporte tecnico cerro mi ticket sin resolver el problema.,queja,media
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. Recibo el error 500 al intentar guardar los cambios en mi suscripcion.",soporte técnico,alta
+"Urgente: Llevo 9 dias esperando respuesta y nadie me contesta, es inaceptable.",queja,alta
+"Sin ninguna prisa, La pantalla se queda cargando indefinidamente al abrir el plan premium.",soporte técnico,baja
+En que idiomas esta disponible la interfaz de el servicio web.,información general,media
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. Mi cuenta se cerro sola en medio de una sesion de trabajo, varias veces.",soporte técnico,alta
+La integracion con la API deja de responder despues de unos minutos.,soporte técnico,media
+Urgente: Recibo el error 500 al intentar guardar los cambios en mi suscripcion.,soporte técnico,alta
+"Cuando puedan, sin urgencia: Tienen algun plan especial para estudiantes o para organizaciones sin fines de lucro.",información general,baja
+Me gustaria saber si puedo pagar la app movil en varias mensualidades.,facturación,baja
+"Es critico, necesito una respuesta hoy mismo. La aplicacion no carga las imagenes y se queda en blanco.",soporte técnico,alta
+"Se me duplico el cobro anual de el plan premium, necesito que me regresen uno.",facturación,baja
+"Solo quiero comentar lo siguiente, no es urgente. Donde puedo consultar los terminos y condiciones del servicio.",información general,baja
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. La integracion con la API deja de responder despues de unos minutos.",soporte técnico,alta
+"No hay prisa alguna, solo queria dejarlo comentado: Quiero saber por que aparecen dos cargos identicos de $183 este mes.",facturación,baja
+En algun momento les agradeceria revisar esto: La integracion con la API deja de responder despues de unos minutos.,soporte técnico,baja
+"Solo quiero comentar lo siguiente, no es urgente. En que idiomas esta disponible la interfaz de la plataforma.",información general,baja
+Agradeceria una respuesta en los proximos dias. La pantalla se queda cargando indefinidamente al abrir mi cuenta.,soporte técnico,media
+"Es critico, necesito una respuesta hoy mismo. Perdi acceso a mi cuenta despues de la ultima actualizacion.",soporte técnico,alta
+"No hay prisa alguna, solo queria dejarlo comentado: No logro restablecer mi contrasena, el enlace del correo esta roto.",soporte técnico,baja
+"No hay prisa alguna, solo queria dejarlo comentado: No reconozco un cargo de $153 en mi tarjeta relacionado con mi suscripcion.",facturación,baja
+En algun momento les agradeceria revisar esto: Pedi hablar con un supervisor y me colgaron la llamada.,queja,baja
+"Necesito una solucion ya, esto no puede esperar. El soporte tecnico cerro mi ticket sin resolver el problema.",queja,alta
+Necesito una copia de la factura del mes pasado para mi contabilidad.,facturación,media
+"Sin ninguna prisa, En que idiomas esta disponible la interfaz de el sistema.",información general,baja
+"Cuando tengan oportunidad, Quisiera cambiar mi ciclo de facturacion, me gustaria pagar cada semana.",facturación,media
+"Cuando tengan oportunidad, El metodo de pago fue rechazado pero igual me generaron el cobro.",facturación,media
+"Solo quiero comentar lo siguiente, no es urgente. Tienen algun plan especial para estudiantes o para organizaciones sin fines de lucro.",información general,baja
+"Por favor prioricen mi caso, es sumamente urgente. El cupon de descuento que aplique no se ve reflejado en el total a pagar.",facturación,alta
+Me gustaria que lo revisaran esta semana si es posible. Ofrecen algun periodo de prueba gratuito antes de contratar el panel de control.,información general,media
+"Me gustaria que lo revisaran esta semana si es posible. Se me duplico el cobro anual de el panel de control, necesito que me regresen uno.",facturación,media
+"No logro restablecer mi contrasena, el enlace del correo esta roto.",soporte técnico,media
+"No hay prisa alguna, solo queria dejarlo comentado: La sincronizacion entre el celular y la web de mi cuenta no funciona.",soporte técnico,baja
+"Por favor prioricen mi caso, es sumamente urgente. No puedo creer que despues de tantos correos nadie me haya dado una solucion.",queja,alta
+Mi factura del pedido 8062 no coincide con el plan que contrate.,facturación,media
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. La integracion con la API deja de responder despues de unos minutos.",soporte técnico,alta
+"No hay prisa alguna, solo queria dejarlo comentado: Estoy muy decepcionado con la calidad de el servicio web, no cumple lo prometido.",queja,baja
+Como contacto al equipo de ventas para una demo.,información general,baja
+Me gustaria que lo revisaran esta semana si es posible. La aplicacion no carga las imagenes y se queda en blanco.,soporte técnico,media
+Esta es la tercera vez que reporto el mismo problema con la plataforma y nadie lo resuelve.,queja,media
+"Sin ninguna prisa, Estoy a punto de cancelar mi cuenta por lo mal que me han atendido.",queja,baja
+"Urgente: No puedo iniciar sesion en el plan premium desde ayer, me marca error de servidor.",soporte técnico,alta
+Agradeceria una respuesta en los proximos dias. Donde puedo ver el historial completo de mis pedidos anteriores.,información general,media
+"Agradeceria una respuesta en los proximos dias. No logro restablecer mi contrasena, el enlace del correo esta roto.",soporte técnico,media
+Quisiera saber si el plan premium es compatible con Mac y con Windows.,información general,baja
+Me siguen cobrando mi suscripcion aunque cancele el servicio hace tiempo.,facturación,media
+"Cuando tengan oportunidad, Me siento estafado, pague por un servicio premium que nunca funciono bien.",queja,media
+Agradeceria una respuesta en los proximos dias. No me llega el recibo de pago del pedido 2354 a mi correo.,facturación,media
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. No me llega el correo de verificacion para activar mi cuenta.",soporte técnico,alta
+"Cuando tengan oportunidad, Cual es la diferencia de precio entre el plan actual y el plan superior.",facturación,media
+"Estoy muy decepcionado con la calidad de el sistema, no cumple lo prometido.",queja,media
+"No es una emergencia, pero me gustaria resolverlo pronto. No puedo adjuntar archivos mayores a 5 MB en mi suscripcion.",soporte técnico,media
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. Quiero presentar una queja formal por el trato recibido en la sucursal.",queja,alta
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. No puedo cambiar mi contrasena, el formulario no guarda los cambios.",soporte técnico,alta
+"Es critico, necesito una respuesta hoy mismo. Cada vez que llamo me transfieren con alguien distinto y repito todo de nuevo.",queja,alta
+"No logro restablecer mi contrasena, el enlace del correo esta roto.",soporte técnico,baja
+"Necesito la factura a nombre de mi empresa, no a mi nombre personal.",facturación,baja
+"Cuando tengan oportunidad, Me aparece un mensaje de error que dice 'token invalido' al entrar.",soporte técnico,media
+"No es una emergencia, pero me gustaria resolverlo pronto. Necesito informacion sobre las tarifas para mas de 10 usuarios.",información general,media
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. Ya escribi tres veces por este mismo tema y siempre me responden lo mismo sin ayudar.",queja,alta
+En algun momento les agradeceria revisar esto: Que metodos de pago aceptan para el panel de control.,información general,baja
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. El descuento que me ofrecieron no se aplico en la factura 6347.",facturación,alta
+"Cuando puedan, sin urgencia: Podrian confirmarme si el servicio esta disponible en mi pais.",información general,baja
+La plataforma se cierra solo cada vez que intento subir un archivo.,soporte técnico,media
+"Cuando tengan oportunidad, Ya escribi tres veces por este mismo tema y siempre me responden lo mismo sin ayudar.",queja,media
+"No es una emergencia, pero me gustaria resolverlo pronto. Quisiera cambiar mi ciclo de facturacion, me gustaria pagar cada semana.",facturación,media
+"Agradeceria una respuesta en los proximos dias. Mi cuenta se cerro sola en medio de una sesion de trabajo, varias veces.",soporte técnico,media
+"Por favor prioricen mi caso, es sumamente urgente. Estoy muy decepcionado con la calidad de el plan premium, no cumple lo prometido.",queja,alta
+"Solo quiero comentar lo siguiente, no es urgente. Me podrian compartir el enlace a la documentacion tecnica de la API.",información general,baja
+"No es una emergencia, pero me gustaria resolverlo pronto. Quiero cambiar el plan de facturacion de mensual a anual.",facturación,media
+"Cuando puedan, sin urgencia: El servicio al cliente me trato de forma grosera en el chat de soporte.",queja,baja
+Urgente: Me prometieron una solucion en 24 horas y ya pasaron 14 dias sin novedades.,queja,alta
+"Es critico, necesito una respuesta hoy mismo. El cupon de descuento que aplique no se ve reflejado en el total a pagar.",facturación,alta
+"Cuando tengan oportunidad, Se me duplico el cobro anual de mi cuenta, necesito que me regresen uno.",facturación,media
+"Cuando tengan oportunidad, Los reportes de mi cuenta tardan mas de 10 minutos en generarse.",soporte técnico,media
+"Por favor prioricen mi caso, es sumamente urgente. No puedo adjuntar archivos mayores a 5 MB en mi suscripcion.",soporte técnico,alta
+Agradeceria una respuesta en los proximos dias. Se me renovo la suscripcion automaticamente y no queria renovarla.,facturación,media
+"No hay prisa alguna, solo queria dejarlo comentado: Cuanto tiempo tarda en procesarse una solicitud de baja.",información general,baja
+"Cuando puedan, sin urgencia: Me cobraron $244 de mas en la factura de este mes y no entiendo por que.",facturación,baja
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. No puedo creer que despues de tantos correos nadie me haya dado una solucion.",queja,alta
+Me gustaria que lo revisaran esta semana si es posible. Me aparece un mensaje de error que dice 'token invalido' al entrar.,soporte técnico,media
+"No es una emergencia, pero me gustaria resolverlo pronto. En que idiomas esta disponible la interfaz de el sistema.",información general,media
+"Solo quiero comentar lo siguiente, no es urgente. Como puedo invitar a un compañero de trabajo a mi cuenta de mi suscripcion.",información general,baja
+"No hay prisa alguna, solo queria dejarlo comentado: el plan premium muestra un error de certificado de seguridad al conectarse.",soporte técnico,baja
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. Tienen alguna guia para empezar a usar mi suscripcion.",información general,alta
+Agradeceria una respuesta en los proximos dias. Nadie en el equipo de soporte parece saber como resolver mi caso.,queja,media
+"Necesito una solucion ya, esto no puede esperar. Necesito actualizar la tarjeta de credito con la que pago la app movil.",facturación,alta
+"No es una emergencia, pero me gustaria resolverlo pronto. Se me duplico el cobro anual de el panel de control, necesito que me regresen uno.",facturación,media
+Esto es una emergencia para mi negocio. Cancele mi cuenta hace 9 dias y todavia me siguen cobrando.,queja,alta
+Como puedo actualizar mis datos de facturacion.,información general,baja
+"Necesito la factura a nombre de mi empresa, no a mi nombre personal.",facturación,media
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. El calendario de el servicio web no sincroniza bien con Google Calendar.",soporte técnico,alta
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. La integracion con la API deja de responder despues de unos minutos.",soporte técnico,alta
+"Cuando puedan, sin urgencia: Quisiera saber si la app movil tiene version para empresas.",información general,baja
+"Necesito una solucion ya, esto no puede esperar. Recibo el error 500 al intentar guardar los cambios en mi suscripcion.",soporte técnico,alta
+"Solo quiero comentar lo siguiente, no es urgente. Tienen algun plan especial para estudiantes o para organizaciones sin fines de lucro.",información general,baja
+Agradeceria una respuesta en los proximos dias. Esta es la tercera vez que reporto el mismo problema con el sistema y nadie lo resuelve.,queja,media
+Me gustaria que lo revisaran esta semana si es posible. el sistema muestra un error de certificado de seguridad al conectarse.,soporte técnico,media
+Urgente: El descuento que me ofrecieron no se aplico en la factura 7151.,facturación,alta
+"Necesito una solucion ya, esto no puede esperar. El boton de exportar datos no responde en ningun navegador.",soporte técnico,alta
+Agradeceria una respuesta en los proximos dias. Quisiera saber si mi cuenta tiene version para empresas.,información general,media
+"Sin ninguna prisa, El calendario de el servicio web no sincroniza bien con Google Calendar.",soporte técnico,baja
+Esto es una emergencia para mi negocio. Es la peor experiencia que he tenido con un servicio en linea.,queja,alta
+"Cuando puedan, sin urgencia: Cuantos usuarios puedo agregar en el plan basico de mi cuenta.",información general,baja
+"Necesito una solucion ya, esto no puede esperar. Pedi hablar con un supervisor y me colgaron la llamada.",queja,alta
+Me gustaria que lo revisaran esta semana si es posible. La sincronizacion entre el celular y la web de el servicio web no funciona.,soporte técnico,media
+"Solo quiero comentar lo siguiente, no es urgente. Pedi hablar con un supervisor y me colgaron la llamada.",queja,baja
+"No es una emergencia, pero me gustaria resolverlo pronto. El cupon de descuento que aplique no se ve reflejado en el total a pagar.",facturación,media
+Cuanto tiempo tarda en procesarse una solicitud de baja.,información general,media
+Me gustaria que lo revisaran esta semana si es posible. Necesito actualizar la tarjeta de credito con la que pago mi suscripcion.,facturación,media
+Quisiera saber si la plataforma tiene version para empresas.,información general,media
+Esto es una emergencia para mi negocio. Cuantos usuarios puedo agregar en el plan basico de mi suscripcion.,información general,alta
+"Sin ninguna prisa, Me siguen cobrando el sistema aunque cancele el servicio hace tiempo.",facturación,baja
+Que diferencia hay entre el soporte estandar y el soporte prioritario.,información general,baja
+"Es critico, necesito una respuesta hoy mismo. El nivel de servicio ha bajado muchisimo comparado con hace un año.",queja,alta
+"Cuando tengan oportunidad, Necesito la factura a nombre de mi empresa, no a mi nombre personal.",facturación,media
+"No es una emergencia, pero me gustaria resolverlo pronto. Cuantos usuarios puedo agregar en el plan basico de la plataforma.",información general,media
+"No hay prisa alguna, solo queria dejarlo comentado: Donde puedo ver el historial completo de mis pedidos anteriores.",información general,baja
+"Por favor prioricen mi caso, es sumamente urgente. Cuanto tiempo tarda en procesarse una solicitud de baja.",información general,alta
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. Necesito una copia de la factura del mes pasado para mi contabilidad.",facturación,alta
+Quiero cambiar el plan de facturacion de mensual a anual.,facturación,baja
+Agradeceria una respuesta en los proximos dias. Como puedo cambiar el correo asociado a mi cuenta.,información general,media
+"Cuando tengan oportunidad, El nivel de servicio ha bajado muchisimo comparado con hace un año.",queja,media
+"No es una emergencia, pero me gustaria resolverlo pronto. Necesito una copia de la factura del mes pasado para mi contabilidad.",facturación,media
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. Necesito informacion sobre las tarifas para mas de 10 usuarios.",información general,alta
+"Cuando tengan oportunidad, la app movil muestra un error de certificado de seguridad al conectarse.",soporte técnico,media
+"Es critico, necesito una respuesta hoy mismo. Me prometieron una solucion en 24 horas y ya pasaron 3 dias sin novedades.",queja,alta
+"Cuando puedan, sin urgencia: Necesito actualizar la tarjeta de credito con la que pago el servicio web.",facturación,baja
+Esto es una emergencia para mi negocio. Nadie en el equipo de soporte parece saber como resolver mi caso.,queja,alta
+"Cuando tengan oportunidad, Mi cuenta se cerro sola en medio de una sesion de trabajo, varias veces.",soporte técnico,media
+"Es critico, necesito una respuesta hoy mismo. El nivel de servicio ha bajado muchisimo comparado con hace un año.",queja,alta
+"No es una emergencia, pero me gustaria resolverlo pronto. La sincronizacion entre el celular y la web de el panel de control no funciona.",soporte técnico,media
+En algun momento les agradeceria revisar esto: Que metodos de pago aceptan para mi cuenta.,información general,baja
+"Sin ninguna prisa, Necesito informacion sobre las tarifas para mas de 10 usuarios.",información general,baja
+"Cuando tengan oportunidad, Cual es la diferencia de precio entre el plan actual y el plan superior.",facturación,media
+Me gustaria que lo revisaran esta semana si es posible. El nivel de servicio ha bajado muchisimo comparado con hace un año.,queja,media
+"Necesito una solucion ya, esto no puede esperar. Necesito una copia de la factura del mes pasado para mi contabilidad.",facturación,alta
+"Solo quiero comentar lo siguiente, no es urgente. Necesito la factura a nombre de mi empresa, no a mi nombre personal.",facturación,baja
+"Cuando tengan oportunidad, Que diferencia hay entre el soporte estandar y el soporte prioritario.",información general,media
+"No es una emergencia, pero me gustaria resolverlo pronto. Mi factura del pedido 2983 no coincide con el plan que contrate.",facturación,media
+"Sin ninguna prisa, Pedi hablar con un supervisor y me colgaron la llamada.",queja,baja
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. El soporte tecnico cerro mi ticket sin resolver el problema.",queja,alta
+El sistema muestra un error de certificado de seguridad al conectarse.,soporte técnico,media
+"Necesito una solucion ya, esto no puede esperar. Me prometieron una solucion en 24 horas y ya pasaron 7 dias sin novedades.",queja,alta
+"Cuando tengan oportunidad, Existe alguna app movil disponible para el plan premium.",información general,media
+En algun momento les agradeceria revisar esto: Me aparece un mensaje de error que dice 'token invalido' al entrar.,soporte técnico,baja
+"Por favor prioricen mi caso, es sumamente urgente. Podrian confirmarme si el servicio esta disponible en mi pais.",información general,alta
+"Es critico, necesito una respuesta hoy mismo. Me prometieron una solucion en 24 horas y ya pasaron 13 dias sin novedades.",queja,alta
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. El calendario de mi suscripcion no sincroniza bien con Google Calendar.",soporte técnico,alta
+"Es critico, necesito una respuesta hoy mismo. Recibo el error 500 al intentar guardar los cambios en el plan premium.",soporte técnico,alta
+Agradeceria una respuesta en los proximos dias. No recibo las notificaciones push en mi celular desde la actualizacion.,soporte técnico,media
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. Es la peor experiencia que he tenido con un servicio en linea.",queja,alta
+"Cuando puedan, sin urgencia: Cuales son los horarios de atencion al cliente.",información general,baja
+"No es una emergencia, pero me gustaria resolverlo pronto. Me gustaria saber si puedo pagar la app movil en varias mensualidades.",facturación,media
+"Solo quiero comentar lo siguiente, no es urgente. Cuales son los horarios de atencion al cliente.",información general,baja
+Me podrian compartir el enlace a la documentacion tecnica de la API.,información general,baja
+"No es una emergencia, pero me gustaria resolverlo pronto. Quisiera saber si la app movil tiene version para empresas.",información general,media
+"Necesito una solucion ya, esto no puede esperar. No puedo adjuntar archivos mayores a 5 MB en el servicio web.",soporte técnico,alta
+"En algun momento les agradeceria revisar esto: Estoy muy decepcionado con la calidad de la app movil, no cumple lo prometido.",queja,baja
+Me gustaria que lo revisaran esta semana si es posible. El soporte tecnico cerro mi ticket sin resolver el problema.,queja,media
+La integracion con la API deja de responder despues de unos minutos.,soporte técnico,media
+"Urgente: Necesito la factura a nombre de mi empresa, no a mi nombre personal.",facturación,alta
+En algun momento les agradeceria revisar esto: Quisiera saber si mi cuenta tiene version para empresas.,información general,baja
+"No es una emergencia, pero me gustaria resolverlo pronto. Ofrecen algun periodo de prueba gratuito antes de contratar el servicio web.",información general,media
+Me siguen cobrando mi cuenta aunque cancele el servicio hace tiempo.,facturación,media
+"Necesito una solucion ya, esto no puede esperar. Ya escribi tres veces por este mismo tema y siempre me responden lo mismo sin ayudar.",queja,alta
+Cuantos usuarios puedo agregar en el plan basico de el plan premium.,información general,media
+"Por favor prioricen mi caso, es sumamente urgente. Cada vez que llamo me transfieren con alguien distinto y repito todo de nuevo.",queja,alta
+"Necesito una solucion ya, esto no puede esperar. El servicio al cliente me trato de forma grosera en el chat de soporte.",queja,alta
+En algun momento les agradeceria revisar esto: El calendario de la plataforma no sincroniza bien con Google Calendar.,soporte técnico,baja
+"Necesito una solucion ya, esto no puede esperar. Me prometieron una solucion en 24 horas y ya pasaron 4 dias sin novedades.",queja,alta
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. Cual es la diferencia de precio entre el plan actual y el plan superior.",facturación,alta
+Urgente: Cada vez que llamo me transfieren con alguien distinto y repito todo de nuevo.,queja,alta
+"Solo quiero comentar lo siguiente, no es urgente. Ofrecen algun periodo de prueba gratuito antes de contratar la plataforma.",información general,baja
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. No me llega el recibo de pago del pedido 2226 a mi correo.",facturación,alta
+"No hay prisa alguna, solo queria dejarlo comentado: Ofrecen algun periodo de prueba gratuito antes de contratar el servicio web.",información general,baja
+"Es critico, necesito una respuesta hoy mismo. Llevo 10 dias esperando respuesta y nadie me contesta, es inaceptable.",queja,alta
+Esto es una emergencia para mi negocio. Me prometieron una solucion en 24 horas y ya pasaron 13 dias sin novedades.,queja,alta
+Urgente: Me cobraron $453 de mas en la factura de este mes y no entiendo por que.,facturación,alta
+Mi factura del pedido 7755 no coincide con el plan que contrate.,facturación,media
+"No es una emergencia, pero me gustaria resolverlo pronto. Me siento estafado, pague por un servicio premium que nunca funciono bien.",queja,media
+Esto es una emergencia para mi negocio. La aplicacion no carga las imagenes y se queda en blanco.,soporte técnico,alta
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. Estoy a punto de cancelar mi cuenta por lo mal que me han atendido.",queja,alta
+En algun momento les agradeceria revisar esto: Que metodos de pago aceptan para el panel de control.,información general,baja
+"Necesito una solucion ya, esto no puede esperar. La integracion con la API deja de responder despues de unos minutos.",soporte técnico,alta
+"Cuando tengan oportunidad, Que diferencia hay entre el soporte estandar y el soporte prioritario.",información general,media
+"No es una emergencia, pero me gustaria resolverlo pronto. Ya escribi tres veces por este mismo tema y siempre me responden lo mismo sin ayudar.",queja,media
+Esto es una emergencia para mi negocio. El calendario de el plan premium no sincroniza bien con Google Calendar.,soporte técnico,alta
+En algun momento les agradeceria revisar esto: el sistema muestra un error de certificado de seguridad al conectarse.,soporte técnico,baja
+"Solo quiero comentar lo siguiente, no es urgente. Voy a reportar esta empresa porque no respetan lo que ofrecen en su publicidad.",queja,baja
+Me gustaria que lo revisaran esta semana si es posible. Me gustaria saber si puedo pagar el servicio web en varias mensualidades.,facturación,media
+Agradeceria una respuesta en los proximos dias. Cual es la diferencia de precio entre el plan actual y el plan superior.,facturación,media
+"No es una emergencia, pero me gustaria resolverlo pronto. Me prometieron una solucion en 24 horas y ya pasaron 4 dias sin novedades.",queja,media
+Esto es una emergencia para mi negocio. el servicio web consume demasiada memoria y se congela el navegador.,soporte técnico,alta
+Agradeceria una respuesta en los proximos dias. No puedo creer que despues de tantos correos nadie me haya dado una solucion.,queja,media
+"Sin ninguna prisa, Me aparece un mensaje de error que dice 'token invalido' al entrar.",soporte técnico,baja
+Esto es una emergencia para mi negocio. Necesito la factura fiscal con los datos de mi empresa para el pedido 9921.,facturación,alta
+"Solo quiero comentar lo siguiente, no es urgente. Como puedo cambiar el correo asociado a mi cuenta.",información general,baja
+"No es una emergencia, pero me gustaria resolverlo pronto. El metodo de pago fue rechazado pero igual me generaron el cobro.",facturación,media
+"Cuando tengan oportunidad, Cada vez que llamo me transfieren con alguien distinto y repito todo de nuevo.",queja,media
+Me gustaria que lo revisaran esta semana si es posible. Quiero cambiar el plan de facturacion de mensual a anual.,facturación,media
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. No me llega el correo de verificacion para activar mi cuenta.",soporte técnico,alta
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. Pedi hablar con un supervisor y me colgaron la llamada.",queja,alta
+"No hay prisa alguna, solo queria dejarlo comentado: Necesito actualizar la tarjeta de credito con la que pago el panel de control.",facturación,baja
+"No es una emergencia, pero me gustaria resolverlo pronto. No recibo las notificaciones push en mi celular desde la actualizacion.",soporte técnico,media
+"No hay prisa alguna, solo queria dejarlo comentado: Donde puedo consultar los terminos y condiciones del servicio.",información general,baja
+"No hay prisa alguna, solo queria dejarlo comentado: Me gustaria saber si puedo pagar mi cuenta en varias mensualidades.",facturación,baja
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. Quiero presentar una queja formal por el trato recibido en la sucursal.",queja,alta
+Agradeceria una respuesta en los proximos dias. Quiero cambiar el plan de facturacion de mensual a anual.,facturación,media
+Urgente: Se me renovo la suscripcion automaticamente y no queria renovarla.,facturación,alta
+"Agradeceria una respuesta en los proximos dias. Estoy muy decepcionado con la calidad de mi cuenta, no cumple lo prometido.",queja,media
+Me gustaria que lo revisaran esta semana si es posible. Mi factura del pedido 4637 no coincide con el plan que contrate.,facturación,media
+El calendario de el plan premium no sincroniza bien con Google Calendar.,soporte técnico,media
+Esto es una emergencia para mi negocio. La aplicacion no carga las imagenes y se queda en blanco.,soporte técnico,alta
+Cancele mi cuenta hace 8 dias y todavia me siguen cobrando.,queja,baja
+"Por favor prioricen mi caso, es sumamente urgente. El calendario de la plataforma no sincroniza bien con Google Calendar.",soporte técnico,alta
+"Cuando tengan oportunidad, Ofrecen algun periodo de prueba gratuito antes de contratar la plataforma.",información general,media
+"Solo quiero comentar lo siguiente, no es urgente. Me aparece un mensaje de error que dice 'token invalido' al entrar.",soporte técnico,baja
+Urgente: Necesito la factura fiscal con los datos de mi empresa para el pedido 7505.,facturación,alta
+"No es una emergencia, pero me gustaria resolverlo pronto. No me llega el correo de verificacion para activar mi cuenta.",soporte técnico,media
+"Solo quiero comentar lo siguiente, no es urgente. Donde puedo consultar los terminos y condiciones del servicio.",información general,baja
+"Cuando puedan, sin urgencia: Tienen algun plan especial para estudiantes o para organizaciones sin fines de lucro.",información general,baja
+Tienen algun plan especial para estudiantes o para organizaciones sin fines de lucro.,información general,baja
+"No es una emergencia, pero me gustaria resolverlo pronto. Quisiera cambiar mi ciclo de facturacion, me gustaria pagar cada semana.",facturación,media
+"No es una emergencia, pero me gustaria resolverlo pronto. Voy a reportar esta empresa porque no respetan lo que ofrecen en su publicidad.",queja,media
+Agradeceria una respuesta en los proximos dias. Esta es la tercera vez que reporto el mismo problema con el servicio web y nadie lo resuelve.,queja,media
+Me gustaria que lo revisaran esta semana si es posible. El descuento que me ofrecieron no se aplico en la factura 8383.,facturación,media
+En algun momento les agradeceria revisar esto: Quiero presentar una queja formal por el trato recibido en la sucursal.,queja,baja
+"Es critico, necesito una respuesta hoy mismo. No puedo iniciar sesion en el servicio web desde ayer, me marca error de servidor.",soporte técnico,alta
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. El soporte tecnico cerro mi ticket sin resolver el problema.",queja,alta
+Agradeceria una respuesta en los proximos dias. No puedo adjuntar archivos mayores a 5 MB en la plataforma.,soporte técnico,media
+"Sin ninguna prisa, Recibo el error 500 al intentar guardar los cambios en la app movil.",soporte técnico,baja
+"Cuando tengan oportunidad, En que idiomas esta disponible la interfaz de el panel de control.",información general,media
+En algun momento les agradeceria revisar esto: El cupon de descuento que aplique no se ve reflejado en el total a pagar.,facturación,baja
+"Sin ninguna prisa, El soporte tecnico cerro mi ticket sin resolver el problema.",queja,baja
+En algun momento les agradeceria revisar esto: Quisiera saber si el sistema tiene version para empresas.,información general,baja
+El calendario de el panel de control no sincroniza bien con Google Calendar.,soporte técnico,baja
+"Necesito una solucion ya, esto no puede esperar. mi suscripcion consume demasiada memoria y se congela el navegador.",soporte técnico,alta
+Agradeceria una respuesta en los proximos dias. Me podrian compartir el enlace a la documentacion tecnica de la API.,información general,media
+"Por favor prioricen mi caso, es sumamente urgente. La sincronizacion entre el celular y la web de mi cuenta no funciona.",soporte técnico,alta
+"Sin ninguna prisa, El cupon de descuento que aplique no se ve reflejado en el total a pagar.",facturación,baja
+En algun momento les agradeceria revisar esto: En que idiomas esta disponible la interfaz de el panel de control.,información general,baja
+La app movil se cierra solo cada vez que intento subir un archivo.,soporte técnico,media
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. No puedo creer que despues de tantos correos nadie me haya dado una solucion.",queja,alta
+Ofrecen algun periodo de prueba gratuito antes de contratar la app movil.,información general,baja
+Agradeceria una respuesta en los proximos dias. No puedo adjuntar archivos mayores a 5 MB en la plataforma.,soporte técnico,media
+"Cuando tengan oportunidad, Quiero saber por que aparecen dos cargos identicos de $280 este mes.",facturación,media
+El calendario de mi cuenta no sincroniza bien con Google Calendar.,soporte técnico,media
+Urgente: El metodo de pago fue rechazado pero igual me generaron el cobro.,facturación,alta
+"Por favor prioricen mi caso, es sumamente urgente. el servicio web muestra un error de certificado de seguridad al conectarse.",soporte técnico,alta
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. La integracion con la API deja de responder despues de unos minutos.",soporte técnico,alta
+"Cuando puedan, sin urgencia: Donde puedo ver el historial completo de mis pedidos anteriores.",información general,baja
+"Urgente: Necesito la factura a nombre de mi empresa, no a mi nombre personal.",facturación,alta
+"No es una emergencia, pero me gustaria resolverlo pronto. Cuales son los horarios de atencion al cliente.",información general,media
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. El sistema muestra datos desactualizados desde hace 12 dias.",soporte técnico,alta
+Quiero saber por que aparecen dos cargos identicos de $354 este mes.,facturación,media
+Esto es una emergencia para mi negocio. No recibo las notificaciones push en mi celular desde la actualizacion.,soporte técnico,alta
+"Necesito una solucion ya, esto no puede esperar. Los reportes de el panel de control tardan mas de 10 minutos en generarse.",soporte técnico,alta
+Me gustaria que lo revisaran esta semana si es posible. Nadie en el equipo de soporte parece saber como resolver mi caso.,queja,media
+Quisiera saber si el plan premium es compatible con Mac y con Windows.,información general,baja
+Que metodos de pago aceptan para el plan premium.,información general,baja
+Agradeceria una respuesta en los proximos dias. Que metodos de pago aceptan para el sistema.,información general,media
+En algun momento les agradeceria revisar esto: El nivel de servicio ha bajado muchisimo comparado con hace un año.,queja,baja
+Esto es una emergencia para mi negocio. El nivel de servicio ha bajado muchisimo comparado con hace un año.,queja,alta
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. El cupon de descuento que aplique no se ve reflejado en el total a pagar.",facturación,alta
+"Solo quiero comentar lo siguiente, no es urgente. No logro restablecer mi contrasena, el enlace del correo esta roto.",soporte técnico,baja
+"Cuando puedan, sin urgencia: Que diferencia hay entre el soporte estandar y el soporte prioritario.",información general,baja
+"Cuando tengan oportunidad, Necesito una copia de la factura del mes pasado para mi contabilidad.",facturación,media
+Me gustaria que lo revisaran esta semana si es posible. No recibo las notificaciones push en mi celular desde la actualizacion.,soporte técnico,media
+"No hay prisa alguna, solo queria dejarlo comentado: Tienen alguna guia para empezar a usar el sistema.",información general,baja
+Podrian confirmarme si el servicio esta disponible en mi pais.,información general,media
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. Perdi acceso a mi cuenta despues de la ultima actualizacion.",soporte técnico,alta
+En algun momento les agradeceria revisar esto: Que diferencia hay entre el soporte estandar y el soporte prioritario.,información general,baja
+En algun momento les agradeceria revisar esto: Cuales son los horarios de atencion al cliente.,información general,baja
+Agradeceria una respuesta en los proximos dias. Que metodos de pago aceptan para el servicio web.,información general,media
+"Solo quiero comentar lo siguiente, no es urgente. Que diferencia hay entre el soporte estandar y el soporte prioritario.",información general,baja
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. Me siguen cobrando el panel de control aunque cancele el servicio hace tiempo.",facturación,alta
+Urgente: Se me renovo la suscripcion automaticamente y no queria renovarla.,facturación,alta
+Ya escribi tres veces por este mismo tema y siempre me responden lo mismo sin ayudar.,queja,baja
+"Necesito ayuda inmediata, esto esta afectando mi trabajo. No puedo adjuntar archivos mayores a 5 MB en la app movil.",soporte técnico,alta
+Agradeceria una respuesta en los proximos dias. Por que el precio de el sistema subio sin previo aviso.,facturación,media
+"Por favor prioricen mi caso, es sumamente urgente. Necesito actualizar la tarjeta de credito con la que pago la plataforma.",facturación,alta
+Me gustaria que lo revisaran esta semana si es posible. Nadie en el equipo de soporte parece saber como resolver mi caso.,queja,media
+Ya escribi tres veces por este mismo tema y siempre me responden lo mismo sin ayudar.,queja,media
+"Sin ninguna prisa, Necesito actualizar la tarjeta de credito con la que pago mi cuenta.",facturación,baja
+Urgente: Voy a reportar esta empresa porque no respetan lo que ofrecen en su publicidad.,queja,alta
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. Me siguen cobrando mi cuenta aunque cancele el servicio hace tiempo.",facturación,alta
+"Necesito una solucion ya, esto no puede esperar. El servicio al cliente me trato de forma grosera en el chat de soporte.",queja,alta
+Me gustaria que lo revisaran esta semana si es posible. No me llega el correo de verificacion para activar mi cuenta.,soporte técnico,media
+"No hay prisa alguna, solo queria dejarlo comentado: Cuanto tiempo tarda en procesarse una solicitud de baja.",información general,baja
+Urgente: Los reportes de la app movil tardan mas de 10 minutos en generarse.,soporte técnico,alta
+"No es una emergencia, pero me gustaria resolverlo pronto. Me aparece un mensaje de error que dice 'token invalido' al entrar.",soporte técnico,media
+Agradeceria una respuesta en los proximos dias. En que idiomas esta disponible la interfaz de la app movil.,información general,media
+"Sin ninguna prisa, No reconozco un cargo de $44 en mi tarjeta relacionado con mi cuenta.",facturación,baja
+"Necesito una solucion ya, esto no puede esperar. El buscador interno de el servicio web no encuentra resultados que si existen.",soporte técnico,alta
+"Solo quiero comentar lo siguiente, no es urgente. Cada vez que llamo me transfieren con alguien distinto y repito todo de nuevo.",queja,baja
+"Es critico, necesito una respuesta hoy mismo. Necesito actualizar la tarjeta de credito con la que pago el plan premium.",facturación,alta
+La integracion con la API deja de responder despues de unos minutos.,soporte técnico,baja
+Agradeceria una respuesta en los proximos dias. Que metodos de pago aceptan para mi suscripcion.,información general,media
+Urgente: Me gustaria saber si puedo pagar el panel de control en varias mensualidades.,facturación,alta
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. Necesito la factura fiscal con los datos de mi empresa para el pedido 7052.",facturación,alta
+El servicio al cliente me trato de forma grosera en el chat de soporte.,queja,baja
+En algun momento les agradeceria revisar esto: Podrian confirmarme si el servicio esta disponible en mi pais.,información general,baja
+"Por favor atiendan esto lo antes posible, no puedo esperar mas. Perdi acceso a mi cuenta despues de la ultima actualizacion.",soporte técnico,alta
+"Cuando tengan oportunidad, No puedo adjuntar archivos mayores a 5 MB en el plan premium.",soporte técnico,media
+Agradeceria una respuesta en los proximos dias. Me gustaria saber si puedo pagar mi suscripcion en varias mensualidades.,facturación,media
+"Solo quiero comentar lo siguiente, no es urgente. No puedo creer que despues de tantos correos nadie me haya dado una solucion.",queja,baja
+"Necesito una solucion ya, esto no puede esperar. Por que el precio de el sistema subio sin previo aviso.",facturación,alta
+"No es una emergencia, pero me gustaria resolverlo pronto. Donde puedo ver el historial completo de mis pedidos anteriores.",información general,media
+"Cuando puedan, sin urgencia: Que diferencia hay entre el soporte estandar y el soporte prioritario.",información general,baja
+"En algun momento les agradeceria revisar esto: Estoy muy decepcionado con la calidad de la plataforma, no cumple lo prometido.",queja,baja
+"Solo quiero comentar lo siguiente, no es urgente. Tienen algun plan especial para estudiantes o para organizaciones sin fines de lucro.",información general,baja
+En algun momento les agradeceria revisar esto: Quisiera saber si la plataforma tiene version para empresas.,información general,baja
+"Necesito una solucion ya, esto no puede esperar. La sincronizacion entre el celular y la web de el sistema no funciona.",soporte técnico,alta
+"Me gustaria que lo revisaran esta semana si es posible. Llevo 4 dias esperando respuesta y nadie me contesta, es inaceptable.",queja,media
+"Cuando tengan oportunidad, la plataforma muestra un error de certificado de seguridad al conectarse.",soporte técnico,media
+"No es una emergencia, pero me gustaria resolverlo pronto. No puedo adjuntar archivos mayores a 5 MB en el sistema.",soporte técnico,media
+Agradeceria una respuesta en los proximos dias. la plataforma se cierra solo cada vez que intento subir un archivo.,soporte técnico,media
+"Cuando tengan oportunidad, Donde puedo ver el historial completo de mis pedidos anteriores.",información general,media
+En algun momento les agradeceria revisar esto: Cuantos usuarios puedo agregar en el plan basico de la plataforma.,información general,baja
+"Cuando puedan, sin urgencia: En que idiomas esta disponible la interfaz de el plan premium.",información general,baja
+Me gustaria que lo revisaran esta semana si es posible. Que metodos de pago aceptan para la plataforma.,información general,media
+Urgente: La integracion con la API deja de responder despues de unos minutos.,soporte técnico,alta
+"Por favor prioricen mi caso, es sumamente urgente. La sincronizacion entre el celular y la web de la app movil no funciona.",soporte técnico,alta
+En algun momento les agradeceria revisar esto: Como puedo actualizar mis datos de facturacion.,información general,baja
+Me gustaria que lo revisaran esta semana si es posible. Existe alguna app movil disponible para mi cuenta.,información general,media
+Quiero solicitar el reembolso del pago duplicado del pedido 7510.,facturación,baja

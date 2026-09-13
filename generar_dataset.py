@@ -14,7 +14,7 @@ import random
 from pathlib import Path
 
 SEED = 42
-N_TICKETS = 250
+N_TICKETS = 700
 OUTPUT_PATH = Path(__file__).parent / "data" / "tickets_dataset.csv"
 
 # ---------------------------------------------------------------------------
@@ -47,6 +47,16 @@ BASE_FACTURACION = [
     "Solicito la cancelacion de mi suscripcion y el reembolso proporcional.",
     "El descuento que me ofrecieron no se aplico en la factura {numero}.",
     "Necesito la factura fiscal con los datos de mi empresa para el pedido {numero}.",
+    "Me siguen cobrando {producto} aunque cancele el servicio hace tiempo.",
+    "Quiero saber por que aparecen dos cargos identicos de {monto} este mes.",
+    "Necesito actualizar la tarjeta de credito con la que pago {producto}.",
+    "No me llega el recibo de pago del pedido {numero} a mi correo.",
+    "Quisiera cambiar mi ciclo de facturacion, me gustaria pagar cada semana.",
+    "El cupon de descuento que aplique no se ve reflejado en el total a pagar.",
+    "Me gustaria saber si puedo pagar {producto} en varias mensualidades.",
+    "Se me duplico el cobro anual de {producto}, necesito que me regresen uno.",
+    "Cual es la diferencia de precio entre el plan actual y el plan superior.",
+    "Necesito la factura a nombre de mi empresa, no a mi nombre personal.",
 ]
 
 BASE_SOPORTE_TECNICO = [
@@ -62,6 +72,16 @@ BASE_SOPORTE_TECNICO = [
     "No logro restablecer mi contrasena, el enlace del correo esta roto.",
     "La integracion con la API deja de responder despues de unos minutos.",
     "{producto} consume demasiada memoria y se congela el navegador.",
+    "La pantalla se queda cargando indefinidamente al abrir {producto}.",
+    "Me aparece un mensaje de error que dice 'token invalido' al entrar.",
+    "No puedo adjuntar archivos mayores a 5 MB en {producto}.",
+    "El buscador interno de {producto} no encuentra resultados que si existen.",
+    "Mi cuenta se cerro sola en medio de una sesion de trabajo, varias veces.",
+    "Los reportes de {producto} tardan mas de 10 minutos en generarse.",
+    "No recibo las notificaciones push en mi celular desde la actualizacion.",
+    "{producto} muestra un error de certificado de seguridad al conectarse.",
+    "El calendario de {producto} no sincroniza bien con Google Calendar.",
+    "No puedo cambiar mi contrasena, el formulario no guarda los cambios.",
 ]
 
 BASE_QUEJA = [
@@ -75,6 +95,15 @@ BASE_QUEJA = [
     "Ya escribi tres veces por este mismo tema y siempre me responden lo mismo sin ayudar.",
     "Quiero presentar una queja formal por el trato recibido en la sucursal.",
     "Es la peor experiencia que he tenido con un servicio en linea.",
+    "Me prometieron una solucion en 24 horas y ya pasaron {dias} dias sin novedades.",
+    "Nadie en el equipo de soporte parece saber como resolver mi caso.",
+    "Estoy a punto de cancelar mi cuenta por lo mal que me han atendido.",
+    "El representante me dejo en espera mas de una hora y luego colgo la llamada.",
+    "Voy a reportar esta empresa porque no respetan lo que ofrecen en su publicidad.",
+    "No puedo creer que despues de tantos correos nadie me haya dado una solucion.",
+    "El nivel de servicio ha bajado muchisimo comparado con hace un año.",
+    "Me siento estafado, pague por un servicio premium que nunca funciono bien.",
+    "Cada vez que llamo me transfieren con alguien distinto y repito todo de nuevo.",
 ]
 
 BASE_INFORMACION_GENERAL = [
@@ -90,6 +119,15 @@ BASE_INFORMACION_GENERAL = [
     "Existe alguna app movil disponible para {producto}.",
     "Podrian confirmarme si el servicio esta disponible en mi pais.",
     "Como puedo actualizar mis datos de facturacion.",
+    "Tienen algun plan especial para estudiantes o para organizaciones sin fines de lucro.",
+    "Quisiera saber si {producto} es compatible con Mac y con Windows.",
+    "Me podrian compartir el enlace a la documentacion tecnica de la API.",
+    "Cuantos usuarios puedo agregar en el plan basico de {producto}.",
+    "Ofrecen algun periodo de prueba gratuito antes de contratar {producto}.",
+    "Donde puedo ver el historial completo de mis pedidos anteriores.",
+    "Que diferencia hay entre el soporte estandar y el soporte prioritario.",
+    "Como puedo invitar a un compañero de trabajo a mi cuenta de {producto}.",
+    "En que idiomas esta disponible la interfaz de {producto}.",
 ]
 
 # Frases que se anteponen para marcar el nivel de urgencia percibido.
@@ -100,12 +138,15 @@ PREFIJOS_URGENCIA = {
         "Necesito ayuda inmediata, esto esta afectando mi trabajo. ",
         "Por favor atiendan esto lo antes posible, no puedo esperar mas. ",
         "Esto es una emergencia para mi negocio. ",
+        "Necesito una solucion ya, esto no puede esperar. ",
+        "Por favor prioricen mi caso, es sumamente urgente. ",
     ],
     "media": [
         "",
         "Agradeceria una respuesta en los proximos dias. ",
         "No es una emergencia, pero me gustaria resolverlo pronto. ",
         "Cuando tengan oportunidad, ",
+        "Me gustaria que lo revisaran esta semana si es posible. ",
     ],
     "baja": [
         "Sin ninguna prisa, ",
@@ -113,6 +154,7 @@ PREFIJOS_URGENCIA = {
         "Solo quiero comentar lo siguiente, no es urgente. ",
         "En algun momento les agradeceria revisar esto: ",
         "",
+        "No hay prisa alguna, solo queria dejarlo comentado: ",
     ],
 }
 
