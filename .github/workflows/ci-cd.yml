@@ -60,9 +60,46 @@ jobs:
       - run: pip install -r requirements-dev.txt
       - run: pytest -v
 
+  docker-build:
+    name: Build de la imagen Docker (validacion, sin push ni credenciales)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build de la imagen (no se publica a ningun registry)
+        run: docker build -t clasificador-tickets:ci .
+
+      - name: Smoke test - el contenedor arranca y responde HTTP
+        run: |
+          # No hay Postgres real en este runner, asi que /health respondera
+          # 503 (documentado y esperado, ver app/routes.py). Lo que este
+          # smoke test valida es que gunicorn/Flask arrancan dentro del
+          # contenedor y sirven HTTP - no la conectividad a una DB real.
+          docker run -d --name smoke -p 8080:8080 \
+            -e DATABASE_URL="postgresql://usuario:password@host:5432/postgres" \
+            clasificador-tickets:ci
+
+          codigo="000"
+          for i in $(seq 1 15); do
+            codigo=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/health || true)
+            if [ "$codigo" != "000" ] && [ -n "$codigo" ]; then
+              echo "Contenedor respondio HTTP $codigo en /health (503 es lo esperado sin DB real)"
+              break
+            fi
+            sleep 2
+          done
+
+          docker logs smoke
+          docker rm -f smoke
+
+          if [ "$codigo" = "000" ] || [ -z "$codigo" ]; then
+            echo "::error::El contenedor nunca respondio HTTP - revisar logs arriba"
+            exit 1
+          fi
+
   deploy:
     name: Build y deploy a Cloud Run
-    needs: [lint, seguridad, tests]
+    needs: [lint, seguridad, tests, docker-build]
     # Solo se despliega en un push DIRECTO a main (nunca en un PR ni en
     # otras ramas). Si lint/seguridad/tests fallan, "needs" ya impide que
     # este job se ejecute - el pipeline completo queda en rojo y no

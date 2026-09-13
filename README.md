@@ -538,17 +538,19 @@ nada desplegable ni un pipeline de CI que proteger. A partir de la seccion
 
 ## 6. CI/CD con GitHub Actions
 
-### 6.1 Los 4 jobs de `.github/workflows/ci-cd.yml`
+### 6.1 Los 5 jobs de `.github/workflows/ci-cd.yml`
 
 ```mermaid
 flowchart LR
     A[push / pull_request] --> B[lint]
     A --> C[seguridad: gitleaks]
     A --> D[tests: pytest]
+    A --> G[docker-build: build + smoke test]
     B --> E{needs}
     C --> E
     D --> E
-    E -->|solo si push a main Y B,C,D OK| F[deploy a Cloud Run]
+    G --> E
+    E -->|solo si push a main Y todos OK| F[deploy a Cloud Run]
 ```
 
 1. **`lint`**: `black --check`, `isort --check`, `flake8` sobre todo el
@@ -562,12 +564,22 @@ flowchart LR
    connection string con forma real pero con password de placeholder).
 3. **`tests`**: instala `requirements-dev.txt` y corre `pytest -v` (los 6
    tests de la seccion 3, con la base de datos mockeada).
-4. **`deploy`**: **solo corre si los 3 jobs anteriores pasaron** (`needs:
-   [lint, seguridad, tests]`) **y** el evento es un push directo a `main`
-   (nunca en un Pull Request ni en otra rama). Si falta cualquiera de los
-   3 checks, GitHub Actions simplemente no ejecuta este job — el pipeline
-   completo queda en rojo y no se despliega nada, cumpliendo el requisito
-   de "si algo falla, no se despliega".
+4. **`docker-build`**: construye la imagen del `Dockerfile` (seccion 4) en
+   el runner de GitHub Actions (Linux, con Docker preinstalado) y corre un
+   smoke test: levanta el contenedor y verifica que `/health` responda
+   *algun* codigo HTTP (503 es el esperado sin una DB real — lo que se
+   valida es que gunicorn/Flask arrancan dentro del contenedor, no la
+   conectividad a Postgres). Esta imagen **no se publica a ningun
+   registry** aqui, solo se valida que compila y arranca; el build "real"
+   que si se publica ocurre dentro del job `deploy`. Este job existe
+   porque la maquina de desarrollo no tenia Docker instalado (seccion 4) —
+   este es el punto donde el Dockerfile se valida de verdad, end-to-end.
+5. **`deploy`**: **solo corre si los 4 jobs anteriores pasaron** (`needs:
+   [lint, seguridad, tests, docker-build]`) **y** el evento es un push
+   directo a `main` (nunca en un Pull Request ni en otra rama). Si falta
+   cualquiera de esos checks, GitHub Actions simplemente no ejecuta este
+   job — el pipeline completo queda en rojo y no se despliega nada,
+   cumpliendo el requisito de "si algo falla, no se despliega".
 
 ### 6.2 Deploy sin bloquear el pipeline si aun no hay credenciales de GCP
 
