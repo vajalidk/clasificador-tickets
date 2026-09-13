@@ -603,3 +603,173 @@ condicion `github.event_name == 'push'`, que es falsa para un evento de
 tipo `pull_request`.
 
 ---
+
+## 7. Despliegue gratuito (Google Cloud Run)
+
+Guia paso a paso para dejar la API corriendo en una URL publica sin gastar
+un centavo.
+
+### 7.1 Cuenta y proyecto de Google Cloud
+
+1. Crear una cuenta en [cloud.google.com](https://cloud.google.com/free) —
+   el plan gratuito pide una tarjeta solo para verificar identidad, no
+   cobra automaticamente al terminar la prueba gratuita.
+2. **Antes de crear nada mas**, ir a **Billing -> Budgets & alerts -> Create
+   budget** y configurar un presupuesto de **$0** con alertas al 50/90/100%.
+   Esto no impide gastar, pero **avisa por correo de inmediato** ante
+   cualquier cargo inesperado — la unica red de seguridad real contra un
+   error de configuracion que genere costos.
+3. Crear un proyecto nuevo: **IAM & Admin -> Create Project**. Anotar el
+   **Project ID** (no el nombre) — es el valor que va en el secret
+   `GCP_PROJECT_ID`.
+4. Habilitar las APIs necesarias (**APIs & Services -> Enable APIs**):
+   - `Cloud Run Admin API`
+   - `Artifact Registry API`
+
+### 7.2 Service Account para GitHub Actions
+
+1. **IAM & Admin -> Service Accounts -> Create Service Account**, por
+   ejemplo `github-actions-deploy`.
+2. Asignarle dos roles:
+   - **Cloud Run Admin** (`roles/run.admin`) — para crear/actualizar el
+     servicio.
+   - **Service Account User** (`roles/iam.serviceAccountUser`) — para que
+     Cloud Run pueda "actuar como" la Service Account que ejecuta el
+     contenedor.
+   - (Tambien conviene **Artifact Registry Writer** —
+     `roles/artifactregistry.writer` — para poder subir la imagen Docker;
+     no estaba en la lista original pero es necesaria para el paso de
+     `docker push` del workflow.)
+3. **Keys -> Add Key -> Create new key -> JSON**. Descarga un archivo
+   `.json` — **este archivo es una credencial real, tratalo como una
+   contrasena** (no lo commitees, no lo compartas).
+4. En GitHub: **Settings -> Secrets and variables -> Actions -> New
+   repository secret**, crear:
+   - `GCP_SA_KEY`: pegar el **contenido completo** del JSON descargado.
+   - `GCP_PROJECT_ID`: el Project ID del paso 7.1.3.
+   - `DATABASE_URL`: el connection string de Supabase (seccion 2.4).
+
+### 7.3 Como se dispara el deploy
+
+Con los 3 secrets configurados, el siguiente push a `main` (o el merge de
+un PR hacia `main`) hace que `.github/workflows/ci-cd.yml`:
+
+1. Corra `lint`, `seguridad` y `tests`.
+2. Si los 3 pasan, el job `deploy` se autentica con `GCP_SA_KEY`, crea el
+   repositorio de Artifact Registry si no existe, construye la imagen del
+   `Dockerfile` (seccion 4), la sube como
+   `us-central1-docker.pkg.dev/<GCP_PROJECT_ID>/clasificador-tickets/api`,
+   y la despliega con `google-github-actions/deploy-cloudrun` (equivalente
+   a correr `gcloud run deploy --image ... --allow-unauthenticated --region
+   us-central1` manualmente), inyectando `DATABASE_URL` y `LOG_LEVEL` como
+   variables de entorno del servicio.
+
+### 7.4 URL publica
+
+Cloud Run asigna una URL con la forma:
+
+```
+https://clasificador-tickets-<hash-aleatorio>-uc.a.run.app
+```
+
+Una vez desplegado, esa URL expone:
+
+| Endpoint | URL |
+|---|---|
+| Clasificar | `POST https://<tu-servicio>.a.run.app/clasificar` |
+| Health | `GET https://<tu-servicio>.a.run.app/health` |
+| Dashboard | `GET https://<tu-servicio>.a.run.app/dashboard` |
+| Swagger | `GET https://<tu-servicio>.a.run.app/apidocs` |
+
+> Esta seccion se actualizara con la URL real en cuanto el primer deploy
+> corra exitosamente (requiere que completes los pasos 7.1 y 7.2 con tu
+> propia cuenta de Google Cloud — son credenciales personales que no
+> podemos crear en tu nombre).
+
+### 7.5 UptimeRobot: monitoreo gratuito + reducir cold starts
+
+Cloud Run "duerme" un servicio sin trafico (escala a 0 instancias) para no
+cobrar por tiempo inactivo; el efecto secundario es un "cold start" (varios
+segundos de latencia) en la primera request tras un periodo de inactividad.
+
+1. Crear una cuenta gratuita en [uptimerobot.com](https://uptimerobot.com).
+2. **Add New Monitor**: tipo `HTTP(s)`, URL = `https://<tu-servicio>.a.run.app/health`,
+   intervalo = 5 minutos (el minimo del plan gratuito).
+3. Esto cumple dos funciones a la vez: alerta por correo si `/health`
+   empieza a devolver algo distinto de 200, y mantiene el contenedor
+   "tibio" (una instancia activa) para que los usuarios reales no sufran
+   el cold start — a costa de mantener 1 instancia corriendo ~24/7, lo
+   cual **sigue estando dentro del free tier de Cloud Run** (que incluye
+   un numero generoso de vCPU-segundos/mes gratis).
+
+---
+
+## 8. Variables de entorno y seguridad
+
+Resumen de las medidas de seguridad aplicadas en todo el proyecto (cada una
+ya se implemento en secciones anteriores; aqui se consolidan):
+
+| Medida | Donde | Seccion |
+|---|---|---|
+| `.env.example` con todas las llaves, sin valores reales | [`.env.example`](.env.example) | 2 |
+| `.env` real ignorado por git | [`.gitignore`](.gitignore) | 2 |
+| Ninguna credencial hardcodeada (siempre `os.environ`) | `app/db/supabase_client.py`, `run.py` | 2 |
+| Secrets de Cloud Run inyectados via GitHub Secrets, nunca en el repo | `.github/workflows/ci-cd.yml` | 6-7 |
+| Escaneo de secretos filtrados en cada push/PR | `gitleaks` + `.gitleaks.toml` | 6 |
+| Usuario no-root en el contenedor | `Dockerfile` | 4 |
+| Rate limiting contra abuso del free tier | `Flask-Limiter` en `/clasificar` | 2 |
+
+**Que hacer si un secret se filtra por accidente**: rotarlo inmediatamente
+(generar una nueva key de Service Account / regenerar el password de
+Supabase) y revocar el anterior — cambiar el valor en el secret de GitHub
+no invalida una key que ya fue expuesta en el historial de git; hay que
+invalidarla en el proveedor (GCP/Supabase) directamente. `gitleaks` en CI
+esta ahi como red de seguridad para detectar esto lo antes posible, no
+como sustituto de revisar el `git diff` antes de cada commit.
+
+---
+
+## Estructura completa del repositorio
+
+```
+.
+├── .github/
+│   ├── workflows/
+│   │   └── ci-cd.yml              # lint + seguridad + tests + deploy
+│   └── dependabot.yml              # actualizaciones automaticas de dependencias
+├── app/
+│   ├── __init__.py                 # application factory (create_app)
+│   ├── routes.py                    # los 4 endpoints
+│   ├── ml/
+│   │   └── clasificador.py           # carga modelos .joblib y expone clasificar(texto)
+│   ├── db/
+│   │   └── supabase_client.py        # conexion a Postgres con pool + reintentos
+│   ├── templates/
+│   │   └── dashboard.html             # panel de estadisticas (Chart.js)
+│   └── static/
+├── data/
+│   └── tickets_dataset.csv          # dataset sintetico (generado)
+├── models/
+│   ├── categoria_v{fecha}.joblib    # modelo de categoria (generado)
+│   ├── urgencia_v{fecha}.joblib     # modelo de urgencia (generado)
+│   └── latest.json                  # puntero a la version activa
+├── tests/
+│   ├── conftest.py                   # fixtures (app, client, mock de DB)
+│   └── test_api.py                    # tests del contrato HTTP de la API
+├── generar_dataset.py
+├── entrenar_modelo.py
+├── run.py                           # entry point (dev server / gunicorn)
+├── init_db.sql                      # CREATE TABLE de clasificaciones y predicciones_dudosas
+├── Dockerfile                        # build multi-stage, usuario no-root
+├── .dockerignore
+├── .gitleaks.toml                    # excepcion para .env.example
+├── requirements.txt
+├── requirements-dev.txt             # + pytest/black/isort/flake8/pre-commit
+├── pytest.ini
+├── pyproject.toml                    # config de black/isort
+├── .flake8
+├── .pre-commit-config.yaml
+├── .env.example
+├── .gitignore
+└── README.md
+```
