@@ -98,76 +98,43 @@ jobs:
           fi
 
   deploy:
-    name: Build y deploy a Cloud Run
+    name: Deploy a Render
     needs: [lint, seguridad, tests, docker-build]
     # Solo se despliega en un push DIRECTO a main (nunca en un PR ni en
-    # otras ramas). Si lint/seguridad/tests fallan, "needs" ya impide que
-    # este job se ejecute - el pipeline completo queda en rojo y no
-    # despliega, tal como pide la especificacion.
+    # otras ramas). Si lint/seguridad/tests/docker-build fallan, "needs" ya
+    # impide que este job se ejecute - el pipeline completo queda en rojo y
+    # no despliega, tal como pide la especificacion.
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Verificar que los secrets de GCP esten configurados
+      - name: Verificar que el Deploy Hook de Render este configurado
         id: check
         run: |
-          if [ -z "${{ secrets.GCP_SA_KEY }}" ] || [ -z "${{ secrets.GCP_PROJECT_ID }}" ]; then
-            echo "Faltan GCP_SA_KEY y/o GCP_PROJECT_ID como secrets de GitHub." >&2
-            echo "El deploy se omite - ver seccion 7 del README para configurarlos." >&2
+          if [ -z "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" ]; then
+            echo "Falta RENDER_DEPLOY_HOOK_URL como secret de GitHub." >&2
+            echo "El deploy se omite - ver seccion 7 del README para configurarlo." >&2
             echo "listo=false" >> "$GITHUB_OUTPUT"
           else
             echo "listo=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Autenticar con Google Cloud
-        if: steps.check.outputs.listo == 'true'
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
-
-      - name: Configurar gcloud CLI
-        if: steps.check.outputs.listo == 'true'
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Configurar Docker para Artifact Registry
-        if: steps.check.outputs.listo == 'true'
-        run: gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
-
-      - name: Crear repositorio en Artifact Registry si no existe
+      # Render ya tiene guardadas las variables de entorno (DATABASE_URL,
+      # LOG_LEVEL) desde su propio dashboard (seccion 7) - el "Deploy Hook"
+      # es una URL secreta que, al recibir un POST, le dice a Render
+      # "reconstruye y despliega la ultima version de main". Con
+      # Auto-Deploy apagado en Render, este es el UNICO disparador de
+      # deploys: solo ocurre cuando este job corre, es decir, solo despues
+      # de que lint/seguridad/tests/docker-build ya pasaron.
+      - name: Disparar deploy en Render
         if: steps.check.outputs.listo == 'true'
         run: |
-          gcloud artifacts repositories describe clasificador-tickets \
-            --location=us-central1 \
-            --project="${{ secrets.GCP_PROJECT_ID }}" \
-            || gcloud artifacts repositories create clasificador-tickets \
-                 --repository-format=docker \
-                 --location=us-central1 \
-                 --project="${{ secrets.GCP_PROJECT_ID }}" \
-                 --description="Imagenes del clasificador de tickets de soporte"
-
-      - name: Build y push de la imagen Docker
-        if: steps.check.outputs.listo == 'true'
-        env:
-          IMAGE: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/clasificador-tickets/api
-        run: |
-          docker build -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest" .
-          docker push "$IMAGE:${{ github.sha }}"
-          docker push "$IMAGE:latest"
-          echo "IMAGE_TAG=$IMAGE:${{ github.sha }}" >> "$GITHUB_ENV"
-
-      - name: Deploy a Cloud Run
-        if: steps.check.outputs.listo == 'true'
-        uses: google-github-actions/deploy-cloudrun@v2
-        with:
-          service: clasificador-tickets
-          region: us-central1
-          image: ${{ env.IMAGE_TAG }}
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          flags: --allow-unauthenticated
-          env_vars: |
-            DATABASE_URL=${{ secrets.DATABASE_URL }}
-            LOG_LEVEL=INFO
+          codigo=$(curl -s -o /tmp/render_respuesta.json -w "%{http_code}" \
+            -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}")
+          echo "Respuesta de Render (HTTP $codigo):"
+          cat /tmp/render_respuesta.json
+          if [ "$codigo" -ge 300 ]; then
+            echo "::error::Render devolvio HTTP $codigo al disparar el deploy"
+            exit 1
+          fi
+          echo ""
+          echo "Deploy disparado correctamente. Progreso visible en el dashboard de Render."

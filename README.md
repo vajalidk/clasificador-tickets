@@ -3,7 +3,7 @@
 API que recibe texto de soporte al cliente en espanol y devuelve
 **categoria**, **urgencia** y **nivel de confianza**, con historial
 persistente en Postgres, dashboard de estadisticas y despliegue automatico
-100% gratuito (Cloud Run + Supabase + GitHub Actions).
+100% gratuito (Render + Supabase + GitHub Actions).
 
 > Este README se construye seccion por seccion junto con el proyecto. Cada
 > apartado se completa a medida que se implementa esa parte del sistema.
@@ -93,7 +93,7 @@ API:
    LLM tiene una caida, un rate-limit, o cambia su contrato, `/clasificar`
    dejaria de funcionar. Con un modelo `.joblib` cargado en memoria, la
    clasificacion es una operacion local, determinista y sin red.
-3. **Corre dentro del limite de memoria/CPU del free tier de Cloud Run.**
+3. **Corre dentro del limite de memoria/CPU de un hosting gratuito (Render).**
    Los modelos de este proyecto pesan unos pocos MB y clasifican en
    milisegundos con CPU minima. Cargar un modelo de lenguaje (aunque fuera
    uno pequeno, local) para un dominio de 4 categorias seria
@@ -192,16 +192,16 @@ flowchart LR
 - **Logging estructurado, nunca `print`.** `_configurar_logging()` en
   `app/__init__.py` configura `logging.basicConfig` con timestamp y nivel
   configurable por `LOG_LEVEL` (INFO por defecto). Todos los modulos usan
-  `logging.getLogger(__name__)`. Cloud Run captura stdout automaticamente,
+  `logging.getLogger(__name__)`. Render captura stdout automaticamente,
   y un log estructurado con nivel permite filtrar y alertar en produccion;
   un `print` no se puede filtrar ni tiene severidad.
 - **Rate limiting con `Flask-Limiter` (20/min por IP en `/clasificar`).**
-  Protege el free tier de Supabase/Cloud Run de un abuso accidental o
+  Protege el free tier de Supabase/Render de un abuso accidental o
   deliberado. *Limitacion conocida y documentada*: el backend de
   almacenamiento por defecto de Flask-Limiter es en memoria del proceso; en
-  un despliegue con **mas de una instancia** de Cloud Run corriendo en
-  paralelo, cada instancia llevaria su propio contador (el limite real
-  efectivo seria `20 x num_instancias`). Para este proyecto de portafolio,
+  un despliegue con **mas de una instancia** corriendo en paralelo, cada
+  instancia llevaria su propio contador (el limite real efectivo seria
+  `20 x num_instancias`). Para este proyecto de portafolio,
   que corre en el free tier con bajo trafico, se acepta esta limitacion en
   vez de anadir una dependencia de pago (Redis gestionado) solo para tener
   un contador distribuido. Si el trafico creciera, la migracion natural
@@ -368,7 +368,7 @@ Se separaron a proposito: `requirements.txt` son las dependencias que
 `pytest`, `black`, `isort`, `flake8` y `pre-commit` — herramientas que solo
 se usan en desarrollo local y en CI. Esto mantiene la imagen Docker final
 mas pequena y evita instalar herramientas de testing en el contenedor que
-se despliega a Cloud Run.
+se despliega en produccion.
 
 ### 3.4 Dependabot (`.github/dependabot.yml`)
 
@@ -411,7 +411,7 @@ de `requirements.txt` necesitara compilarse desde codigo fuente (por
 ejemplo, un wheel sin build precompilado para alguna arquitectura), las
 herramientas de compilacion (`gcc`, headers de desarrollo, etc.) solo
 existirian en la etapa `build` y nunca inflarian el tamano de la imagen que
-realmente se despliega a Cloud Run.
+realmente se despliega en produccion.
 
 ### 4.2 Modelos: se copian, no se reentrenan en el build
 
@@ -449,10 +449,11 @@ EXPOSE 8080
 CMD gunicorn --bind 0.0.0.0:$PORT --workers 2 run:app
 ```
 
-Cloud Run inyecta la variable `PORT` en tiempo de ejecucion (por defecto
-8080) y espera que el contenedor escuche ahi; el `ENV PORT=8080` de arriba
-es solo el valor por defecto para pruebas locales con
-`docker run` sin `-e PORT=...`. El `CMD` se escribe en **forma shell**
+La mayoria de plataformas de hosting de contenedores (Render, Cloud Run,
+etc.) inyectan la variable `PORT` en tiempo de ejecucion y esperan que el
+contenedor escuche ahi; el `ENV PORT=8080` de arriba es solo el valor por
+defecto para pruebas locales con `docker run` sin `-e PORT=...`. El `CMD`
+se escribe en **forma shell**
 (no en forma exec/array) a proposito: es la unica forma en que `$PORT` se
 expande al arrancar el contenedor en vez de pasarse como texto literal.
 
@@ -487,7 +488,7 @@ curl http://localhost:8080/health
 > para expandir `$PORT`). El workflow de CI/CD (seccion 6) construye esta
 > misma imagen en un runner de GitHub Actions (Linux) en cada push a
 > `main`, lo cual sirve como la validacion real end-to-end antes de
-> desplegar a Cloud Run.
+> desplegar (seccion 7, Render).
 
 ---
 
@@ -496,7 +497,7 @@ curl http://localhost:8080/health
 ### 5.1 Estrategia de ramas
 
 - **`main`**: siempre desplegable. Cada push a `main` dispara el deploy a
-  Cloud Run (seccion 6). Se protege en GitHub (Settings -> Branches -> Add
+  Render (seccion 6). Se protege en GitHub (Settings -> Branches -> Add
   branch ruleset para `main`): exigir que los checks `lint`, `seguridad` y
   `tests` pasen antes de poder mergear, y prohibir el push directo sin PR
   (esto se configura manualmente en la UI de GitHub por el dueño del repo;
@@ -550,7 +551,7 @@ flowchart LR
     C --> E
     D --> E
     G --> E
-    E -->|solo si push a main Y todos OK| F[deploy a Cloud Run]
+    E -->|solo si push a main Y todos OK| F[deploy: dispara Render]
 ```
 
 1. **`lint`**: `black --check`, `isort --check`, `flake8` sobre todo el
@@ -570,10 +571,11 @@ flowchart LR
    *algun* codigo HTTP (503 es el esperado sin una DB real — lo que se
    valida es que gunicorn/Flask arrancan dentro del contenedor, no la
    conectividad a Postgres). Esta imagen **no se publica a ningun
-   registry** aqui, solo se valida que compila y arranca; el build "real"
-   que si se publica ocurre dentro del job `deploy`. Este job existe
-   porque la maquina de desarrollo no tenia Docker instalado (seccion 4) —
-   este es el punto donde el Dockerfile se valida de verdad, end-to-end.
+   registry** aqui, solo se valida que compila y arranca — Render
+   construye su propia copia de la imagen a partir del mismo `Dockerfile`
+   al desplegar (seccion 7). Este job existe porque la maquina de
+   desarrollo no tenia Docker instalado (seccion 4) — este es el punto
+   donde el Dockerfile se valida de verdad, end-to-end.
 5. **`deploy`**: **solo corre si los 4 jobs anteriores pasaron** (`needs:
    [lint, seguridad, tests, docker-build]`) **y** el evento es un push
    directo a `main` (nunca en un Pull Request ni en otra rama). Si falta
@@ -581,17 +583,28 @@ flowchart LR
    job — el pipeline completo queda en rojo y no se despliega nada,
    cumpliendo el requisito de "si algo falla, no se despliega".
 
-### 6.2 Deploy sin bloquear el pipeline si aun no hay credenciales de GCP
+> **Nota sobre la plataforma de despliegue**: la especificacion original de
+> este proyecto proponia Google Cloud Run. Durante la configuracion real
+> con una cuenta de Google Cloud en Mexico, el flujo de verificacion de
+> facturacion (formulario de RFC/regimen fiscal) fallo repetidamente con
+> errores del lado de Google (`OR_BACR2_59`) sin una solucion clara y
+> disponible en el momento. Se decidio migrar el despliegue a **Render**
+> (render.com), que ofrece el mismo tipo de despliegue gratuito de
+> contenedores Docker con una verificacion de cuenta mucho mas simple (sin
+> campos fiscales especificos de un pais). El `Dockerfile` de la seccion 4
+> no cambio en absoluto — Render lo usa directamente, igual que hubiera
+> hecho Cloud Run.
 
-El job `deploy` primero verifica (`steps.check`) si existen los secrets
-`GCP_SA_KEY` y `GCP_PROJECT_ID`. Si no existen (por ejemplo, recien
-clonaste este repo y todavia no configuraste Cloud Run), los pasos de
-autenticacion/build/deploy se saltan limpiamente (`if:
-steps.check.outputs.listo == 'true'`) en vez de fallar con un error
-críptico de autenticacion. Esto es una decision deliberada no exigida
+### 6.2 Deploy sin bloquear el pipeline si aun no hay credenciales de Render
+
+El job `deploy` primero verifica (`steps.check`) si existe el secret
+`RENDER_DEPLOY_HOOK_URL`. Si no existe (por ejemplo, recien clonaste este
+repo y todavia no configuraste Render), el paso de disparo del deploy se
+salta limpiamente (`if: steps.check.outputs.listo == 'true'`) en vez de
+fallar con un error críptico. Esto es una decision deliberada no exigida
 explicitamente por la especificacion: preferimos que el pipeline muestre
 "omitido" en vez de "fallido" cuando el motivo es simplemente que el
-usuario aun no completo la seccion 7 (configuracion de Cloud Run), para no
+usuario aun no completo la seccion 7 (configuracion de Render), para no
 confundir un problema de configuracion pendiente con un bug real del
 codigo.
 
@@ -599,9 +612,12 @@ codigo.
 
 | Secret | Contenido | Usado por |
 |---|---|---|
-| `GCP_SA_KEY` | JSON completo de la Service Account (ver seccion 7) | autenticacion con `google-github-actions/auth` |
-| `GCP_PROJECT_ID` | ID del proyecto de Google Cloud | Artifact Registry + Cloud Run |
-| `DATABASE_URL` | Connection string de Supabase | se inyecta como variable de entorno al servicio de Cloud Run |
+| `RENDER_DEPLOY_HOOK_URL` | URL secreta del "Deploy Hook" del servicio en Render (seccion 7.3) | dispara el deploy con un simple `curl -X POST` |
+
+`DATABASE_URL` y `LOG_LEVEL` **ya no son secrets de GitHub** — se
+configuran directamente como variables de entorno en el dashboard de
+Render (seccion 7.2), porque es Render (no GitHub Actions) quien corre el
+contenedor en produccion.
 
 `GITHUB_TOKEN` (usado por gitleaks para poder comentar en PRs) lo provee
 GitHub automaticamente, no hace falta crearlo.
@@ -616,103 +632,100 @@ tipo `pull_request`.
 
 ---
 
-## 7. Despliegue gratuito (Google Cloud Run)
+## 7. Despliegue gratuito (Render)
 
 Guia paso a paso para dejar la API corriendo en una URL publica sin gastar
 un centavo.
 
-### 7.1 Cuenta y proyecto de Google Cloud
+### 7.1 Cuenta y servicio en Render
 
-1. Crear una cuenta en [cloud.google.com](https://cloud.google.com/free) —
-   el plan gratuito pide una tarjeta solo para verificar identidad, no
-   cobra automaticamente al terminar la prueba gratuita.
-2. **Antes de crear nada mas**, ir a **Billing -> Budgets & alerts -> Create
-   budget** y configurar un presupuesto de **$0** con alertas al 50/90/100%.
-   Esto no impide gastar, pero **avisa por correo de inmediato** ante
-   cualquier cargo inesperado — la unica red de seguridad real contra un
-   error de configuracion que genere costos.
-3. Crear un proyecto nuevo: **IAM & Admin -> Create Project**. Anotar el
-   **Project ID** (no el nombre) — es el valor que va en el secret
-   `GCP_PROJECT_ID`.
-4. Habilitar las APIs necesarias (**APIs & Services -> Enable APIs**):
-   - `Cloud Run Admin API`
-   - `Artifact Registry API`
+1. Crear una cuenta en [render.com](https://render.com) — el boton
+   **"Sign up with GitHub"** es el mas directo, porque de una vez deja
+   autorizado el acceso a tus repos.
+2. **New -> Web Service** -> selecciona el repositorio
+   `clasificador-tickets`.
+3. Render detecta el `Dockerfile` automaticamente y lo usa como metodo de
+   build (no elijas un runtime de Python manual).
+4. En **Instance Type**, selecciona **Free** ($0/month) — no el plan de
+   $7/mes que Render sugiere por defecto para "mas potencia".
+5. Antes de desplegar, configura las dos secciones siguientes
+   (Environment Variables y Auto-Deploy).
 
-### 7.2 Service Account para GitHub Actions
+### 7.2 Variables de entorno en Render
 
-1. **IAM & Admin -> Service Accounts -> Create Service Account**, por
-   ejemplo `github-actions-deploy`.
-2. Asignarle dos roles:
-   - **Cloud Run Admin** (`roles/run.admin`) — para crear/actualizar el
-     servicio.
-   - **Service Account User** (`roles/iam.serviceAccountUser`) — para que
-     Cloud Run pueda "actuar como" la Service Account que ejecuta el
-     contenedor.
-   - (Tambien conviene **Artifact Registry Writer** —
-     `roles/artifactregistry.writer` — para poder subir la imagen Docker;
-     no estaba en la lista original pero es necesaria para el paso de
-     `docker push` del workflow.)
-3. **Keys -> Add Key -> Create new key -> JSON**. Descarga un archivo
-   `.json` — **este archivo es una credencial real, tratalo como una
-   contrasena** (no lo commitees, no lo compartas).
+En la seccion **"Environment Variables"** del formulario de creacion (o
+despues, en **Settings -> Environment** del servicio ya creado):
+
+| Key | Value |
+|---|---|
+| `DATABASE_URL` | El connection string de Supabase (seccion 2.4) — **usa el modo "Session pooler", no "Direct connection"** (ver nota de IPv4 abajo) |
+| `LOG_LEVEL` | `INFO` |
+
+> **Por que "Session pooler" y no "Direct connection"**: Supabase ofrece
+> conexion directa por IPv6 de forma gratuita; IPv4 es un add-on de pago.
+> La mayoria de plataformas de hosting gratuito (incluyendo Render y Cloud
+> Run) solo tienen salida a internet por IPv4. Usar "Direct connection"
+> haría que el despliegue nunca pudiera conectarse a la base de datos. El
+> "Session pooler" de Supabase si soporta IPv4 sin costo extra, y se
+> comporta como una conexion de sesion normal (compatible con el pool de
+> conexiones de `psycopg2` que usa `app/db/supabase_client.py`).
+
+### 7.3 Desactivar Auto-Deploy y crear el Deploy Hook
+
+Por defecto, Render redespliega automaticamente en cada push a `main`,
+**sin pasar por nuestro pipeline de CI**. Para que el deploy solo ocurra
+si `lint`/`seguridad`/`tests`/`docker-build` pasan (igual que se penso
+originalmente para Cloud Run):
+
+1. En el formulario de creacion (o en **Settings** del servicio), busca
+   **"Auto-Deploy"** y cambialo de **"On Commit"** a **"Off"**.
+2. Click en **"Deploy web service"** para crear el servicio (este primer
+   deploy es manual, para que el servicio exista).
+3. Una vez creado, ve a **Settings** del servicio -> busca la seccion
+   **"Deploy Hook"** -> copia esa URL (empieza con
+   `https://api.render.com/deploy/srv-...`).
 4. En GitHub: **Settings -> Secrets and variables -> Actions -> New
-   repository secret**, crear:
-   - `GCP_SA_KEY`: pegar el **contenido completo** del JSON descargado.
-   - `GCP_PROJECT_ID`: el Project ID del paso 7.1.3.
-   - `DATABASE_URL`: el connection string de Supabase (seccion 2.4).
+   repository secret** -> crea `RENDER_DEPLOY_HOOK_URL` con esa URL.
 
-### 7.3 Como se dispara el deploy
-
-Con los 3 secrets configurados, el siguiente push a `main` (o el merge de
-un PR hacia `main`) hace que `.github/workflows/ci-cd.yml`:
-
-1. Corra `lint`, `seguridad` y `tests`.
-2. Si los 3 pasan, el job `deploy` se autentica con `GCP_SA_KEY`, crea el
-   repositorio de Artifact Registry si no existe, construye la imagen del
-   `Dockerfile` (seccion 4), la sube como
-   `us-central1-docker.pkg.dev/<GCP_PROJECT_ID>/clasificador-tickets/api`,
-   y la despliega con `google-github-actions/deploy-cloudrun` (equivalente
-   a correr `gcloud run deploy --image ... --allow-unauthenticated --region
-   us-central1` manualmente), inyectando `DATABASE_URL` y `LOG_LEVEL` como
-   variables de entorno del servicio.
+A partir de aqui, cada push a `main` que pase los 4 checks de calidad hace
+que GitHub Actions llame a esa URL, y Render reconstruye y despliega la
+ultima version — exactamente el mismo gate que se diseño para Cloud Run,
+solo con una plataforma distinta por debajo.
 
 ### 7.4 URL publica
 
-Cloud Run asigna una URL con la forma:
+Render asigna una URL con la forma:
 
 ```
-https://clasificador-tickets-<hash-aleatorio>-uc.a.run.app
+https://clasificador-tickets.onrender.com
 ```
 
 Una vez desplegado, esa URL expone:
 
 | Endpoint | URL |
 |---|---|
-| Clasificar | `POST https://<tu-servicio>.a.run.app/clasificar` |
-| Health | `GET https://<tu-servicio>.a.run.app/health` |
-| Dashboard | `GET https://<tu-servicio>.a.run.app/dashboard` |
-| Swagger | `GET https://<tu-servicio>.a.run.app/apidocs` |
+| Clasificar | `POST https://clasificador-tickets.onrender.com/clasificar` |
+| Health | `GET https://clasificador-tickets.onrender.com/health` |
+| Dashboard | `GET https://clasificador-tickets.onrender.com/dashboard` |
+| Swagger | `GET https://clasificador-tickets.onrender.com/apidocs` |
 
-> Esta seccion se actualizara con la URL real en cuanto el primer deploy
-> corra exitosamente (requiere que completes los pasos 7.1 y 7.2 con tu
-> propia cuenta de Google Cloud — son credenciales personales que no
-> podemos crear en tu nombre).
+> Esta seccion se actualizara con la URL exacta (el nombre real del
+> servicio puede variar) en cuanto el primer deploy corra exitosamente.
 
 ### 7.5 UptimeRobot: monitoreo gratuito + reducir cold starts
 
-Cloud Run "duerme" un servicio sin trafico (escala a 0 instancias) para no
-cobrar por tiempo inactivo; el efecto secundario es un "cold start" (varios
-segundos de latencia) en la primera request tras un periodo de inactividad.
+Render "duerme" las instancias gratuitas tras un periodo sin trafico para
+no cobrar por tiempo inactivo; el efecto secundario es un "cold start"
+(unos 10-30 segundos) en la primera request tras la inactividad.
 
 1. Crear una cuenta gratuita en [uptimerobot.com](https://uptimerobot.com).
-2. **Add New Monitor**: tipo `HTTP(s)`, URL = `https://<tu-servicio>.a.run.app/health`,
-   intervalo = 5 minutos (el minimo del plan gratuito).
+2. **Add New Monitor**: tipo `HTTP(s)`, URL =
+   `https://clasificador-tickets.onrender.com/health`, intervalo = 5
+   minutos (el minimo del plan gratuito).
 3. Esto cumple dos funciones a la vez: alerta por correo si `/health`
-   empieza a devolver algo distinto de 200, y mantiene el contenedor
-   "tibio" (una instancia activa) para que los usuarios reales no sufran
-   el cold start — a costa de mantener 1 instancia corriendo ~24/7, lo
-   cual **sigue estando dentro del free tier de Cloud Run** (que incluye
-   un numero generoso de vCPU-segundos/mes gratis).
+   empieza a devolver algo distinto de 200, y mantiene la instancia
+   "tibia" (recibiendo trafico cada 5 minutos) para que los usuarios
+   reales casi nunca sufran el cold start.
 
 ---
 
@@ -726,18 +739,19 @@ ya se implemento en secciones anteriores; aqui se consolidan):
 | `.env.example` con todas las llaves, sin valores reales | [`.env.example`](.env.example) | 2 |
 | `.env` real ignorado por git | [`.gitignore`](.gitignore) | 2 |
 | Ninguna credencial hardcodeada (siempre `os.environ`) | `app/db/supabase_client.py`, `run.py` | 2 |
-| Secrets de Cloud Run inyectados via GitHub Secrets, nunca en el repo | `.github/workflows/ci-cd.yml` | 6-7 |
+| `DATABASE_URL` vive solo en el dashboard de Render y en `.env` local, nunca en GitHub ni en el repo | Render (seccion 7.2) | 7 |
+| El unico secret de GitHub (`RENDER_DEPLOY_HOOK_URL`) no expone credenciales de la app, solo dispara un deploy | `.github/workflows/ci-cd.yml` | 6-7 |
 | Escaneo de secretos filtrados en cada push/PR | `gitleaks` + `.gitleaks.toml` | 6 |
 | Usuario no-root en el contenedor | `Dockerfile` | 4 |
 | Rate limiting contra abuso del free tier | `Flask-Limiter` en `/clasificar` | 2 |
 
 **Que hacer si un secret se filtra por accidente**: rotarlo inmediatamente
-(generar una nueva key de Service Account / regenerar el password de
-Supabase) y revocar el anterior — cambiar el valor en el secret de GitHub
-no invalida una key que ya fue expuesta en el historial de git; hay que
-invalidarla en el proveedor (GCP/Supabase) directamente. `gitleaks` en CI
-esta ahi como red de seguridad para detectar esto lo antes posible, no
-como sustituto de revisar el `git diff` antes de cada commit.
+(regenerar el password de Supabase, o regenerar el Deploy Hook de Render
+desde su dashboard) y revocar el anterior — cambiar el valor en el secret
+de GitHub no invalida una credencial que ya fue expuesta en el historial
+de git; hay que invalidarla en el proveedor (Supabase/Render) directamente.
+`gitleaks` en CI esta ahi como red de seguridad para detectar esto lo antes
+posible, no como sustituto de revisar el `git diff` antes de cada commit.
 
 ---
 
