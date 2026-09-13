@@ -92,8 +92,18 @@ def check_conexion() -> bool:
     return True
 
 
-def insertar_clasificacion(texto: str, categoria: str, urgencia: str, confianza: float) -> dict:
-    fecha_hora = datetime.now(timezone.utc)
+def insertar_clasificacion(
+    texto: str,
+    categoria: str,
+    urgencia: str,
+    confianza: float,
+    fecha_hora: datetime | None = None,
+) -> dict:
+    """`fecha_hora` es opcional y normalmente se omite (se usa el momento
+    actual). Solo se pasa explicitamente desde `seed_demo_data.py`, para
+    poder distribuir tickets de demostracion en los ultimos N dias y que
+    la grafica de "tickets por dia" del dashboard se vea realista."""
+    fecha_hora = fecha_hora or datetime.now(timezone.utc)
     with _cursor(commit=True) as cur:
         cur.execute(
             """
@@ -106,8 +116,14 @@ def insertar_clasificacion(texto: str, categoria: str, urgencia: str, confianza:
         return dict(cur.fetchone())
 
 
-def insertar_prediccion_dudosa(texto: str, categoria: str, urgencia: str, confianza: float) -> dict:
-    fecha_hora = datetime.now(timezone.utc)
+def insertar_prediccion_dudosa(
+    texto: str,
+    categoria: str,
+    urgencia: str,
+    confianza: float,
+    fecha_hora: datetime | None = None,
+) -> dict:
+    fecha_hora = fecha_hora or datetime.now(timezone.utc)
     with _cursor(commit=True) as cur:
         cur.execute(
             """

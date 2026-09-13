@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mesa de Ayuda - Nuevo Ticket</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #0f1220;
+      --card-bg: #1a1f36;
+      --text: #e8eaf2;
+      --text-muted: #9aa0b4;
+      --border: #2a3050;
+      --accent: #6c8cff;
+      --accent-hover: #849dff;
+      --exito: #5cd6a9;
+      --alta: #ff6c6c;
+      --media: #f2c94c;
+      --baja: #5cd6a9;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(circle at top, #171b30 0%, var(--bg) 60%);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+    .contenedor { width: 100%; max-width: 640px; }
+
+    .encabezado { text-align: center; margin-bottom: 28px; }
+    .encabezado .icono {
+      width: 56px; height: 56px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, var(--accent), #9b6cff);
+      border-radius: 16px;
+      font-size: 28px;
+      margin-bottom: 14px;
+    }
+    .encabezado h1 { margin: 0 0 6px 0; font-size: 1.6rem; }
+    .encabezado p { margin: 0; color: var(--text-muted); font-size: 0.95rem; }
+
+    .tarjeta {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin: 18px 0 6px 0;
+    }
+    label.requerido::after { content: " *"; color: var(--alta); }
+    input[type="text"], input[type="email"], textarea {
+      width: 100%;
+      background: #12162a;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: var(--text);
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: border-color 0.15s ease;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    textarea { resize: vertical; min-height: 130px; }
+
+    .fila-doble {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 520px) {
+      .fila-doble { grid-template-columns: 1fr; }
+    }
+
+    .contador {
+      text-align: right;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .contador.limite { color: var(--alta); }
+
+    button.enviar {
+      width: 100%;
+      margin-top: 24px;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #0b0e1a;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.05s ease;
+    }
+    button.enviar:hover:not(:disabled) { background: var(--accent-hover); }
+    button.enviar:active:not(:disabled) { transform: scale(0.99); }
+    button.enviar:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .mensaje-error {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: rgba(255, 108, 108, 0.12);
+      border: 1px solid rgba(255, 108, 108, 0.4);
+      color: #ffb3b3;
+      font-size: 0.88rem;
+    }
+
+    .resultado { text-align: center; }
+    .resultado .icono-exito {
+      width: 64px; height: 64px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: rgba(92, 214, 169, 0.15);
+      border: 1px solid rgba(92, 214, 169, 0.4);
+      border-radius: 50%;
+      font-size: 32px;
+      margin-bottom: 16px;
+      color: var(--exito);
+    }
+    .resultado h2 { margin: 0 0 6px 0; }
+    .resultado p.folio { color: var(--text-muted); margin: 0 0 24px 0; font-size: 0.9rem; }
+
+    .deteccion {
+      text-align: left;
+      background: #12162a;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-top: 8px;
+    }
+    .deteccion h3 {
+      margin: 0 0 14px 0;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .fila-deteccion {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .fila-deteccion:last-child { border-bottom: none; }
+    .fila-deteccion .etiqueta { color: var(--text-muted); font-size: 0.9rem; }
+    .badge {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+    .badge.categoria { background: rgba(108, 140, 255, 0.15); color: var(--accent); }
+    .badge.urgencia-alta { background: rgba(255, 108, 108, 0.15); color: var(--alta); }
+    .badge.urgencia-media { background: rgba(242, 201, 76, 0.15); color: var(--media); }
+    .badge.urgencia-baja { background: rgba(92, 214, 169, 0.15); color: var(--baja); }
+
+    .otro-ticket {
+      display: inline-block;
+      margin-top: 22px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .otro-ticket:hover { text-decoration: underline; }
+
+    .pie {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    .pie a { color: var(--text-muted); }
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+    <div class="encabezado">
+      <div class="icono">🎧</div>
+      <h1>Mesa de Ayuda</h1>
+      <p>Cuéntanos tu problema o solicitud. Nuestro sistema la clasifica y prioriza automáticamente.</p>
+    </div>
+
+    <div class="tarjeta">
+      <form id="form-ticket">
+        <div class="fila-doble">
+          <div>
+            <label for="nombre">Nombre (opcional)</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" maxlength="120" />
+          </div>
+          <div>
+            <label for="correo">Correo (opcional)</label>
+            <input type="email" id="correo" name="correo" placeholder="tucorreo@ejemplo.com" maxlength="150" />
+          </div>
+        </div>
+
+        <label for="asunto">Asunto (opcional)</label>
+        <input type="text" id="asunto" name="asunto" placeholder="Un resumen breve de tu solicitud" maxlength="150" />
+
+        <label for="mensaje" class="requerido">Mensaje</label>
+        <textarea id="mensaje" name="mensaje" maxlength="2000"
+          placeholder="Describe tu problema o solicitud con el mayor detalle posible..."></textarea>
+        <div class="contador" id="contador">0 / 2000</div>
+
+        <button type="submit" class="enviar" id="boton-enviar">Enviar solicitud</button>
+
+        <div class="mensaje-error" id="caja-error" hidden></div>
+      </form>
+
+      <div class="resultado" id="caja-resultado" hidden>
+        <div class="icono-exito">✓</div>
+        <h2>¡Listo! Tu ticket fue recibido</h2>
+        <p class="folio">Nuestro equipo le dará seguimiento a la brevedad.</p>
+
+        <div class="deteccion">
+          <h3>Así clasificó tu ticket nuestro sistema automáticamente</h3>
+          <div class="fila-deteccion">
+            <span class="etiqueta">Categoría</span>
+            <span class="badge categoria" id="valor-categoria">-</span>
+          </div>
+          <div class="fila-deteccion">
+            <span class="etiqueta">Urgencia</span>
+            <span class="badge" id="valor-urgencia">-</span>
+          </div>
+          <div class="fila-deteccion">
+            <span class="etiqueta">Confianza del modelo</span>
+            <span class="etiqueta" id="valor-confianza" style="color: var(--text);">-</span>
+          </div>
+        </div>
+
+        <a class="otro-ticket" id="enviar-otro">Enviar otro ticket →</a>
+      </div>
+    </div>
+
+    <p class="pie">
+      Proyecto de portafolio - <a href="/dashboard">Ver panel de estadísticas</a> ·
+      <a href="/apidocs">Documentación de la API</a>
+    </p>
+  </div>
+
+  <script>
+    const MAX_LARGO = 2000;
+    const form = document.getElementById("form-ticket");
+    const mensaje = document.getElementById("mensaje");
+    const contador = document.getElementById("contador");
+    const botonEnviar = document.getElementById("boton-enviar");
+    const cajaError = document.getElementById("caja-error");
+    const cajaResultado = document.getElementById("caja-resultado");
+    const enviarOtro = document.getElementById("enviar-otro");
+
+    mensaje.addEventListener("input", () => {
+      const largo = mensaje.value.length;
+      contador.textContent = `${largo} / ${MAX_LARGO}`;
+      contador.classList.toggle("limite", largo > MAX_LARGO - 100);
+    });
+
+    function mostrarError(texto) {
+      cajaError.textContent = texto;
+      cajaError.hidden = false;
+    }
+
+    function ocultarError() {
+      cajaError.hidden = true;
+      cajaError.textContent = "";
+    }
+
+    function badgeUrgencia(urgencia) {
+      const clase = { alta: "urgencia-alta", media: "urgencia-media", baja: "urgencia-baja" }[urgencia] || "urgencia-media";
+      return clase;
+    }
+
+    form.addEventListener("submit", async (evento) => {
+      evento.preventDefault();
+      ocultarError();
+
+      const asunto = document.getElementById("asunto").value.trim();
+      const cuerpo = mensaje.value.trim();
+
+      if (!cuerpo) {
+        mostrarError("Escribe un mensaje describiendo tu problema.");
+        return;
+      }
+
+      // Combinamos asunto + mensaje en un solo texto: la API solo entiende
+      // el campo "texto" (ver POST /clasificar en /apidocs).
+      const texto = asunto ? `${asunto}. ${cuerpo}` : cuerpo;
+
+      botonEnviar.disabled = true;
+      botonEnviar.textContent = "Enviando...";
+
+      try {
+        const resp = await fetch("/clasificar", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ texto }),
+        });
+
+        const datos = await resp.json();
+
+        if (!resp.ok) {
+          if (resp.status === 429) {
+            throw new Error("Se enviaron demasiadas solicitudes. Espera un minuto e intenta de nuevo.");
+          }
+          throw new Error(datos.error || `Error inesperado (HTTP ${resp.status})`);
+        }
+
+        document.getElementById("valor-categoria").textContent = datos.categoria;
+        const badgeUrg = document.getElementById("valor-urgencia");
+        badgeUrg.textContent = datos.urgencia;
+        badgeUrg.className = `badge ${badgeUrgencia(datos.urgencia)}`;
+        document.getElementById("valor-confianza").textContent =
+          `${Math.round(datos.confianza * 100)}%`;
+
+        form.hidden = true;
+        cajaResultado.hidden = false;
+      } catch (error) {
+        mostrarError(error.message || "No se pudo enviar el ticket. Intenta de nuevo.");
+      } finally {
+        botonEnviar.disabled = false;
+        botonEnviar.textContent = "Enviar solicitud";
+      }
+    });
+
+    enviarOtro.addEventListener("click", () => {
+      form.reset();
+      contador.textContent = `0 / ${MAX_LARGO}`;
+      form.hidden = false;
+      cajaResultado.hidden = true;
+    });
+  </script>
+</body>
+</html>

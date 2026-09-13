@@ -23,6 +23,13 @@ def test_health_responde_200(client):
     assert resp.get_json() == {"status": "ok"}
 
 
+def test_nuevo_ticket_responde_200_con_html(client):
+    resp = client.get("/nuevo-ticket")
+
+    assert resp.status_code == 200
+    assert b"Mesa de Ayuda" in resp.data
+
+
 def test_clasificar_texto_valido_devuelve_200_con_forma_correcta(client):
     resp = client.post(
         "/clasificar",

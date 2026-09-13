@@ -172,7 +172,7 @@ flowchart LR
   (`create_app()`), en vez de crear un `Flask()` global. Esto permite crear
   instancias de la app aisladas en los tests (seccion 3), cada una con su
   propia configuracion, sin que un test contamine el estado de otro.
-- **`app/routes.py`** contiene los 4 endpoints y llama a `app/ml` y
+- **`app/routes.py`** contiene los 5 endpoints y llama a `app/ml` y
   `app/db` a traves de sus funciones publicas — nunca accede a joblib o a
   psycopg2 directamente. Esto mantiene la logica de negocio (validacion,
   persistencia condicional) separada de los detalles de implementacion del
@@ -233,9 +233,34 @@ flowchart LR
 |---|---|---|
 | `POST` | `/clasificar` | Clasifica un ticket: `{"texto": "..."}` -> `{"categoria", "urgencia", "confianza"}` |
 | `GET` | `/health` | 200 si la app y la DB responden; 503 con detalle si la DB falla |
+| `GET` | `/nuevo-ticket` | Formulario publico (HTML) para que un usuario final envie un ticket, sin tocar la API directamente |
 | `GET` | `/dashboard` | HTML con Chart.js, consume `/api/estadisticas` |
 | `GET` | `/api/estadisticas` | JSON con agregaciones para el dashboard |
 | `GET` | `/apidocs` | Swagger UI autogenerado (flasgger) |
+
+### 2.3.1 `/nuevo-ticket`: formulario para usuarios finales
+
+Swagger (`/apidocs`) es documentacion para desarrolladores, no una interfaz
+pensada para que alguien sin conocimientos tecnicos reporte un problema.
+[`app/templates/nuevo_ticket.html`](app/templates/nuevo_ticket.html) es una
+pagina publica con la estetica de una "Mesa de Ayuda" corporativa (campos
+de Nombre/Correo opcionales, Asunto y Mensaje) que:
+
+1. Combina Asunto + Mensaje en un solo texto y lo envia via `fetch()` a
+   `POST /clasificar` (el mismo endpoint que ya existia, sin duplicar
+   logica de clasificacion ni de persistencia).
+2. Muestra el resultado como una confirmacion de "ticket recibido",
+   revelando de forma transparente la categoria/urgencia/confianza que el
+   modelo detecto — una decision deliberada de este proyecto de
+   portafolio: el objetivo es exhibir el sistema de IA funcionando, a
+   diferencia de un ticket real de soporte donde ese detalle interno
+   normalmente se le ocultaria al usuario final.
+3. Maneja los mismos errores que ya devuelve la API (400 por texto vacio,
+   429 por rate limit) mostrando un mensaje legible en vez de un JSON
+   crudo.
+
+No se agrego ningun endpoint ni tabla nueva — es una capa de presentacion
+sobre `/clasificar` que ya existia desde la seccion 2.
 
 ### 2.4 Base de datos (Supabase / Postgres)
 
@@ -251,14 +276,40 @@ patrones de consulta que usa `GET /api/estadisticas`.
 2. "New Project" -> elegir un nombre, una contrasena para la base de datos
    (guardala, la necesitas para el connection string) y una region cercana.
 3. Esperar ~2 minutos a que se aprovisione el proyecto.
-4. Ir a **Project Settings -> Database -> Connection string -> URI** y
+4. Ir al boton **"Connect"** (arriba del proyecto) -> pestaña
+   **"Connection string"** -> metodo **"Session pooler"** (no "Direct
+   connection" - ver el porque en la seccion 7.2, tiene que ver con que la
+   mayoria de hosting gratuito solo tiene salida IPv4) -> tipo **URI**, y
    copiar la cadena (tiene la forma
-   `postgresql://postgres:[password]@db.xxxx.supabase.co:5432/postgres`).
+   `postgresql://postgres.<project-ref>:[password]@aws-0-<region>.pooler.supabase.com:5432/postgres`).
 5. Pegar esa URL en tu `.env` local como `DATABASE_URL` (ver
-   `.env.example`), y mas adelante como secret de GitHub Actions para el
-   despliegue (seccion 6/7).
+   `.env.example`), y mas adelante como variable de entorno en el
+   dashboard de Render (seccion 7.2) para el despliegue.
 6. Abrir el **SQL Editor** de Supabase, pegar el contenido de
    `init_db.sql` y ejecutarlo una sola vez para crear las tablas.
+
+### 2.4.1 Poblar el dashboard con datos de demostracion (`seed_demo_data.py`)
+
+Con un dashboard recien creado, las graficas de la seccion 2.3 se ven
+vacias hasta que existan varias clasificaciones. En vez de mandar tickets
+uno por uno (chocando ademas contra el rate limit de 20/min de
+`/clasificar`), [`seed_demo_data.py`](seed_demo_data.py) genera texto
+variado reutilizando las plantillas de `generar_dataset.py`, lo clasifica
+con el modelo real (`app.ml.clasificador.clasificar`) y lo inserta
+**directamente en Supabase** (mismas funciones de `app/db/supabase_client.py`
+que usa la API), con fechas distribuidas aleatoriamente en los ultimos N
+dias para que la grafica de "tickets por dia" se vea realista:
+
+```bash
+# Con tu .env configurado (DATABASE_URL apuntando a tu Supabase):
+python seed_demo_data.py                    # 60 tickets, ultimos 7 dias
+python seed_demo_data.py --cantidad 150 --dias 14
+python seed_demo_data.py --seed 42          # reproducible
+```
+
+El resultado es indistinguible de tickets reales para `/dashboard` (usa
+el mismo modelo y las mismas tablas) — solo se genera en segundos en vez
+de minutos, y sin gastar el rate limit real de la API.
 
 ### 2.5 Ejemplos curl
 
@@ -765,13 +816,14 @@ posible, no como sustituto de revisar el `git diff` antes de cada commit.
 │   └── dependabot.yml              # actualizaciones automaticas de dependencias
 ├── app/
 │   ├── __init__.py                 # application factory (create_app)
-│   ├── routes.py                    # los 4 endpoints
+│   ├── routes.py                    # los 5 endpoints
 │   ├── ml/
 │   │   └── clasificador.py           # carga modelos .joblib y expone clasificar(texto)
 │   ├── db/
 │   │   └── supabase_client.py        # conexion a Postgres con pool + reintentos
 │   ├── templates/
-│   │   └── dashboard.html             # panel de estadisticas (Chart.js)
+│   │   ├── dashboard.html             # panel de estadisticas (Chart.js)
+│   │   └── nuevo_ticket.html           # formulario publico "Mesa de Ayuda"
 │   └── static/
 ├── data/
 │   └── tickets_dataset.csv          # dataset sintetico (generado)
@@ -784,6 +836,7 @@ posible, no como sustituto de revisar el `git diff` antes de cada commit.
 │   └── test_api.py                    # tests del contrato HTTP de la API
 ├── generar_dataset.py
 ├── entrenar_modelo.py
+├── seed_demo_data.py                # pobla el dashboard con datos de demo
 ├── run.py                           # entry point (dev server / gunicorn)
 ├── init_db.sql                      # CREATE TABLE de clasificaciones y predicciones_dudosas
 ├── Dockerfile                        # build multi-stage, usuario no-root

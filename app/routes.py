@@ -170,6 +170,23 @@ def endpoint_health():
     return jsonify({"status": "ok"}), 200
 
 
+@main_bp.route("/nuevo-ticket", methods=["GET"])
+def endpoint_nuevo_ticket():
+    """Formulario publico para enviar un ticket de soporte (pensado para
+    usuarios finales, no para desarrolladores) - envia internamente al
+    mismo POST /clasificar via fetch().
+    ---
+    tags:
+      - Dashboard
+    produces:
+      - text/html
+    responses:
+      200:
+        description: Pagina HTML del formulario
+    """
+    return render_template("nuevo_ticket.html")
+
+
 @main_bp.route("/dashboard", methods=["GET"])
 def endpoint_dashboard():
     """Panel de estadisticas (HTML + Chart.js).
