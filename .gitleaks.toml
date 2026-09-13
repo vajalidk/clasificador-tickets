@@ -1,0 +1,13 @@
+# Configuracion de gitleaks (usada por .github/workflows/ci-cd.yml).
+# Extiende el ruleset por defecto de gitleaks (deteccion de API keys, tokens,
+# credenciales de AWS/GCP, connection strings, etc.) y solo agrega una
+# excepcion explicita para el archivo de placeholders del proyecto.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Placeholders de .env.example (nunca credenciales reales)"
+paths = [
+  '''\.env\.example$''',
+]

@@ -380,51 +380,6 @@ revisarlas manualmente.
 
 ---
 
-## Estructura del repositorio (hasta ahora)
-
-```
-.
-├── .github/
-│   └── dependabot.yml            # actualizaciones automaticas de dependencias
-├── app/
-│   ├── __init__.py            # application factory (create_app)
-│   ├── routes.py               # los 4 endpoints
-│   ├── ml/
-│   │   └── clasificador.py      # carga modelos .joblib y expone clasificar(texto)
-│   ├── db/
-│   │   └── supabase_client.py   # conexion a Postgres con pool + reintentos
-│   ├── templates/
-│   │   └── dashboard.html        # panel de estadisticas (Chart.js)
-│   └── static/
-├── data/
-│   └── tickets_dataset.csv       # dataset sintetico (generado)
-├── models/
-│   ├── categoria_v{fecha}.joblib # modelo de categoria (generado)
-│   ├── urgencia_v{fecha}.joblib  # modelo de urgencia (generado)
-│   └── latest.json               # puntero a la version activa
-├── tests/
-│   ├── conftest.py                # fixtures (app, client, mock de DB)
-│   └── test_api.py                 # tests del contrato HTTP de la API
-├── generar_dataset.py
-├── entrenar_modelo.py
-├── run.py                        # entry point (dev server / gunicorn)
-├── init_db.sql                   # CREATE TABLE de clasificaciones y predicciones_dudosas
-├── Dockerfile                     # build multi-stage, usuario no-root
-├── .dockerignore
-├── requirements.txt
-├── requirements-dev.txt          # + pytest/black/isort/flake8/pre-commit
-├── pytest.ini
-├── pyproject.toml                # config de black/isort
-├── .flake8
-├── .pre-commit-config.yaml
-├── .env.example
-├── .gitignore
-└── README.md
-```
-
-*(Las secciones siguientes -CI/CD, despliegue- se documentaran aqui a medida
-que se implementen.)*
-
 ---
 
 ## 4. Docker
@@ -522,3 +477,118 @@ curl http://localhost:8080/health
 > misma imagen en un runner de GitHub Actions (Linux) en cada push a
 > `main`, lo cual sirve como la validacion real end-to-end antes de
 > desplegar a Cloud Run.
+
+---
+
+## 5. Repositorio GitHub
+
+### 5.1 Estrategia de ramas
+
+- **`main`**: siempre desplegable. Cada push a `main` dispara el deploy a
+  Cloud Run (seccion 6). Se protege en GitHub (Settings -> Branches -> Add
+  branch ruleset para `main`): exigir que los checks `lint`, `seguridad` y
+  `tests` pasen antes de poder mergear, y prohibir el push directo sin PR
+  (esto se configura manualmente en la UI de GitHub por el dueño del repo;
+  no es algo que un script pueda activar de forma remota via git).
+- **`develop`**: rama de trabajo diario. Los `feature/*` se mergean aqui
+  primero; sirve como zona de integracion antes de promover a `main`.
+- **`feature/*`**: una rama por cambio puntual (ej. `feature/ci-cd-pipeline`,
+  la rama en la que se desarrollo la seccion 6 de este mismo README). Se
+  abre un Pull Request de `feature/*` hacia `develop` (o hacia `main` para
+  un hotfix urgente), donde corren los checks de CI antes de mergear.
+
+```
+feature/*  ──PR──►  develop  ──PR──►  main  ──push──► deploy automatico
+```
+
+### 5.2 Conventional Commits
+
+Todos los commits de este repo siguen [Conventional Commits](https://www.conventionalcommits.org/es/v1.0.0/):
+
+| Prefijo | Uso | Ejemplo real de este repo |
+|---|---|---|
+| `feat:` | funcionalidad nueva | `feat: agrega endpoint de estadisticas` |
+| `fix:` | correccion de bug | `fix: corrige timezone en fecha_hora` |
+| `docs:` | solo documentacion | `docs: documenta flujo de ramas y Conventional Commits` |
+| `test:` | tests o config de tests | `test: agrega suite de pytest, calidad de codigo y dependabot` |
+| `ci:` | pipelines/workflows | `ci: agrega pipeline de CI/CD con lint, seguridad, tests y deploy` |
+| `chore:` | mantenimiento (deps, config) | `chore: actualiza flask-limiter` (lo que abrira Dependabot) |
+| `build:` | build system / Docker | `build: agrega Dockerfile multi-stage para produccion` |
+
+### 5.3 Por que no se "reescribio" el historial retroactivamente
+
+Las secciones 1-3 de este proyecto se commitearon directamente en `main`
+(antes de que existiera `develop`) porque en ese punto no habia todavia
+nada desplegable ni un pipeline de CI que proteger. A partir de la seccion
+6 (este mismo cambio), el trabajo nuevo sigue el flujo `feature/* -> develop
+-> main` descrito arriba.
+
+---
+
+## 6. CI/CD con GitHub Actions
+
+### 6.1 Los 4 jobs de `.github/workflows/ci-cd.yml`
+
+```mermaid
+flowchart LR
+    A[push / pull_request] --> B[lint]
+    A --> C[seguridad: gitleaks]
+    A --> D[tests: pytest]
+    B --> E{needs}
+    C --> E
+    D --> E
+    E -->|solo si push a main Y B,C,D OK| F[deploy a Cloud Run]
+```
+
+1. **`lint`**: `black --check`, `isort --check`, `flake8` sobre todo el
+   codigo. Falla si algo no esta formateado o tiene un error de estilo.
+2. **`seguridad`**: corre `gitleaks` (accion oficial `gitleaks-action`)
+   sobre el historial completo del repo (`fetch-depth: 0`), buscando
+   credenciales filtradas por accidente. Se eligio gitleaks sobre
+   trufflehog por ser mas rapido y no requerir cuenta/API key para uso
+   basico en CI. `.gitleaks.toml` extiende el ruleset por defecto y solo
+   agrega una excepcion para `.env.example` (que a proposito contiene un
+   connection string con forma real pero con password de placeholder).
+3. **`tests`**: instala `requirements-dev.txt` y corre `pytest -v` (los 6
+   tests de la seccion 3, con la base de datos mockeada).
+4. **`deploy`**: **solo corre si los 3 jobs anteriores pasaron** (`needs:
+   [lint, seguridad, tests]`) **y** el evento es un push directo a `main`
+   (nunca en un Pull Request ni en otra rama). Si falta cualquiera de los
+   3 checks, GitHub Actions simplemente no ejecuta este job — el pipeline
+   completo queda en rojo y no se despliega nada, cumpliendo el requisito
+   de "si algo falla, no se despliega".
+
+### 6.2 Deploy sin bloquear el pipeline si aun no hay credenciales de GCP
+
+El job `deploy` primero verifica (`steps.check`) si existen los secrets
+`GCP_SA_KEY` y `GCP_PROJECT_ID`. Si no existen (por ejemplo, recien
+clonaste este repo y todavia no configuraste Cloud Run), los pasos de
+autenticacion/build/deploy se saltan limpiamente (`if:
+steps.check.outputs.listo == 'true'`) en vez de fallar con un error
+críptico de autenticacion. Esto es una decision deliberada no exigida
+explicitamente por la especificacion: preferimos que el pipeline muestre
+"omitido" en vez de "fallido" cuando el motivo es simplemente que el
+usuario aun no completo la seccion 7 (configuracion de Cloud Run), para no
+confundir un problema de configuracion pendiente con un bug real del
+codigo.
+
+### 6.3 Secrets de GitHub necesarios (Settings -> Secrets and variables -> Actions)
+
+| Secret | Contenido | Usado por |
+|---|---|---|
+| `GCP_SA_KEY` | JSON completo de la Service Account (ver seccion 7) | autenticacion con `google-github-actions/auth` |
+| `GCP_PROJECT_ID` | ID del proyecto de Google Cloud | Artifact Registry + Cloud Run |
+| `DATABASE_URL` | Connection string de Supabase | se inyecta como variable de entorno al servicio de Cloud Run |
+
+`GITHUB_TOKEN` (usado por gitleaks para poder comentar en PRs) lo provee
+GitHub automaticamente, no hace falta crearlo.
+
+### 6.4 Job separado para Pull Requests
+
+El trigger `pull_request: branches: [main]` hace que `lint`, `seguridad` y
+`tests` corran en cada PR hacia `main` — exactamente el "lint + tests sin
+deploy" que pide la especificacion — porque el job `deploy` tiene la
+condicion `github.event_name == 'push'`, que es falsa para un evento de
+tipo `pull_request`.
+
+---
