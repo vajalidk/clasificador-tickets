@@ -409,6 +409,8 @@ revisarlas manualmente.
 ├── entrenar_modelo.py
 ├── run.py                        # entry point (dev server / gunicorn)
 ├── init_db.sql                   # CREATE TABLE de clasificaciones y predicciones_dudosas
+├── Dockerfile                     # build multi-stage, usuario no-root
+├── .dockerignore
 ├── requirements.txt
 ├── requirements-dev.txt          # + pytest/black/isort/flake8/pre-commit
 ├── pytest.ini
@@ -420,5 +422,103 @@ revisarlas manualmente.
 └── README.md
 ```
 
-*(Las secciones siguientes -Docker, CI/CD, despliegue- se documentaran aqui
-a medida que se implementen.)*
+*(Las secciones siguientes -CI/CD, despliegue- se documentaran aqui a medida
+que se implementen.)*
+
+---
+
+## 4. Docker
+
+### 4.1 Por que multi-stage
+
+[`Dockerfile`](Dockerfile) tiene dos etapas:
+
+1. **`build`**: crea un virtualenv en `/opt/venv` e instala
+   `requirements.txt` ahi dentro.
+2. **runtime** (imagen final, sin nombre): parte de `python:3.11-slim` otra
+   vez, limpio, y copia **solo** el virtualenv ya resuelto
+   (`COPY --from=build /opt/venv /opt/venv`), el codigo de `app/`, `run.py`
+   y `models/`.
+
+La ventaja de separar build de runtime: si en el futuro alguna dependencia
+de `requirements.txt` necesitara compilarse desde codigo fuente (por
+ejemplo, un wheel sin build precompilado para alguna arquitectura), las
+herramientas de compilacion (`gcc`, headers de desarrollo, etc.) solo
+existirian en la etapa `build` y nunca inflarian el tamano de la imagen que
+realmente se despliega a Cloud Run.
+
+### 4.2 Modelos: se copian, no se reentrenan en el build
+
+El Dockerfile hace `COPY models ./models` en vez de correr
+`entrenar_modelo.py` durante el build. Se eligio esto deliberadamente:
+
+- **Reproducibilidad**: el build de Docker no depende de que scikit-learn
+  entrene exactamente igual en la maquina de CI que en local (aunque el
+  script es determinista con semilla fija, cualquier entrenamiento durante
+  el build seria trabajo redundante).
+- **Velocidad de build**: copiar 2 archivos `.joblib` de unos pocos KB es
+  instantaneo; entrenar (aunque sea rapido, segundos) sigue siendo mas
+  lento y anade una dependencia innecesaria a pandas/scikit-learn/el
+  dataset CSV dentro de la imagen final.
+- Es coherente con el flujo documentado en la seccion 1: los modelos se
+  versionan explicitamente en `models/` y el pointer `models/latest.json`
+  decide cual esta activo — el Dockerfile simplemente respeta ese
+  contrato.
+
+### 4.3 Seguridad: usuario no-root
+
+Se crea un usuario de sistema `appuser` (`groupadd --system` /
+`useradd --system`) y todos los `COPY` de la etapa final usan
+`--chown=appuser:appuser`, seguido de `USER appuser` antes del `CMD`. Si
+alguna vez se descubriera una vulnerabilidad de ejecucion remota de codigo
+en el proceso de gunicorn/Flask, el proceso no correria con privilegios de
+root dentro del contenedor — una practica de seguridad estandar para
+contenedores en produccion.
+
+### 4.4 Puerto dinamico (`$PORT`) y arranque
+
+```dockerfile
+ENV PORT=8080
+EXPOSE 8080
+CMD gunicorn --bind 0.0.0.0:$PORT --workers 2 run:app
+```
+
+Cloud Run inyecta la variable `PORT` en tiempo de ejecucion (por defecto
+8080) y espera que el contenedor escuche ahi; el `ENV PORT=8080` de arriba
+es solo el valor por defecto para pruebas locales con
+`docker run` sin `-e PORT=...`. El `CMD` se escribe en **forma shell**
+(no en forma exec/array) a proposito: es la unica forma en que `$PORT` se
+expande al arrancar el contenedor en vez de pasarse como texto literal.
+
+### 4.5 `.dockerignore`
+
+Excluye del contexto de build: `.git`, `.github`, `tests/`, herramientas de
+desarrollo (`requirements-dev.txt`, `.pre-commit-config.yaml`, `.flake8`,
+`pytest.ini`), `.venv`, cache de Python, `.env`/`.env.example` y `data/`
+(el CSV crudo no hace falta en producción, solo los `.joblib` ya
+entrenados). Esto acelera el build (menos contexto que enviar al daemon de
+Docker) y evita que un secreto local (`.env`) termine copiado a una imagen.
+
+### 4.6 Como construir y correr la imagen localmente
+
+```bash
+docker build -t clasificador-tickets .
+
+docker run -p 8080:8080 \
+  -e DATABASE_URL="postgresql://usuario:password@host:5432/postgres" \
+  -e PORT=8080 \
+  clasificador-tickets
+
+curl http://localhost:8080/health
+```
+
+> **Nota de este entorno de desarrollo**: la maquina donde se escribio este
+> Dockerfile no tiene Docker Desktop instalado, por lo que el build no se
+> pudo ejecutar end-to-end aqui mismo — se valido manualmente linea por
+> linea (rutas de `COPY` consistentes con `WORKDIR /app` y con como
+> `app/ml/clasificador.py` resuelve `models/` de forma relativa al proyecto,
+> permisos de `appuser` sobre `/opt/venv` y `/app`, forma shell del `CMD`
+> para expandir `$PORT`). El workflow de CI/CD (seccion 6) construye esta
+> misma imagen en un runner de GitHub Actions (Linux) en cada push a
+> `main`, lo cual sirve como la validacion real end-to-end antes de
+> desplegar a Cloud Run.

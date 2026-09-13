@@ -1,0 +1,41 @@
+# Control de versiones
+.git
+.github
+
+# Entornos virtuales locales
+.venv
+venv
+env
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.egg-info
+.pytest_cache
+.mypy_cache
+.ruff_cache
+
+# Tests y herramientas de desarrollo (no se necesitan en la imagen de produccion)
+tests
+requirements-dev.txt
+.pre-commit-config.yaml
+.flake8
+pytest.ini
+pyproject.toml
+
+# Dataset crudo: no se copia a la imagen, solo los .joblib ya entrenados
+data
+
+# Secretos y configuracion local
+.env
+.env.example
+
+# Editor / SO
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+
+# Documentacion (no afecta el runtime)
+README.md
