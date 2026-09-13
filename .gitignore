@@ -1,0 +1,30 @@
+# Entornos virtuales
+.venv/
+venv/
+env/
+
+# Variables de entorno reales (nunca se sube al repo)
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Cobertura de tests
+.coverage
+htmlcov/
+
+# Editor / SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# NOTA: data/*.csv y models/*.joblib SI se versionan a proposito.
+# El Dockerfile los copia directamente en el build (no reentrena en cada
+# despliegue), por lo que necesitan estar en el repositorio.

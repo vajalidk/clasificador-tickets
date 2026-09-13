@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - Clasificador de Tickets</title>
+  <!-- Chart.js via CDN: no requiere build step ni dependencias de pago -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #0f1220;
+      --card-bg: #1a1f36;
+      --text: #e8eaf2;
+      --text-muted: #9aa0b4;
+      --border: #2a3050;
+      --accent: #6c8cff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 24px;
+    }
+    h1 { font-size: 1.4rem; margin-bottom: 4px; }
+    p.subtitulo { color: var(--text-muted); margin-top: 0; margin-bottom: 24px; }
+    .resumen {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .tarjeta-resumen {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      min-width: 180px;
+    }
+    .tarjeta-resumen .valor { font-size: 1.8rem; font-weight: 700; }
+    .tarjeta-resumen .etiqueta { color: var(--text-muted); font-size: 0.85rem; }
+    .grid-graficas {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+    .tarjeta-grafica {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .tarjeta-grafica h2 {
+      font-size: 1rem;
+      margin: 0 0 12px 0;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .estado-carga { color: var(--text-muted); font-size: 0.9rem; }
+    canvas { max-height: 300px; }
+  </style>
+</head>
+<body>
+  <h1>Panel de estadisticas</h1>
+  <p class="subtitulo">Clasificacion de tickets de soporte al cliente</p>
+
+  <div class="resumen" id="resumen">
+    <div class="tarjeta-resumen">
+      <div class="valor" id="valor-total">-</div>
+      <div class="etiqueta">Tickets clasificados</div>
+    </div>
+    <div class="tarjeta-resumen">
+      <div class="valor" id="valor-dudosas">-</div>
+      <div class="etiqueta">Casos de baja confianza (revision manual)</div>
+    </div>
+  </div>
+
+  <div class="grid-graficas">
+    <div class="tarjeta-grafica">
+      <h2>Tickets por categoria</h2>
+      <canvas id="grafica-categoria"></canvas>
+    </div>
+    <div class="tarjeta-grafica">
+      <h2>Tickets por urgencia</h2>
+      <canvas id="grafica-urgencia"></canvas>
+    </div>
+    <div class="tarjeta-grafica" style="grid-column: 1 / -1;">
+      <h2>Tickets por dia (ultimos 7 dias)</h2>
+      <canvas id="grafica-tendencia"></canvas>
+    </div>
+  </div>
+
+  <p class="estado-carga" id="estado-carga"></p>
+
+  <script>
+    const COLORES = ["#6c8cff", "#ff8a5c", "#5cd6a9", "#f2c94c", "#c86cff"];
+
+    async function cargarEstadisticas() {
+      const estadoEl = document.getElementById("estado-carga");
+      try {
+        const resp = await fetch("/api/estadisticas");
+        if (!resp.ok) {
+          const cuerpo = await resp.json().catch(() => ({}));
+          throw new Error(cuerpo.error || `Error HTTP ${resp.status}`);
+        }
+        const datos = await resp.json();
+        renderizar(datos);
+        estadoEl.textContent = "";
+      } catch (err) {
+        estadoEl.textContent = `No se pudieron cargar las estadisticas: ${err.message}`;
+      }
+    }
+
+    function renderizar(datos) {
+      document.getElementById("valor-total").textContent = datos.total_clasificaciones ?? 0;
+      document.getElementById("valor-dudosas").textContent = datos.total_predicciones_dudosas ?? 0;
+
+      const categorias = datos.por_categoria || [];
+      new Chart(document.getElementById("grafica-categoria"), {
+        type: "bar",
+        data: {
+          labels: categorias.map((c) => c.categoria),
+          datasets: [{
+            label: "Tickets",
+            data: categorias.map((c) => c.total),
+            backgroundColor: COLORES,
+            borderRadius: 6,
+          }],
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, ticks: { precision: 0 } },
+          },
+        },
+      });
+
+      const urgencias = datos.por_urgencia || [];
+      new Chart(document.getElementById("grafica-urgencia"), {
+        type: "doughnut",
+        data: {
+          labels: urgencias.map((u) => u.urgencia),
+          datasets: [{
+            data: urgencias.map((u) => u.total),
+            backgroundColor: COLORES,
+          }],
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: "bottom" } },
+        },
+      });
+
+      const porDia = datos.por_dia || [];
+      new Chart(document.getElementById("grafica-tendencia"), {
+        type: "line",
+        data: {
+          labels: porDia.map((d) => d.dia),
+          datasets: [{
+            label: "Tickets clasificados",
+            data: porDia.map((d) => d.total),
+            borderColor: COLORES[0],
+            backgroundColor: "rgba(108, 140, 255, 0.15)",
+            fill: true,
+            tension: 0.3,
+          }],
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, ticks: { precision: 0 } },
+          },
+        },
+      });
+    }
+
+    cargarEstadisticas();
+  </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+-- ---------------------------------------------------------------------
+-- Esquema de base de datos para el Clasificador de Tickets de Soporte.
+-- Ejecutar una sola vez sobre el proyecto de Supabase (o cualquier
+-- Postgres), por ejemplo desde el SQL Editor de supabase.com.
+--
+-- Tablas:
+--   clasificaciones      -> historial de TODAS las clasificaciones hechas
+--   predicciones_dudosas -> copia de las clasificaciones con confianza < 0.6,
+--                           pensada como cola de revision humana para el
+--                           reentrenamiento periodico (ver README, plan de
+--                           mantenimiento del modelo).
+-- ---------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS clasificaciones (
+    id          BIGSERIAL PRIMARY KEY,
+    texto       TEXT NOT NULL,
+    categoria   TEXT NOT NULL,
+    urgencia    TEXT NOT NULL,
+    confianza   REAL NOT NULL CHECK (confianza >= 0 AND confianza <= 1),
+    fecha_hora  TIMESTAMPTZ NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc')
+);
+
+-- Los dos filtros mas comunes del dashboard son "agregar por categoria" y
+-- "agregar por rango de fechas" (tickets por dia en los ultimos 7 dias),
+-- por lo que ambos campos llevan indice propio.
+CREATE INDEX IF NOT EXISTS idx_clasificaciones_fecha_hora
+    ON clasificaciones (fecha_hora);
+
+CREATE INDEX IF NOT EXISTS idx_clasificaciones_categoria
+    ON clasificaciones (categoria);
+
+
+CREATE TABLE IF NOT EXISTS predicciones_dudosas (
+    id          BIGSERIAL PRIMARY KEY,
+    texto       TEXT NOT NULL,
+    categoria   TEXT NOT NULL,
+    urgencia    TEXT NOT NULL,
+    confianza   REAL NOT NULL CHECK (confianza >= 0 AND confianza <= 1),
+    fecha_hora  TIMESTAMPTZ NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc'),
+    -- Campos para el flujo de revision manual: se completan cuando un
+    -- humano revisa el caso (ver plan de mantenimiento del modelo).
+    revisado         BOOLEAN NOT NULL DEFAULT FALSE,
+    categoria_correcta TEXT,
+    urgencia_correcta  TEXT
+);
+
+CREATE INDEX IF NOT EXISTS idx_predicciones_dudosas_fecha_hora
+    ON predicciones_dudosas (fecha_hora);
+
+CREATE INDEX IF NOT EXISTS idx_predicciones_dudosas_revisado
+    ON predicciones_dudosas (revisado);
