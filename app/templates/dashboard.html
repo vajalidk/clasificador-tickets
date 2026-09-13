@@ -15,9 +15,12 @@
       --text-muted: #9aa0b4;
       --border: #2a3050;
       --accent: #6c8cff;
-      --alta: #ff6c6c;
-      --media: #f2c94c;
-      --baja: #5cd6a9;
+      /* Paleta semantica de urgencia: fija en toda la app (dashboard +
+         formulario de tickets) para que un mismo color siempre signifique
+         lo mismo. Tonos suavizados para buen contraste sobre fondo oscuro. */
+      --alta: #f0555a;
+      --media: #f5b942;
+      --baja: #3ecf8e;
     }
     * { box-sizing: border-box; }
     body {
@@ -25,6 +28,10 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: var(--bg);
       color: var(--text);
+    }
+    .contenedor-dashboard {
+      max-width: 1200px;
+      margin: 0 auto;
       padding: 24px;
     }
     .encabezado {
@@ -47,7 +54,7 @@
 
     .resumen {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 16px;
       margin-bottom: 24px;
     }
@@ -56,14 +63,22 @@
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 16px 20px;
+      min-width: 0;
     }
-    .tarjeta-resumen .valor { font-size: 1.7rem; font-weight: 700; line-height: 1.2; }
+    .tarjeta-resumen .valor {
+      font-size: 1.7rem;
+      font-weight: 700;
+      line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
     .tarjeta-resumen .valor.alta { color: var(--alta); }
     .tarjeta-resumen .etiqueta { color: var(--text-muted); font-size: 0.82rem; margin-top: 4px; }
 
     .grid-graficas {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      grid-template-columns: 1fr 1fr;
       gap: 20px;
       margin-bottom: 20px;
     }
@@ -72,14 +87,17 @@
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 16px;
+      min-width: 0;
     }
+    .tarjeta-grafica.ancha { grid-column: 1 / -1; }
     .tarjeta-grafica h2 {
       font-size: 1rem;
       margin: 0 0 12px 0;
       color: var(--text-muted);
       font-weight: 600;
     }
-    canvas { max-height: 300px; }
+    .lienzo-grafica { position: relative; height: 260px; }
+    .lienzo-grafica.tendencia { height: 240px; }
 
     .tarjeta-tabla {
       background: var(--card-bg);
@@ -128,68 +146,94 @@
       white-space: nowrap;
     }
     .badge.categoria { background: rgba(108, 140, 255, 0.15); color: var(--accent); }
-    .badge.urgencia-alta { background: rgba(255, 108, 108, 0.15); color: var(--alta); }
-    .badge.urgencia-media { background: rgba(242, 201, 76, 0.15); color: var(--media); }
-    .badge.urgencia-baja { background: rgba(92, 214, 169, 0.15); color: var(--baja); }
+    .badge.urgencia-alta { background: rgba(240, 85, 90, 0.15); color: var(--alta); }
+    .badge.urgencia-media { background: rgba(245, 185, 66, 0.15); color: var(--media); }
+    .badge.urgencia-baja { background: rgba(62, 207, 142, 0.15); color: var(--baja); }
 
     .estado-carga { color: var(--text-muted); font-size: 0.9rem; }
     .sin-datos { color: var(--text-muted); font-size: 0.85rem; padding: 8px 0; }
+
+    /* Responsive: se explicitan los puntos de quiebre en vez de depender
+       solo de auto-fit/minmax, para que el layout no se vea "raro" a
+       anchos intermedios (ej. media pantalla en un monitor grande). */
+    @media (max-width: 980px) {
+      .grid-graficas { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 760px) {
+      .resumen { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .contenedor-dashboard { padding: 16px; }
+      .resumen { grid-template-columns: 1fr; }
+      .tarjeta-resumen .valor { font-size: 1.4rem; }
+    }
   </style>
 </head>
 <body>
-  <div class="encabezado">
-    <div>
-      <h1>Panel de estadisticas</h1>
-      <p class="subtitulo">Clasificacion de tickets de soporte al cliente</p>
+  <div class="contenedor-dashboard">
+    <div class="encabezado">
+      <div>
+        <h1>Panel de estadisticas</h1>
+        <p class="subtitulo">Clasificacion de tickets de soporte al cliente</p>
+      </div>
+      <a href="/nuevo-ticket" class="enlace-ticket">+ Enviar un ticket</a>
     </div>
-    <a href="/nuevo-ticket" class="enlace-ticket">+ Enviar un ticket</a>
-  </div>
 
-  <div class="resumen" id="resumen">
-    <div class="tarjeta-resumen">
-      <div class="valor" id="valor-total">-</div>
-      <div class="etiqueta">Tickets totales</div>
+    <div class="resumen" id="resumen">
+      <div class="tarjeta-resumen">
+        <div class="valor" id="valor-total">-</div>
+        <div class="etiqueta">Tickets totales</div>
+      </div>
+      <div class="tarjeta-resumen">
+        <div class="valor" id="valor-categoria-top">-</div>
+        <div class="etiqueta">Categoria top</div>
+      </div>
+      <div class="tarjeta-resumen">
+        <div class="valor alta" id="valor-urgencia-alta">-</div>
+        <div class="etiqueta">Urgencia alta</div>
+      </div>
+      <div class="tarjeta-resumen">
+        <div class="valor" id="valor-confianza-prom">-</div>
+        <div class="etiqueta">Confianza prom.</div>
+      </div>
     </div>
-    <div class="tarjeta-resumen">
-      <div class="valor" id="valor-categoria-top">-</div>
-      <div class="etiqueta">Categoria top</div>
-    </div>
-    <div class="tarjeta-resumen">
-      <div class="valor alta" id="valor-urgencia-alta">-</div>
-      <div class="etiqueta">Urgencia alta</div>
-    </div>
-    <div class="tarjeta-resumen">
-      <div class="valor" id="valor-confianza-prom">-</div>
-      <div class="etiqueta">Confianza prom.</div>
-    </div>
-  </div>
 
-  <div class="grid-graficas">
-    <div class="tarjeta-grafica">
-      <h2>Tickets por categoria</h2>
-      <canvas id="grafica-categoria"></canvas>
+    <div class="grid-graficas">
+      <div class="tarjeta-grafica">
+        <h2>Tickets por categoria</h2>
+        <div class="lienzo-grafica"><canvas id="grafica-categoria"></canvas></div>
+      </div>
+      <div class="tarjeta-grafica">
+        <h2>Tickets por urgencia</h2>
+        <div class="lienzo-grafica"><canvas id="grafica-urgencia"></canvas></div>
+      </div>
+      <div class="tarjeta-grafica ancha">
+        <h2>Tickets por dia · ultimos 7 dias</h2>
+        <div class="lienzo-grafica tendencia"><canvas id="grafica-tendencia"></canvas></div>
+      </div>
     </div>
-    <div class="tarjeta-grafica">
-      <h2>Tickets por urgencia</h2>
-      <canvas id="grafica-urgencia"></canvas>
-    </div>
-    <div class="tarjeta-grafica" style="grid-column: 1 / -1;">
-      <h2>Tickets por dia · ultimos 7 dias</h2>
-      <canvas id="grafica-tendencia"></canvas>
-    </div>
-  </div>
 
-  <div class="tarjeta-tabla">
-    <h2>Clasificaciones recientes</h2>
-    <div id="contenedor-recientes"></div>
-  </div>
+    <div class="tarjeta-tabla">
+      <h2>Clasificaciones recientes</h2>
+      <div id="contenedor-recientes"></div>
+    </div>
 
-  <p class="estado-carga" id="estado-carga"></p>
+    <p class="estado-carga" id="estado-carga"></p>
+  </div>
 
   <script>
     const DIAS_SEMANA = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
-    const URGENCIA_COLOR = { alta: "#ff6c6c", media: "#f2c94c", baja: "#5cd6a9" };
+    const URGENCIA_COLOR = { alta: "#f0555a", media: "#f5b942", baja: "#3ecf8e" };
     const URGENCIA_ORDEN = ["alta", "media", "baja"];
+    const COLOR_TEXTO_MUTED = "#9aa0b4";
+    const COLOR_GRID = "rgba(255, 255, 255, 0.06)";
+
+    // Chart.js no puede leer variables CSS (corre en <canvas>), asi que
+    // los colores de ejes/leyendas se fijan aqui una sola vez para que
+    // todas las graficas compartan la misma paleta legible sobre fondo oscuro.
+    Chart.defaults.color = COLOR_TEXTO_MUTED;
+    Chart.defaults.borderColor = COLOR_GRID;
+    Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
 
     function capitalizar(texto) {
       if (!texto) return texto;
@@ -254,15 +298,18 @@
           datasets: [{
             label: "Tickets",
             data: categorias.map((c) => c.total),
-            backgroundColor: "#8c7bff",
-            borderRadius: 6,
+            backgroundColor: "#6c8cff",
+            borderRadius: 4,
+            maxBarThickness: 32,
           }],
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           plugins: { legend: { display: false } },
           scales: {
-            y: { beginAtZero: true, ticks: { precision: 0 } },
+            y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: COLOR_GRID } },
+            x: { grid: { display: false } },
           },
         },
       });
@@ -282,11 +329,14 @@
           datasets: [{
             data: urgenciasOrdenadas.map((u) => urgenciasPorClave[u]),
             backgroundColor: urgenciasOrdenadas.map((u) => URGENCIA_COLOR[u]),
+            borderColor: "#1a1f36",
+            borderWidth: 2,
           }],
         },
         options: {
           responsive: true,
-          plugins: { legend: { position: "bottom" } },
+          maintainAspectRatio: false,
+          plugins: { legend: { position: "bottom", labels: { boxWidth: 10, boxHeight: 10 } } },
         },
       });
 
@@ -299,16 +349,23 @@
             label: "Tickets clasificados",
             data: porDia.map((d) => d.total),
             borderColor: "#6c8cff",
-            backgroundColor: "rgba(108, 140, 255, 0.15)",
+            backgroundColor: "rgba(108, 140, 255, 0.1)",
+            borderWidth: 2,
+            pointBackgroundColor: "#6c8cff",
+            pointBorderColor: "#1a1f36",
+            pointBorderWidth: 2,
+            pointRadius: 4,
             fill: true,
             tension: 0.35,
           }],
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           plugins: { legend: { display: false } },
           scales: {
-            y: { beginAtZero: true, ticks: { precision: 0 } },
+            y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: COLOR_GRID } },
+            x: { grid: { display: false } },
           },
         },
       });
