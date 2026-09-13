@@ -745,23 +745,22 @@ solo con una plataforma distinta por debajo.
 
 ### 7.4 URL publica
 
-Render asigna una URL con la forma:
+La API ya esta desplegada y funcionando en:
 
-```
-https://clasificador-tickets.onrender.com
-```
-
-Una vez desplegado, esa URL expone:
+**https://clasificador-tickets.onrender.com**
 
 | Endpoint | URL |
 |---|---|
+| Mesa de ayuda (usuarios finales) | `GET https://clasificador-tickets.onrender.com/nuevo-ticket` |
 | Clasificar | `POST https://clasificador-tickets.onrender.com/clasificar` |
 | Health | `GET https://clasificador-tickets.onrender.com/health` |
 | Dashboard | `GET https://clasificador-tickets.onrender.com/dashboard` |
 | Swagger | `GET https://clasificador-tickets.onrender.com/apidocs` |
 
-> Esta seccion se actualizara con la URL exacta (el nombre real del
-> servicio puede variar) en cuanto el primer deploy corra exitosamente.
+Confirmado funcionando end-to-end: `/health` responde `{"status":"ok"}`
+(la conexion a Supabase via "Session pooler" funciona correctamente desde
+Render), y un ticket real enviado desde `/nuevo-ticket` se clasifico y
+reflejo correctamente en `/dashboard`.
 
 ### 7.5 UptimeRobot: monitoreo gratuito + reducir cold starts
 
