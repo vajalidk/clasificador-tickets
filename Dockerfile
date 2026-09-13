@@ -6,7 +6,7 @@
 # alguna) no terminen en la imagen final: solo se copia el resultado
 # (/opt/venv), nunca el cache de pip ni artefactos intermedios.
 # ---------------------------------------------------------------------
-FROM python:3.11-slim AS build
+FROM python:3.12-slim AS build
 
 WORKDIR /app
 
@@ -24,7 +24,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # practica de seguridad: si un dia se descubre una vulnerabilidad remota
 # en el proceso, no corre con privilegios de root dentro del contenedor).
 # ---------------------------------------------------------------------
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 RUN groupadd --system appuser && \
     useradd --system --gid appuser --home /app --shell /usr/sbin/nologin appuser

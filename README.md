@@ -384,13 +384,24 @@ revisarlas manualmente.
 
 ## 4. Docker
 
+> **Nota sobre la version de Python**: la especificacion original de este
+> proyecto pedia `python:3.11-slim`. Al validar el pipeline de CI contra
+> PyPI real se detecto que `numpy==2.5.3` y `scipy==1.18.1` (resueltos por
+> `pip freeze` al fijar versiones en la seccion 1) **ya no publican wheels
+> para Python 3.11** — solo para 3.12 en adelante. Como el objetivo
+> explicito es que el pipeline de CI/CD quede en verde de verdad (no solo
+> en teoria), se ajusto tanto el `Dockerfile` como `ci-cd.yml` a
+> **Python 3.12**, que si esta soportado por todas las dependencias
+> fijadas. Se documenta aqui como una desviacion deliberada de la
+> especificacion original, motivada por disponibilidad real de paquetes.
+
 ### 4.1 Por que multi-stage
 
 [`Dockerfile`](Dockerfile) tiene dos etapas:
 
 1. **`build`**: crea un virtualenv en `/opt/venv` e instala
    `requirements.txt` ahi dentro.
-2. **runtime** (imagen final, sin nombre): parte de `python:3.11-slim` otra
+2. **runtime** (imagen final, sin nombre): parte de `python:3.12-slim` otra
    vez, limpio, y copia **solo** el virtualenv ya resuelto
    (`COPY --from=build /opt/venv /opt/venv`), el codigo de `app/`, `run.py`
    y `models/`.
