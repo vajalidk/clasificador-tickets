@@ -31,6 +31,13 @@ RUN groupadd --system appuser && \
 
 WORKDIR /app
 
+# WORKDIR crea /app como root (el usuario appuser todavia no existe en
+# este punto). gunicorn necesita escribir un archivo de control
+# (.gunicorn) directamente en el directorio de trabajo al arrancar, asi
+# que /app en si mismo tambien debe pertenecer a appuser, no solo su
+# contenido (que ya se maneja con --chown en los COPY de abajo).
+RUN chown appuser:appuser /app
+
 COPY --from=build --chown=appuser:appuser /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
@@ -45,8 +52,9 @@ COPY --chown=appuser:appuser models ./models
 
 USER appuser
 
-# Cloud Run inyecta $PORT en tiempo de ejecucion (normalmente 8080); el
-# default de abajo solo se usa para `docker run` local sin -e PORT=....
+# La plataforma de hosting (Render, Cloud Run, etc.) inyecta $PORT en
+# tiempo de ejecucion; el default de abajo solo se usa para `docker run`
+# local sin -e PORT=....
 ENV PORT=8080
 EXPOSE 8080
 
