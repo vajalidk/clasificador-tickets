@@ -33,6 +33,8 @@ def mock_db(monkeypatch):
         "por_dia": [],
         "total_clasificaciones": 0,
         "total_predicciones_dudosas": 0,
+        "confianza_promedio": None,
+        "recientes": [],
     }
     monkeypatch.setattr(routes_module, "db", mock)
     return mock

@@ -138,9 +138,10 @@ def insertar_prediccion_dudosa(
 
 def obtener_estadisticas() -> dict:
     """Agregaciones para el dashboard: tickets por categoria, por urgencia,
-    y por dia en los ultimos 7 dias. Todas las agregaciones se calculan en
-    SQL (no en Python) para aprovechar los indices en `categoria` y
-    `fecha_hora` y no traer filas de mas a la aplicacion."""
+    por dia en los ultimos 7 dias, confianza promedio y las clasificaciones
+    mas recientes. Todas las agregaciones se calculan en SQL (no en
+    Python) para aprovechar los indices en `categoria` y `fecha_hora` y no
+    traer filas de mas a la aplicacion."""
     with _cursor() as cur:
         cur.execute("""
             SELECT categoria, COUNT(*) AS total
@@ -150,11 +151,20 @@ def obtener_estadisticas() -> dict:
             """)
         por_categoria = [dict(r) for r in cur.fetchall()]
 
+        # Orden fijo (alta/media/baja) en vez de ORDER BY total DESC: el
+        # dashboard le asigna un color semantico a cada urgencia (rojo,
+        # naranja, verde) y necesita un orden estable para que la leyenda
+        # y los colores no cambien de posicion segun los datos.
         cur.execute("""
             SELECT urgencia, COUNT(*) AS total
             FROM clasificaciones
             GROUP BY urgencia
-            ORDER BY total DESC
+            ORDER BY CASE urgencia
+                WHEN 'alta' THEN 1
+                WHEN 'media' THEN 2
+                WHEN 'baja' THEN 3
+                ELSE 4
+            END
             """)
         por_urgencia = [dict(r) for r in cur.fetchall()]
 
@@ -173,10 +183,33 @@ def obtener_estadisticas() -> dict:
         cur.execute("SELECT COUNT(*) AS total FROM predicciones_dudosas")
         total_dudosas = cur.fetchone()["total"]
 
+        cur.execute("SELECT ROUND(AVG(confianza)::numeric, 2) AS promedio FROM clasificaciones")
+        fila_promedio = cur.fetchone()["promedio"]
+        confianza_promedio = float(fila_promedio) if fila_promedio is not None else None
+
+        cur.execute("""
+            SELECT texto, categoria, urgencia, confianza, fecha_hora
+            FROM clasificaciones
+            ORDER BY fecha_hora DESC
+            LIMIT 10
+            """)
+        recientes = [
+            {
+                "texto": r["texto"],
+                "categoria": r["categoria"],
+                "urgencia": r["urgencia"],
+                "confianza": r["confianza"],
+                "fecha_hora": r["fecha_hora"].isoformat(),
+            }
+            for r in cur.fetchall()
+        ]
+
     return {
         "por_categoria": por_categoria,
         "por_urgencia": por_urgencia,
         "por_dia": por_dia,
         "total_clasificaciones": total_clasificaciones,
         "total_predicciones_dudosas": total_dudosas,
+        "confianza_promedio": confianza_promedio,
+        "recientes": recientes,
     }

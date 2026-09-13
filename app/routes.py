@@ -230,6 +230,13 @@ def endpoint_estadisticas():
               type: integer
             total_predicciones_dudosas:
               type: integer
+            confianza_promedio:
+              type: number
+              format: float
+            recientes:
+              type: array
+              items:
+                type: object
       500:
         description: Error al consultar la base de datos
     """

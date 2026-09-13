@@ -262,6 +262,28 @@ de Nombre/Correo opcionales, Asunto y Mensaje) que:
 No se agrego ningun endpoint ni tabla nueva — es una capa de presentacion
 sobre `/clasificar` que ya existia desde la seccion 2.
 
+### 2.3.2 Dashboard: 4 metricas, colores semanticos y clasificaciones recientes
+
+`GET /api/estadisticas` se amplio con dos campos para dar mas contexto de
+un vistazo (sin agregar tablas nuevas, solo agregaciones adicionales sobre
+`clasificaciones`):
+
+- `confianza_promedio`: `AVG(confianza)` de todas las clasificaciones —
+  una senal rapida de que tan seguro esta el modelo en general (si baja
+  con el tiempo, es indicio de drift — ver seccion 1.4).
+- `recientes`: las ultimas 10 clasificaciones (texto, categoria, urgencia,
+  confianza), para poder inspeccionar casos individuales sin entrar a la
+  base de datos.
+
+En el dashboard esto se traduce en 4 tarjetas de resumen (Tickets
+totales, Categoria top, Urgencia alta, Confianza prom.) y una tabla de
+"Clasificaciones recientes" con badges de color. La dona de "Tickets por
+urgencia" usa un **orden y color fijos** (alta=rojo, media=amarillo,
+baja=verde, tanto en el SQL de `obtener_estadisticas()` como en el
+JavaScript del dashboard) en vez de colores genericos por posicion — asi
+la urgencia alta siempre se lee como "alerta" sin importar cuantos
+tickets tenga cada categoria en un momento dado.
+
 ### 2.4 Base de datos (Supabase / Postgres)
 
 El esquema completo esta en [`init_db.sql`](init_db.sql): tablas
