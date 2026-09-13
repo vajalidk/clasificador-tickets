@@ -1,0 +1,20 @@
+# Corre automaticamente en cada `git commit` local (una vez instalado con
+# `pre-commit install`). El mismo trio (black/isort/flake8) se vuelve a
+# correr en CI (.github/workflows/ci-cd.yml) como red de seguridad, por si
+# alguien commitea con --no-verify o sin pre-commit instalado localmente.
+repos:
+  - repo: https://github.com/psf/black
+    rev: 26.5.1
+    hooks:
+      - id: black
+        language_version: python3
+
+  - repo: https://github.com/PyCQA/isort
+    rev: 9.0.1
+    hooks:
+      - id: isort
+
+  - repo: https://github.com/PyCQA/flake8
+    rev: 7.3.0
+    hooks:
+      - id: flake8

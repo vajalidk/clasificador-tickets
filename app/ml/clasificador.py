@@ -77,7 +77,9 @@ def _cargar_modelos() -> None:
 
         logger.info(
             "Modelos cargados (version=%s): categoria=%s urgencia=%s",
-            version, archivo_categoria, archivo_urgencia,
+            version,
+            archivo_categoria,
+            archivo_urgencia,
         )
 
 

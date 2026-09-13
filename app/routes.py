@@ -96,8 +96,7 @@ def _validar_texto(payload) -> str:
 
     if len(texto) > MAX_TEXTO_LENGTH:
         _abortar_400(
-            f"El campo 'texto' excede la longitud maxima de "
-            f"{MAX_TEXTO_LENGTH} caracteres."
+            f"El campo 'texto' excede la longitud maxima de " f"{MAX_TEXTO_LENGTH} caracteres."
         )
 
     return texto
@@ -133,9 +132,7 @@ def _persistir_clasificacion(texto: str, resultado: dict) -> None:
                 resultado["confianza"],
             )
     except Exception:
-        logger.exception(
-            "No se pudo persistir la clasificacion en la base de datos"
-        )
+        logger.exception("No se pudo persistir la clasificacion en la base de datos")
 
 
 @main_bp.route("/health", methods=["GET"])

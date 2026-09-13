@@ -21,12 +21,7 @@ from datetime import datetime, timezone
 import psycopg2
 import psycopg2.extras
 import psycopg2.pool
-from tenacity import (
-    retry,
-    retry_if_exception_type,
-    stop_after_attempt,
-    wait_exponential,
-)
+from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 
 logger = logging.getLogger(__name__)
 
@@ -46,9 +41,7 @@ def _database_url() -> str:
 def _get_pool() -> psycopg2.pool.SimpleConnectionPool:
     global _pool
     if _pool is None:
-        _pool = psycopg2.pool.SimpleConnectionPool(
-            minconn=1, maxconn=5, dsn=_database_url()
-        )
+        _pool = psycopg2.pool.SimpleConnectionPool(minconn=1, maxconn=5, dsn=_database_url())
         logger.info("Pool de conexiones a Postgres inicializado")
     return _pool
 
@@ -99,9 +92,7 @@ def check_conexion() -> bool:
     return True
 
 
-def insertar_clasificacion(
-    texto: str, categoria: str, urgencia: str, confianza: float
-) -> dict:
+def insertar_clasificacion(texto: str, categoria: str, urgencia: str, confianza: float) -> dict:
     fecha_hora = datetime.now(timezone.utc)
     with _cursor(commit=True) as cur:
         cur.execute(
@@ -115,9 +106,7 @@ def insertar_clasificacion(
         return dict(cur.fetchone())
 
 
-def insertar_prediccion_dudosa(
-    texto: str, categoria: str, urgencia: str, confianza: float
-) -> dict:
+def insertar_prediccion_dudosa(texto: str, categoria: str, urgencia: str, confianza: float) -> dict:
     fecha_hora = datetime.now(timezone.utc)
     with _cursor(commit=True) as cur:
         cur.execute(
@@ -137,38 +126,30 @@ def obtener_estadisticas() -> dict:
     SQL (no en Python) para aprovechar los indices en `categoria` y
     `fecha_hora` y no traer filas de mas a la aplicacion."""
     with _cursor() as cur:
-        cur.execute(
-            """
+        cur.execute("""
             SELECT categoria, COUNT(*) AS total
             FROM clasificaciones
             GROUP BY categoria
             ORDER BY total DESC
-            """
-        )
+            """)
         por_categoria = [dict(r) for r in cur.fetchall()]
 
-        cur.execute(
-            """
+        cur.execute("""
             SELECT urgencia, COUNT(*) AS total
             FROM clasificaciones
             GROUP BY urgencia
             ORDER BY total DESC
-            """
-        )
+            """)
         por_urgencia = [dict(r) for r in cur.fetchall()]
 
-        cur.execute(
-            """
+        cur.execute("""
             SELECT DATE(fecha_hora) AS dia, COUNT(*) AS total
             FROM clasificaciones
             WHERE fecha_hora >= (NOW() - INTERVAL '7 days')
             GROUP BY dia
             ORDER BY dia ASC
-            """
-        )
-        por_dia = [
-            {"dia": r["dia"].isoformat(), "total": r["total"]} for r in cur.fetchall()
-        ]
+            """)
+        por_dia = [{"dia": r["dia"].isoformat(), "total": r["total"]} for r in cur.fetchall()]
 
         cur.execute("SELECT COUNT(*) AS total FROM clasificaciones")
         total_clasificaciones = cur.fetchone()["total"]

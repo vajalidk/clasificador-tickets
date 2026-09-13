@@ -46,11 +46,14 @@ def create_app(config_overrides: dict | None = None) -> Flask:
 
     limiter.init_app(app)
 
-    app.config.setdefault("SWAGGER", {
-        "title": "Clasificador de Tickets de Soporte - API",
-        "uiversion": 3,
-        "specs_route": "/apidocs/",
-    })
+    app.config.setdefault(
+        "SWAGGER",
+        {
+            "title": "Clasificador de Tickets de Soporte - API",
+            "uiversion": 3,
+            "specs_route": "/apidocs/",
+        },
+    )
     Swagger(app)
 
     # Import diferido para evitar import circular: app/routes.py hace
@@ -62,7 +65,10 @@ def create_app(config_overrides: dict | None = None) -> Flask:
 
     _registrar_manejadores_error(app)
 
-    logger.info("Aplicacion Flask inicializada (entorno=%s)", os.environ.get("FLASK_ENV", "production"))
+    logger.info(
+        "Aplicacion Flask inicializada (entorno=%s)",
+        os.environ.get("FLASK_ENV", "production"),
+    )
     return app
 
 

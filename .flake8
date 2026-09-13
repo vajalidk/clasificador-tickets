@@ -1,0 +1,9 @@
+[flake8]
+; 100 en vez del default 79: acomoda los docstrings YAML de flasgger y las
+; consultas SQL sin forzar cortes de linea artificiales.
+max-line-length = 100
+; E203/W503 chocan con el estilo que aplica black (espacios en slices,
+; saltos de linea antes de operador binario) - se ignoran para no pelear
+; entre black y flake8 en cada pre-commit.
+extend-ignore = E203, W503
+exclude = .venv,__pycache__,.git,models,data

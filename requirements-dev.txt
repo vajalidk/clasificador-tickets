@@ -1,0 +1,12 @@
+# Dependencias SOLO de desarrollo/CI (tests + calidad de codigo).
+# Separadas de requirements.txt a proposito: la imagen Docker de produccion
+# (seccion 4) instala unicamente requirements.txt, para no cargar pytest,
+# black, flake8, etc. en el contenedor que corre en Cloud Run.
+
+-r requirements.txt
+
+pytest==9.1.1
+black==26.5.1
+isort==9.0.1
+flake8==7.3.0
+pre-commit==4.6.2

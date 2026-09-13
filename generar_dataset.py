@@ -23,8 +23,16 @@ OUTPUT_PATH = Path(__file__).parent / "data" / "tickets_dataset.csv"
 # aumentar la variabilidad lexica del dataset.
 # ---------------------------------------------------------------------------
 
-PRODUCTOS = ["la app movil", "el plan premium", "mi suscripcion", "el servicio web",
-             "la plataforma", "mi cuenta", "el sistema", "el panel de control"]
+PRODUCTOS = [
+    "la app movil",
+    "el plan premium",
+    "mi suscripcion",
+    "el servicio web",
+    "la plataforma",
+    "mi cuenta",
+    "el sistema",
+    "el panel de control",
+]
 
 BASE_FACTURACION = [
     "Me cobraron {monto} de mas en la factura de este mes y no entiendo por que.",

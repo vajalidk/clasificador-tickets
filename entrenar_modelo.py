@@ -32,11 +32,7 @@ import joblib
 import pandas as pd
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics import (
-    accuracy_score,
-    classification_report,
-    confusion_matrix,
-)
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.svm import LinearSVC
@@ -53,17 +49,106 @@ LATEST_PATH = MODELS_DIR / "latest.json"
 # para este dominio. Se evita depender de nltk/spacy para no anadir pesos ni
 # descargas extra al contenedor de produccion.
 STOPWORDS_ES = [
-    "a", "al", "algo", "algunas", "algunos", "ante", "antes", "como", "con",
-    "contra", "cual", "cuando", "de", "del", "desde", "donde", "durante", "e",
-    "el", "ella", "ellas", "ellos", "en", "entre", "era", "erais", "eran",
-    "eras", "eres", "es", "esa", "esas", "ese", "eso", "esos", "esta", "estas",
-    "este", "esto", "estos", "fue", "fueron", "ha", "han", "hasta", "hay",
-    "la", "las", "le", "les", "lo", "los", "mas", "me", "mi", "mis", "mucho",
-    "muchos", "muy", "nada", "ni", "no", "nos", "nosotros", "o", "os", "otra",
-    "otras", "otro", "otros", "para", "pero", "poco", "por", "porque", "que",
-    "quien", "se", "segun", "ser", "si", "sin", "sobre", "su", "sus", "te",
-    "tener", "ti", "tiene", "todo", "todos", "tu", "tus", "un", "una", "uno",
-    "unos", "y", "ya", "yo",
+    "a",
+    "al",
+    "algo",
+    "algunas",
+    "algunos",
+    "ante",
+    "antes",
+    "como",
+    "con",
+    "contra",
+    "cual",
+    "cuando",
+    "de",
+    "del",
+    "desde",
+    "donde",
+    "durante",
+    "e",
+    "el",
+    "ella",
+    "ellas",
+    "ellos",
+    "en",
+    "entre",
+    "era",
+    "erais",
+    "eran",
+    "eras",
+    "eres",
+    "es",
+    "esa",
+    "esas",
+    "ese",
+    "eso",
+    "esos",
+    "esta",
+    "estas",
+    "este",
+    "esto",
+    "estos",
+    "fue",
+    "fueron",
+    "ha",
+    "han",
+    "hasta",
+    "hay",
+    "la",
+    "las",
+    "le",
+    "les",
+    "lo",
+    "los",
+    "mas",
+    "me",
+    "mi",
+    "mis",
+    "mucho",
+    "muchos",
+    "muy",
+    "nada",
+    "ni",
+    "no",
+    "nos",
+    "nosotros",
+    "o",
+    "os",
+    "otra",
+    "otras",
+    "otro",
+    "otros",
+    "para",
+    "pero",
+    "poco",
+    "por",
+    "porque",
+    "que",
+    "quien",
+    "se",
+    "segun",
+    "ser",
+    "si",
+    "sin",
+    "sobre",
+    "su",
+    "sus",
+    "te",
+    "tener",
+    "ti",
+    "tiene",
+    "todo",
+    "todos",
+    "tu",
+    "tus",
+    "un",
+    "una",
+    "uno",
+    "unos",
+    "y",
+    "ya",
+    "yo",
 ]
 
 
@@ -82,10 +167,12 @@ def construir_pipeline() -> Pipeline:
     # cv=3: con ~200 ejemplos de entrenamiento y hasta 4 clases, un cv mayor
     # dejaria muy pocos ejemplos por clase en cada fold de calibracion.
     clasificador = CalibratedClassifierCV(svm_base, method="sigmoid", cv=3)
-    return Pipeline([
-        ("tfidf", vectorizador),
-        ("clf", clasificador),
-    ])
+    return Pipeline(
+        [
+            ("tfidf", vectorizador),
+            ("clf", clasificador),
+        ]
+    )
 
 
 def entrenar_y_evaluar(
@@ -107,9 +194,7 @@ def entrenar_y_evaluar(
     y_pred = pipeline.predict(X_test)
     acc = accuracy_score(y_test, y_pred)
     reporte = classification_report(y_test, y_pred, zero_division=0)
-    reporte_dict = classification_report(
-        y_test, y_pred, zero_division=0, output_dict=True
-    )
+    reporte_dict = classification_report(y_test, y_pred, zero_division=0, output_dict=True)
     matriz = confusion_matrix(y_test, y_pred, labels=sorted(y.unique()))
 
     print(f"\n{'=' * 70}")
@@ -201,9 +286,7 @@ def main() -> None:
     print(f"\nModelo de categoria guardado en: {ruta_categoria}")
     print(f"Modelo de urgencia guardado en:  {ruta_urgencia}")
 
-    actualizar_latest(
-        version, ruta_categoria, ruta_urgencia, metricas_categoria, metricas_urgencia
-    )
+    actualizar_latest(version, ruta_categoria, ruta_urgencia, metricas_categoria, metricas_urgencia)
 
     print("\nEntrenamiento completado con exito.")
 

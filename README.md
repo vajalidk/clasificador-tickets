@@ -305,10 +305,87 @@ python run.py
 
 ---
 
+## 3. Pruebas automatizadas y calidad de codigo
+
+### 3.1 Tests (`tests/`)
+
+[`tests/conftest.py`](tests/conftest.py) reemplaza `app.db.supabase_client`
+por un `MagicMock` (via `monkeypatch`) antes de crear cada app de prueba, y
+resetea el estado del rate limiter (`limiter.reset()`) antes de cada test.
+Esto se documenta explicitamente porque son las dos decisiones que hacen que
+la suite sea rapida y determinista en CI:
+
+- **Sin DB real**: no se usa sqlite en memoria como sustituto de Postgres
+  porque el SQL de `supabase_client.py` usa sintaxis especifica de Postgres
+  (`RETURNING`, `NOW() AT TIME ZONE 'utc'`, `INTERVAL '7 days'`) que sqlite
+  no entiende. Mockear el modulo completo prueba el contrato HTTP de la API
+  (que es lo que pide la especificacion) sin acoplar los tests a un motor
+  de base de datos concreto.
+- **Reset del rate limiter**: Flask-Limiter guarda sus contadores en un
+  almacenamiento en memoria a nivel de proceso. Sin resetearlo entre tests,
+  el test de rate limit podria "heredar" requests de otro test que corrio
+  antes en el mismo proceso de pytest y fallar de forma intermitente.
+
+[`tests/test_api.py`](tests/test_api.py) cubre exactamente lo pedido:
+`/health` -> 200; `/clasificar` valido -> 200 con `categoria` (str),
+`urgencia` (str) y `confianza` (float 0-1); `/clasificar` sin texto, con
+texto vacio y con texto > 2000 caracteres -> 400; y 20 requests validas
+seguidas de una 21a que debe responder 429.
+
+```bash
+pip install -r requirements-dev.txt
+pytest -v
+```
+
+### 3.2 Calidad de codigo (`black`, `isort`, `flake8`)
+
+- **`pyproject.toml`**: configura `black` e `isort` (perfil `black`) con
+  `line-length = 100`. Se eligio 100 en vez del default de black (88)
+  porque varias funciones tienen docstrings YAML de flasgger y consultas
+  SQL multilinea que se ven forzadas y menos legibles con 88 columnas.
+- **`.flake8`**: mismo `max-line-length = 100` para no pelear con black, e
+  ignora `E203`/`W503` (ambas reglas contradicen el estilo que aplica black
+  de forma automatica: espacios en slices y saltos de linea antes de un
+  operador binario).
+- **`.pre-commit-config.yaml`**: corre `black`, `isort` y `flake8` en cada
+  `git commit` local. Instalacion:
+
+  ```bash
+  pip install -r requirements-dev.txt
+  pre-commit install          # una sola vez por clon del repo
+  ```
+
+  A partir de ahi, cada commit local pasa por los 3 checks automaticamente.
+  El mismo trio se vuelve a correr en GitHub Actions (seccion 6) como red de
+  seguridad, por si alguien commitea con `--no-verify` o sin `pre-commit`
+  instalado.
+
+### 3.3 `requirements.txt` vs `requirements-dev.txt`
+
+Se separaron a proposito: `requirements.txt` son las dependencias que
+**corren en produccion** (las que instala el Dockerfile), mientras que
+`requirements-dev.txt` (que incluye a `requirements.txt` con `-r`) agrega
+`pytest`, `black`, `isort`, `flake8` y `pre-commit` — herramientas que solo
+se usan en desarrollo local y en CI. Esto mantiene la imagen Docker final
+mas pequena y evita instalar herramientas de testing en el contenedor que
+se despliega a Cloud Run.
+
+### 3.4 Dependabot (`.github/dependabot.yml`)
+
+Configurado para abrir PRs automaticos semanales ante actualizaciones de:
+dependencias de Python (`pip`), la imagen base del `Dockerfile` (`docker`) y
+las GitHub Actions usadas en los workflows (`github-actions`). Esto cubre
+las tres superficies de dependencias del proyecto sin necesidad de
+revisarlas manualmente.
+
+---
+
 ## Estructura del repositorio (hasta ahora)
 
 ```
 .
+├── .github/
+│   └── dependabot.yml            # actualizaciones automaticas de dependencias
 ├── app/
 │   ├── __init__.py            # application factory (create_app)
 │   ├── routes.py               # los 4 endpoints
@@ -325,15 +402,23 @@ python run.py
 │   ├── categoria_v{fecha}.joblib # modelo de categoria (generado)
 │   ├── urgencia_v{fecha}.joblib  # modelo de urgencia (generado)
 │   └── latest.json               # puntero a la version activa
+├── tests/
+│   ├── conftest.py                # fixtures (app, client, mock de DB)
+│   └── test_api.py                 # tests del contrato HTTP de la API
 ├── generar_dataset.py
 ├── entrenar_modelo.py
 ├── run.py                        # entry point (dev server / gunicorn)
 ├── init_db.sql                   # CREATE TABLE de clasificaciones y predicciones_dudosas
 ├── requirements.txt
+├── requirements-dev.txt          # + pytest/black/isort/flake8/pre-commit
+├── pytest.ini
+├── pyproject.toml                # config de black/isort
+├── .flake8
+├── .pre-commit-config.yaml
 ├── .env.example
 ├── .gitignore
 └── README.md
 ```
 
-*(Las secciones siguientes -tests, Docker, CI/CD, despliegue- se
-documentaran aqui a medida que se implementen.)*
+*(Las secciones siguientes -Docker, CI/CD, despliegue- se documentaran aqui
+a medida que se implementen.)*

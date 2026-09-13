@@ -17,7 +17,7 @@ from dotenv import load_dotenv
 # lo que este archivo simplemente no existira y load_dotenv() no hace nada.
 load_dotenv()
 
-from app import create_app  # noqa: E402 (import despues de load_dotenv a proposito)
+from app import create_app  # noqa: E402  (import despues de load_dotenv a proposito)
 
 app = create_app()
 
