@@ -89,11 +89,22 @@ jobs:
             sleep 2
           done
 
-          docker logs smoke
+          docker logs smoke > /tmp/smoke.log 2>&1
+          cat /tmp/smoke.log
           docker rm -f smoke
 
           if [ "$codigo" = "000" ] || [ -z "$codigo" ]; then
             echo "::error::El contenedor nunca respondio HTTP - revisar logs arriba"
+            exit 1
+          fi
+
+          # Detecta errores reales de gunicorn en el log (ej. el bug de
+          # permisos de /app que encontramos en el primer deploy real:
+          # "Control server error: Permission denied"). El servidor puede
+          # seguir respondiendo HTTP aunque un [ERROR] interno haya
+          # ocurrido, asi que el chequeo de arriba solo no basta.
+          if grep -q '\[ERROR\]' /tmp/smoke.log; then
+            echo "::error::Se encontraron errores de gunicorn en el log (ver arriba)"
             exit 1
           fi
 
