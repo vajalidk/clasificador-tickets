@@ -251,7 +251,10 @@ flowchart LR
 | `GET` | `/health` | 200 si la app y la DB responden; 503 con detalle si la DB falla |
 | `GET` | `/nuevo-ticket` | Formulario publico (HTML) para que un usuario final envie un ticket, sin tocar la API directamente |
 | `GET` | `/dashboard` | HTML con Chart.js, consume `/api/estadisticas` |
+| `GET` | `/tickets` | HTML: listado completo de tickets con filtros y accion de resolver |
 | `GET` | `/api/estadisticas` | JSON con agregaciones para el dashboard |
+| `GET` | `/api/tickets` | JSON paginado/filtrable (categoria, urgencia, estado, orden) |
+| `PATCH` | `/api/tickets/<id>/estado` | Marca un ticket pendiente/resuelto (requiere header `X-Admin-Token`) |
 | `GET` | `/apidocs` | Swagger UI autogenerado (flasgger) |
 
 ### 2.3.1 `/nuevo-ticket`: formulario para usuarios finales
@@ -320,6 +323,33 @@ Ademas, cada `<canvas>` de Chart.js vive dentro de un `div` con altura fija
 y `position: relative`, con `maintainAspectRatio: false` — nunca se le
 pone `max-height` directo al `<canvas>`, que es la causa mas comun de que
 un grafico se vea deforme al cambiar el ancho de la ventana.
+
+### 2.3.3 `/tickets`: listado completo, filtros, y resolver tickets
+
+Pagina adicional para gestionar (no solo ver) los tickets:
+
+- **Datos del remitente**: `clasificaciones` gano dos columnas opcionales,
+  `nombre` y `correo` (migracion en [`migrations/0001_nombre_correo_estado.sql`](migrations/0001_nombre_correo_estado.sql)),
+  que llena `/nuevo-ticket` y se muestran en la tabla. Un cliente que use
+  `/clasificar` directamente puede omitirlos sin problema.
+- **Filtros + orden**: `GET /api/tickets` acepta `categoria`, `urgencia`,
+  `estado` y `orden` (reciente/antiguo/urgencia/confianza) mas paginacion
+  (`page`, `limite`). El valor de `orden` se valida contra una whitelist
+  fija (`ORDENES_VALIDOS`) antes de usarse en la clausula `ORDER BY` del
+  SQL — esa clausula no admite placeholders `%s` de psycopg2, asi que
+  nunca se interpola directo un valor que venga del usuario.
+- **Marcar como resuelto**: cada ticket tiene un `estado` (`pendiente` /
+  `resuelto`). `PATCH /api/tickets/<id>/estado` lo cambia, pero exige un
+  header `X-Admin-Token` que debe coincidir con la variable de entorno
+  `ADMIN_TOKEN` del servidor. **No es un sistema de cuentas de usuario
+  completo** (login, roles, sesiones) — eso esta fuera del alcance de este
+  proyecto de portafolio; es un token compartido simple que distingue
+  "modo lectura" (cualquiera) de "modo administrador" (quien tenga el
+  token). Si `ADMIN_TOKEN` no esta configurado en el servidor, la funcion
+  queda deshabilitada por completo (falla con 503, nunca se permite por
+  accidente con un token vacio en ambos lados). El token se pide una vez
+  en `/tickets` y se guarda en `localStorage` del navegador (nunca en el
+  repo ni en la base de datos).
 
 ### 2.4 Base de datos (Supabase / Postgres)
 
@@ -770,6 +800,7 @@ despues, en **Settings -> Environment** del servicio ya creado):
 |---|---|
 | `DATABASE_URL` | El connection string de Supabase (seccion 2.4) — **usa el modo "Session pooler", no "Direct connection"** (ver nota de IPv4 abajo) |
 | `LOG_LEVEL` | `INFO` |
+| `ADMIN_TOKEN` | Token propio para poder marcar tickets como resueltos en `/tickets` (seccion 2.3.3). Generalo con `python -c "import secrets; print(secrets.token_urlsafe(24))"` |
 
 > **Por que "Session pooler" y no "Direct connection"**: Supabase ofrece
 > conexion directa por IPv6 de forma gratuita; IPv4 es un add-on de pago.
@@ -874,17 +905,20 @@ posible, no como sustituto de revisar el `git diff` antes de cada commit.
 │   └── dependabot.yml              # actualizaciones automaticas de dependencias
 ├── app/
 │   ├── __init__.py                 # application factory (create_app)
-│   ├── routes.py                    # los 5 endpoints
+│   ├── routes.py                    # los 8 endpoints
 │   ├── ml/
 │   │   └── clasificador.py           # carga modelos .joblib y expone clasificar(texto)
 │   ├── db/
 │   │   └── supabase_client.py        # conexion a Postgres con pool + reintentos
 │   ├── templates/
 │   │   ├── dashboard.html             # panel de estadisticas (Chart.js)
-│   │   └── nuevo_ticket.html           # formulario publico "Mesa de Ayuda"
+│   │   ├── nuevo_ticket.html           # formulario publico "Mesa de Ayuda"
+│   │   └── tickets.html                # listado completo, filtros, resolver
 │   └── static/
 ├── data/
 │   └── tickets_dataset.csv          # dataset sintetico (generado)
+├── migrations/
+│   └── 0001_nombre_correo_estado.sql # ALTER TABLE para BDs ya existentes
 ├── models/
 │   ├── categoria_v{fecha}.joblib    # modelo de categoria (generado)
 │   ├── urgencia_v{fecha}.joblib     # modelo de urgencia (generado)

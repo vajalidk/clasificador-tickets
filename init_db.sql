@@ -17,17 +17,24 @@ CREATE TABLE IF NOT EXISTS clasificaciones (
     categoria   TEXT NOT NULL,
     urgencia    TEXT NOT NULL,
     confianza   REAL NOT NULL CHECK (confianza >= 0 AND confianza <= 1),
-    fecha_hora  TIMESTAMPTZ NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc')
+    fecha_hora  TIMESTAMPTZ NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc'),
+    -- Datos opcionales de quien envia el ticket (formulario /nuevo-ticket).
+    nombre      TEXT,
+    correo      TEXT,
+    -- Ciclo de vida del ticket: 'pendiente' -> 'resuelto'.
+    estado      TEXT NOT NULL DEFAULT 'pendiente' CHECK (estado IN ('pendiente', 'resuelto'))
 );
 
--- Los dos filtros mas comunes del dashboard son "agregar por categoria" y
--- "agregar por rango de fechas" (tickets por dia en los ultimos 7 dias),
--- por lo que ambos campos llevan indice propio.
+-- Los filtros mas comunes del dashboard/listado son "agregar por
+-- categoria", "agregar por rango de fechas" y "filtrar por estado".
 CREATE INDEX IF NOT EXISTS idx_clasificaciones_fecha_hora
     ON clasificaciones (fecha_hora);
 
 CREATE INDEX IF NOT EXISTS idx_clasificaciones_categoria
     ON clasificaciones (categoria);
+
+CREATE INDEX IF NOT EXISTS idx_clasificaciones_estado
+    ON clasificaciones (estado);
 
 
 CREATE TABLE IF NOT EXISTS predicciones_dudosas (

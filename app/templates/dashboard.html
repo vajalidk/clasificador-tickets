@@ -129,14 +129,21 @@
       vertical-align: middle;
     }
     table.recientes tr:last-child td { border-bottom: none; }
-    .texto-truncado {
-      max-width: 320px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    .texto-ticket {
+      max-width: 420px;
+      white-space: normal;
+      word-break: break-word;
+      line-height: 1.4;
       display: inline-block;
       vertical-align: middle;
     }
+    .tarjeta-tabla .encabezado-tabla {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .tarjeta-tabla .encabezado-tabla h2 { margin: 0; }
     .badge {
       display: inline-block;
       padding: 3px 12px;
@@ -214,7 +221,10 @@
     </div>
 
     <div class="tarjeta-tabla">
-      <h2>Clasificaciones recientes</h2>
+      <div class="encabezado-tabla">
+        <h2>Clasificaciones recientes</h2>
+        <a href="/tickets" class="enlace-ticket">Ver todos los tickets →</a>
+      </div>
       <div id="contenedor-recientes"></div>
     </div>
 
@@ -393,7 +403,7 @@
 
       const filasHtml = filas.map((r) => `
         <tr>
-          <td><span class="texto-truncado" title="${escaparHtml(r.texto)}">${escaparHtml(r.texto)}</span></td>
+          <td><span class="texto-ticket">${escaparHtml(r.texto)}</span></td>
           <td><span class="badge categoria">${escaparHtml(capitalizar(r.categoria))}</span></td>
           <td>${badgeUrgencia(r.urgencia)}</td>
           <td>${Number(r.confianza).toFixed(2)}</td>

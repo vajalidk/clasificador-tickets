@@ -291,6 +291,8 @@
       evento.preventDefault();
       ocultarError();
 
+      const nombre = document.getElementById("nombre").value.trim();
+      const correo = document.getElementById("correo").value.trim();
       const asunto = document.getElementById("asunto").value.trim();
       const cuerpo = mensaje.value.trim();
 
@@ -300,7 +302,9 @@
       }
 
       // Combinamos asunto + mensaje en un solo texto: la API solo entiende
-      // el campo "texto" (ver POST /clasificar en /apidocs).
+      // el campo "texto" (ver POST /clasificar en /apidocs). nombre/correo
+      // se mandan aparte, son opcionales y solo se guardan como metadata
+      // del ticket (no influyen en la clasificacion).
       const texto = asunto ? `${asunto}. ${cuerpo}` : cuerpo;
 
       botonEnviar.disabled = true;
@@ -310,7 +314,7 @@
         const resp = await fetch("/clasificar", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ texto }),
+          body: JSON.stringify({ texto, nombre: nombre || undefined, correo: correo || undefined }),
         });
 
         const datos = await resp.json();

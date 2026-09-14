@@ -76,3 +76,83 @@ def test_clasificar_respeta_rate_limit_de_20_por_minuto(client):
 
     assert resp_excedida.status_code == 429
     assert "error" in resp_excedida.get_json()
+
+
+def test_clasificar_guarda_nombre_y_correo_opcionales(client, mock_db):
+    resp = client.post(
+        "/clasificar",
+        json={"texto": "No puedo entrar a mi cuenta", "nombre": "Ana", "correo": "ana@ejemplo.com"},
+    )
+
+    assert resp.status_code == 200
+    _args, kwargs = mock_db.insertar_clasificacion.call_args
+    assert kwargs["nombre"] == "Ana"
+    assert kwargs["correo"] == "ana@ejemplo.com"
+
+
+def test_tickets_html_responde_200(client):
+    resp = client.get("/tickets")
+
+    assert resp.status_code == 200
+    assert b"Todos los tickets" in resp.data
+
+
+def test_api_tickets_responde_200_con_forma_correcta(client):
+    resp = client.get("/api/tickets")
+
+    assert resp.status_code == 200
+    data = resp.get_json()
+    assert set(data.keys()) == {"tickets", "total", "limite", "offset"}
+
+
+def test_api_tickets_urgencia_invalida_devuelve_400(client):
+    resp = client.get("/api/tickets?urgencia=critica")
+
+    assert resp.status_code == 400
+    assert "error" in resp.get_json()
+
+
+def test_patch_estado_sin_admin_token_configurado_devuelve_503(client, monkeypatch):
+    monkeypatch.delenv("ADMIN_TOKEN", raising=False)
+
+    resp = client.patch("/api/tickets/1/estado", json={"estado": "resuelto"})
+
+    assert resp.status_code == 503
+
+
+def test_patch_estado_con_token_invalido_devuelve_401(client, monkeypatch):
+    monkeypatch.setenv("ADMIN_TOKEN", "token-correcto")
+
+    resp = client.patch(
+        "/api/tickets/1/estado",
+        json={"estado": "resuelto"},
+        headers={"X-Admin-Token": "token-incorrecto"},
+    )
+
+    assert resp.status_code == 401
+
+
+def test_patch_estado_con_token_valido_actualiza_ticket(client, monkeypatch, mock_db):
+    monkeypatch.setenv("ADMIN_TOKEN", "token-correcto")
+
+    resp = client.patch(
+        "/api/tickets/1/estado",
+        json={"estado": "resuelto"},
+        headers={"X-Admin-Token": "token-correcto"},
+    )
+
+    assert resp.status_code == 200
+    assert resp.get_json() == {"id": 1, "estado": "resuelto"}
+
+
+def test_patch_estado_ticket_inexistente_devuelve_404(client, monkeypatch, mock_db):
+    monkeypatch.setenv("ADMIN_TOKEN", "token-correcto")
+    mock_db.actualizar_estado_ticket.return_value = None
+
+    resp = client.patch(
+        "/api/tickets/999/estado",
+        json={"estado": "resuelto"},
+        headers={"X-Admin-Token": "token-correcto"},
+    )
+
+    assert resp.status_code == 404

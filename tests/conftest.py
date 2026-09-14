@@ -36,6 +36,13 @@ def mock_db(monkeypatch):
         "confianza_promedio": None,
         "recientes": [],
     }
+    mock.listar_clasificaciones.return_value = {
+        "tickets": [],
+        "total": 0,
+        "limite": 20,
+        "offset": 0,
+    }
+    mock.actualizar_estado_ticket.return_value = {"id": 1, "estado": "resuelto"}
     monkeypatch.setattr(routes_module, "db", mock)
     return mock
 

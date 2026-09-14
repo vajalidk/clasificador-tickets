@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Todos los tickets - Clasificador</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #0f1220;
+      --card-bg: #1a1f36;
+      --text: #e8eaf2;
+      --text-muted: #9aa0b4;
+      --border: #2a3050;
+      --accent: #6c8cff;
+      --accent-hover: #849dff;
+      --alta: #f0555a;
+      --media: #f5b942;
+      --baja: #3ecf8e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .contenedor { max-width: 1200px; margin: 0 auto; padding: 24px; }
+
+    .encabezado {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    h1 { font-size: 1.4rem; margin: 0 0 4px 0; }
+    p.subtitulo { color: var(--text-muted); margin: 0; }
+    .enlace { color: var(--accent); text-decoration: none; font-size: 0.9rem; white-space: nowrap; }
+    .enlace:hover { text-decoration: underline; }
+
+    .panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .fila-filtros {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: flex-end;
+    }
+    .campo-filtro { display: flex; flex-direction: column; gap: 4px; min-width: 140px; }
+    .campo-filtro label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.03em; }
+    select, input[type="password"] {
+      background: #12162a;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      color: var(--text);
+      font-size: 0.88rem;
+      font-family: inherit;
+    }
+    select:focus, input:focus { outline: none; border-color: var(--accent); }
+
+    .panel-admin { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .panel-admin .estado-admin { font-size: 0.85rem; color: var(--text-muted); }
+    .panel-admin .estado-admin.activo { color: var(--baja); }
+    button.boton {
+      background: var(--accent);
+      color: #0b0e1a;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    button.boton:hover { background: var(--accent-hover); }
+    button.boton.secundario {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    button.boton.secundario:hover { border-color: var(--accent); }
+    button.boton:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .tarjeta-tabla {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      overflow-x: auto;
+    }
+    table.tickets { width: 100%; border-collapse: collapse; font-size: 0.88rem; min-width: 760px; }
+    table.tickets th {
+      text-align: left;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      padding: 0 12px 10px 0;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    table.tickets td {
+      padding: 12px 12px 12px 0;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    table.tickets tr:last-child td { border-bottom: none; }
+    .texto-ticket { max-width: 360px; white-space: normal; word-break: break-word; line-height: 1.4; display: inline-block; }
+    .col-persona { min-width: 140px; }
+    .col-persona .nombre { font-weight: 600; }
+    .col-persona .correo { color: var(--text-muted); font-size: 0.82rem; }
+    .sin-dato { color: var(--text-muted); font-style: italic; }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .badge.categoria { background: rgba(108, 140, 255, 0.15); color: var(--accent); }
+    .badge.urgencia-alta { background: rgba(240, 85, 90, 0.15); color: var(--alta); }
+    .badge.urgencia-media { background: rgba(245, 185, 66, 0.15); color: var(--media); }
+    .badge.urgencia-baja { background: rgba(62, 207, 142, 0.15); color: var(--baja); }
+    .badge.estado-pendiente { background: rgba(154, 160, 180, 0.15); color: var(--text-muted); }
+    .badge.estado-resuelto { background: rgba(62, 207, 142, 0.15); color: var(--baja); }
+
+    .fecha-ticket { color: var(--text-muted); font-size: 0.82rem; white-space: nowrap; }
+
+    .paginacion { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; font-size: 0.85rem; color: var(--text-muted); }
+    .paginacion .botones { display: flex; gap: 8px; }
+
+    .estado-carga { color: var(--text-muted); font-size: 0.9rem; padding: 8px 0; }
+    .sin-datos { color: var(--text-muted); font-size: 0.85rem; padding: 12px 0; }
+
+    @media (max-width: 480px) {
+      .contenedor { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+    <div class="encabezado">
+      <div>
+        <h1>Todos los tickets</h1>
+        <p class="subtitulo">Listado completo, con filtros</p>
+      </div>
+      <a href="/dashboard" class="enlace">← Volver al panel</a>
+    </div>
+
+    <div class="panel">
+      <div class="fila-filtros">
+        <div class="campo-filtro">
+          <label for="filtro-categoria">Categoria</label>
+          <select id="filtro-categoria">
+            <option value="">Todas</option>
+            <option value="facturación">Facturación</option>
+            <option value="soporte técnico">Soporte técnico</option>
+            <option value="queja">Queja</option>
+            <option value="información general">Información general</option>
+          </select>
+        </div>
+        <div class="campo-filtro">
+          <label for="filtro-urgencia">Urgencia</label>
+          <select id="filtro-urgencia">
+            <option value="">Todas</option>
+            <option value="alta">Alta</option>
+            <option value="media">Media</option>
+            <option value="baja">Baja</option>
+          </select>
+        </div>
+        <div class="campo-filtro">
+          <label for="filtro-estado">Estado</label>
+          <select id="filtro-estado">
+            <option value="">Todos</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="resuelto">Resuelto</option>
+          </select>
+        </div>
+        <div class="campo-filtro">
+          <label for="filtro-orden">Ordenar por</label>
+          <select id="filtro-orden">
+            <option value="reciente">Mas reciente</option>
+            <option value="antiguo">Mas antiguo</option>
+            <option value="urgencia">Urgencia</option>
+            <option value="confianza">Confianza (menor primero)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-admin">
+      <input type="password" id="campo-admin-token" placeholder="Token de administrador (opcional)" style="flex: 1; min-width: 220px;" />
+      <button class="boton secundario" id="boton-guardar-token">Activar modo administrador</button>
+      <span class="estado-admin" id="estado-admin">Modo lectura</span>
+    </div>
+
+    <div class="tarjeta-tabla">
+      <div id="contenedor-tickets"></div>
+      <p class="estado-carga" id="estado-carga"></p>
+      <div class="paginacion" id="paginacion" hidden>
+        <span id="texto-paginacion"></span>
+        <div class="botones">
+          <button class="boton secundario" id="boton-anterior">← Anterior</button>
+          <button class="boton secundario" id="boton-siguiente">Siguiente →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const LIMITE_POR_PAGINA = 20;
+    const CLAVE_TOKEN = "admin_token_clasificador";
+
+    let paginaActual = 1;
+    let totalTickets = 0;
+
+    function capitalizar(texto) {
+      if (!texto) return texto;
+      return texto.charAt(0).toUpperCase() + texto.slice(1);
+    }
+
+    function escaparHtml(texto) {
+      const div = document.createElement("div");
+      div.textContent = texto ?? "";
+      return div.innerHTML;
+    }
+
+    function formatearFecha(iso) {
+      const fecha = new Date(iso);
+      return fecha.toLocaleString("es-MX", {
+        day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit",
+      });
+    }
+
+    function obtenerToken() {
+      return localStorage.getItem(CLAVE_TOKEN) || "";
+    }
+
+    function actualizarEstadoAdmin() {
+      const token = obtenerToken();
+      const estadoEl = document.getElementById("estado-admin");
+      if (token) {
+        estadoEl.textContent = "Modo administrador activo";
+        estadoEl.classList.add("activo");
+      } else {
+        estadoEl.textContent = "Modo lectura";
+        estadoEl.classList.remove("activo");
+      }
+    }
+
+    document.getElementById("boton-guardar-token").addEventListener("click", () => {
+      const valor = document.getElementById("campo-admin-token").value.trim();
+      if (valor) {
+        localStorage.setItem(CLAVE_TOKEN, valor);
+      } else {
+        localStorage.removeItem(CLAVE_TOKEN);
+      }
+      document.getElementById("campo-admin-token").value = "";
+      actualizarEstadoAdmin();
+      cargarTickets();
+    });
+
+    function construirUrl() {
+      const params = new URLSearchParams();
+      const categoria = document.getElementById("filtro-categoria").value;
+      const urgencia = document.getElementById("filtro-urgencia").value;
+      const estado = document.getElementById("filtro-estado").value;
+      const orden = document.getElementById("filtro-orden").value;
+      if (categoria) params.set("categoria", categoria);
+      if (urgencia) params.set("urgencia", urgencia);
+      if (estado) params.set("estado", estado);
+      params.set("orden", orden);
+      params.set("page", paginaActual);
+      params.set("limite", LIMITE_POR_PAGINA);
+      return `/api/tickets?${params.toString()}`;
+    }
+
+    function badgeUrgencia(urgencia) {
+      const clase = { alta: "urgencia-alta", media: "urgencia-media", baja: "urgencia-baja" }[urgencia] || "urgencia-media";
+      return `<span class="badge ${clase}">${capitalizar(urgencia)}</span>`;
+    }
+
+    function badgeEstado(estado) {
+      const clase = estado === "resuelto" ? "estado-resuelto" : "estado-pendiente";
+      return `<span class="badge ${clase}">${capitalizar(estado)}</span>`;
+    }
+
+    async function alternarEstado(id, estadoActual, boton) {
+      const nuevoEstado = estadoActual === "resuelto" ? "pendiente" : "resuelto";
+      const token = obtenerToken();
+      boton.disabled = true;
+      try {
+        const resp = await fetch(`/api/tickets/${id}/estado`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json", "X-Admin-Token": token },
+          body: JSON.stringify({ estado: nuevoEstado }),
+        });
+        if (resp.status === 401) {
+          alert("Token de administrador invalido. Verifica el token e intenta de nuevo.");
+          return;
+        }
+        if (resp.status === 503) {
+          alert("La funcion de administrador no esta configurada en el servidor.");
+          return;
+        }
+        if (!resp.ok) {
+          const cuerpo = await resp.json().catch(() => ({}));
+          throw new Error(cuerpo.error || `Error HTTP ${resp.status}`);
+        }
+        cargarTickets();
+      } catch (err) {
+        alert(`No se pudo actualizar el ticket: ${err.message}`);
+      } finally {
+        boton.disabled = false;
+      }
+    }
+
+    function renderizarTickets(datos) {
+      const contenedor = document.getElementById("contenedor-tickets");
+      const tienesToken = Boolean(obtenerToken());
+
+      if (!datos.tickets.length) {
+        contenedor.innerHTML = '<p class="sin-datos">No hay tickets que coincidan con estos filtros.</p>';
+        document.getElementById("paginacion").hidden = true;
+        return;
+      }
+
+      const filas = datos.tickets.map((t) => `
+        <tr>
+          <td><span class="texto-ticket">${escaparHtml(t.texto)}</span></td>
+          <td class="col-persona">
+            ${t.nombre ? `<div class="nombre">${escaparHtml(t.nombre)}</div>` : '<div class="sin-dato">Sin nombre</div>'}
+            ${t.correo ? `<div class="correo">${escaparHtml(t.correo)}</div>` : ""}
+          </td>
+          <td><span class="badge categoria">${escaparHtml(capitalizar(t.categoria))}</span></td>
+          <td>${badgeUrgencia(t.urgencia)}</td>
+          <td>${Number(t.confianza).toFixed(2)}</td>
+          <td>${badgeEstado(t.estado)}</td>
+          <td class="fecha-ticket">${formatearFecha(t.fecha_hora)}</td>
+          <td>
+            ${tienesToken
+              ? `<button class="boton secundario" data-id="${t.id}" data-estado="${t.estado}">${t.estado === "resuelto" ? "Marcar pendiente" : "Marcar resuelto"}</button>`
+              : '<span class="sin-dato">—</span>'}
+          </td>
+        </tr>
+      `).join("");
+
+      contenedor.innerHTML = `
+        <table class="tickets">
+          <thead>
+            <tr>
+              <th>Texto</th><th>De</th><th>Categoria</th><th>Urgencia</th>
+              <th>Confianza</th><th>Estado</th><th>Fecha</th><th>Accion</th>
+            </tr>
+          </thead>
+          <tbody>${filas}</tbody>
+        </table>
+      `;
+
+      contenedor.querySelectorAll("button[data-id]").forEach((boton) => {
+        boton.addEventListener("click", () => {
+          alternarEstado(Number(boton.dataset.id), boton.dataset.estado, boton);
+        });
+      });
+
+      totalTickets = datos.total;
+      const totalPaginas = Math.max(1, Math.ceil(totalTickets / LIMITE_POR_PAGINA));
+      document.getElementById("texto-paginacion").textContent =
+        `Pagina ${paginaActual} de ${totalPaginas} · ${totalTickets} tickets`;
+      document.getElementById("boton-anterior").disabled = paginaActual <= 1;
+      document.getElementById("boton-siguiente").disabled = paginaActual >= totalPaginas;
+      document.getElementById("paginacion").hidden = false;
+    }
+
+    async function cargarTickets() {
+      const estadoEl = document.getElementById("estado-carga");
+      estadoEl.textContent = "Cargando...";
+      try {
+        const resp = await fetch(construirUrl());
+        if (!resp.ok) {
+          const cuerpo = await resp.json().catch(() => ({}));
+          throw new Error(cuerpo.error || `Error HTTP ${resp.status}`);
+        }
+        const datos = await resp.json();
+        renderizarTickets(datos);
+        estadoEl.textContent = "";
+      } catch (err) {
+        estadoEl.textContent = `No se pudieron cargar los tickets: ${err.message}`;
+      }
+    }
+
+    ["filtro-categoria", "filtro-urgencia", "filtro-estado", "filtro-orden"].forEach((id) => {
+      document.getElementById(id).addEventListener("change", () => {
+        paginaActual = 1;
+        cargarTickets();
+      });
+    });
+
+    document.getElementById("boton-anterior").addEventListener("click", () => {
+      if (paginaActual > 1) { paginaActual -= 1; cargarTickets(); }
+    });
+    document.getElementById("boton-siguiente").addEventListener("click", () => {
+      paginaActual += 1; cargarTickets();
+    });
+
+    actualizarEstadoAdmin();
+    cargarTickets();
+  </script>
+</body>
+</html>

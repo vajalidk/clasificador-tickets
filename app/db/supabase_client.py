@@ -98,20 +98,27 @@ def insertar_clasificacion(
     urgencia: str,
     confianza: float,
     fecha_hora: datetime | None = None,
+    nombre: str | None = None,
+    correo: str | None = None,
 ) -> dict:
     """`fecha_hora` es opcional y normalmente se omite (se usa el momento
     actual). Solo se pasa explicitamente desde `seed_demo_data.py`, para
     poder distribuir tickets de demostracion en los ultimos N dias y que
-    la grafica de "tickets por dia" del dashboard se vea realista."""
+    la grafica de "tickets por dia" del dashboard se vea realista.
+
+    `nombre`/`correo` son opcionales: solo los manda el formulario
+    /nuevo-ticket (seccion 2.3.1); un cliente que use la API directamente
+    (Swagger, curl, integraciones) puede omitirlos sin problema."""
     fecha_hora = fecha_hora or datetime.now(timezone.utc)
     with _cursor(commit=True) as cur:
         cur.execute(
             """
-            INSERT INTO clasificaciones (texto, categoria, urgencia, confianza, fecha_hora)
-            VALUES (%s, %s, %s, %s, %s)
+            INSERT INTO clasificaciones
+                (texto, categoria, urgencia, confianza, fecha_hora, nombre, correo)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
             RETURNING id, fecha_hora
             """,
-            (texto, categoria, urgencia, confianza, fecha_hora),
+            (texto, categoria, urgencia, confianza, fecha_hora, nombre, correo),
         )
         return dict(cur.fetchone())
 
@@ -188,21 +195,12 @@ def obtener_estadisticas() -> dict:
         confianza_promedio = float(fila_promedio) if fila_promedio is not None else None
 
         cur.execute("""
-            SELECT texto, categoria, urgencia, confianza, fecha_hora
+            SELECT id, texto, categoria, urgencia, confianza, fecha_hora, nombre, correo, estado
             FROM clasificaciones
             ORDER BY fecha_hora DESC
             LIMIT 10
             """)
-        recientes = [
-            {
-                "texto": r["texto"],
-                "categoria": r["categoria"],
-                "urgencia": r["urgencia"],
-                "confianza": r["confianza"],
-                "fecha_hora": r["fecha_hora"].isoformat(),
-            }
-            for r in cur.fetchall()
-        ]
+        recientes = [_fila_ticket(r) for r in cur.fetchall()]
 
     return {
         "por_categoria": por_categoria,
@@ -213,3 +211,96 @@ def obtener_estadisticas() -> dict:
         "confianza_promedio": confianza_promedio,
         "recientes": recientes,
     }
+
+
+def _fila_ticket(r: dict) -> dict:
+    """Serializa una fila de `clasificaciones` a un dict JSON-friendly,
+    compartido entre `obtener_estadisticas` (recientes) y
+    `listar_clasificaciones` (listado completo con filtros)."""
+    return {
+        "id": r["id"],
+        "texto": r["texto"],
+        "categoria": r["categoria"],
+        "urgencia": r["urgencia"],
+        "confianza": r["confianza"],
+        "fecha_hora": r["fecha_hora"].isoformat(),
+        "nombre": r["nombre"],
+        "correo": r["correo"],
+        "estado": r["estado"],
+    }
+
+
+ORDENES_VALIDOS = {
+    "reciente": "fecha_hora DESC",
+    "antiguo": "fecha_hora ASC",
+    "urgencia": (
+        "CASE urgencia WHEN 'alta' THEN 1 WHEN 'media' THEN 2 WHEN 'baja' THEN 3 ELSE 4 END, "
+        "fecha_hora DESC"
+    ),
+    "confianza": "confianza ASC",
+}
+
+
+def listar_clasificaciones(
+    categoria: str | None = None,
+    urgencia: str | None = None,
+    estado: str | None = None,
+    orden: str = "reciente",
+    limite: int = 20,
+    offset: int = 0,
+) -> dict:
+    """Listado paginado y filtrable de tickets para GET /tickets y
+    GET /api/tickets. `orden` se valida contra ORDENES_VALIDOS (whitelist)
+    antes de interpolarse en el SQL - nunca se concatena un valor que
+    venga directo del usuario sin pasar por esa whitelist, para evitar
+    inyeccion SQL en la clausula ORDER BY (que no admite placeholders
+    %s de psycopg2)."""
+    clausula_orden = ORDENES_VALIDOS.get(orden, ORDENES_VALIDOS["reciente"])
+
+    condiciones = []
+    parametros: list = []
+    if categoria:
+        condiciones.append("categoria = %s")
+        parametros.append(categoria)
+    if urgencia:
+        condiciones.append("urgencia = %s")
+        parametros.append(urgencia)
+    if estado:
+        condiciones.append("estado = %s")
+        parametros.append(estado)
+    where = f"WHERE {' AND '.join(condiciones)}" if condiciones else ""
+
+    with _cursor() as cur:
+        cur.execute(f"SELECT COUNT(*) AS total FROM clasificaciones {where}", parametros)
+        total = cur.fetchone()["total"]
+
+        cur.execute(
+            f"""
+            SELECT id, texto, categoria, urgencia, confianza, fecha_hora, nombre, correo, estado
+            FROM clasificaciones
+            {where}
+            ORDER BY {clausula_orden}
+            LIMIT %s OFFSET %s
+            """,
+            parametros + [limite, offset],
+        )
+        tickets = [_fila_ticket(r) for r in cur.fetchall()]
+
+    return {"tickets": tickets, "total": total, "limite": limite, "offset": offset}
+
+
+def actualizar_estado_ticket(ticket_id: int, estado: str) -> dict | None:
+    """Marca un ticket como 'pendiente' o 'resuelto'. Devuelve None si el
+    id no existe (para que el endpoint pueda responder 404)."""
+    with _cursor(commit=True) as cur:
+        cur.execute(
+            """
+            UPDATE clasificaciones
+            SET estado = %s
+            WHERE id = %s
+            RETURNING id, estado
+            """,
+            (estado, ticket_id),
+        )
+        fila = cur.fetchone()
+        return dict(fila) if fila else None
