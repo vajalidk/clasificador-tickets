@@ -243,12 +243,16 @@ def endpoint_dashboard():
     return render_template("dashboard.html")
 
 
+CATEGORIAS_VALIDAS = {"facturación", "soporte técnico", "queja", "información general"}
+
+
 @main_bp.route("/api/estadisticas", methods=["GET"])
 def endpoint_estadisticas():
     """Datos agregados que consume el dashboard. Admite filtrado cruzado:
-    `urgencia` (lista separada por comas, ej. "media,baja") y `dia`
-    (YYYY-MM-DD) para que un click en la dona de urgencia o en un punto de
-    la grafica de tendencia recalcule TODO el dashboard con ese filtro.
+    `urgencia` (lista separada por comas, ej. "media,baja"), `categoria` y
+    `dia` (YYYY-MM-DD) para que un click en una barra de categoria, en la
+    dona de urgencia, o en un punto de la grafica de tendencia recalcule
+    TODO el dashboard con ese filtro.
     ---
     tags:
       - Dashboard
@@ -258,6 +262,10 @@ def endpoint_estadisticas():
         type: string
         required: false
         description: "Lista separada por comas, ej: media,baja"
+      - in: query
+        name: categoria
+        type: string
+        required: false
       - in: query
         name: dia
         type: string
@@ -303,6 +311,12 @@ def endpoint_estadisticas():
         if not urgencias or any(u not in {"alta", "media", "baja"} for u in urgencias):
             _abortar_400("El parametro 'urgencia' debe ser una lista de: alta, media, baja.")
 
+    categoria = request.args.get("categoria") or None
+    if categoria and categoria not in CATEGORIAS_VALIDAS:
+        _abortar_400(
+            f"El parametro 'categoria' debe ser uno de: {', '.join(sorted(CATEGORIAS_VALIDAS))}."
+        )
+
     dia = request.args.get("dia") or None
     if dia:
         try:
@@ -311,7 +325,7 @@ def endpoint_estadisticas():
             _abortar_400("El parametro 'dia' debe tener el formato YYYY-MM-DD.")
 
     try:
-        estadisticas = db.obtener_estadisticas(urgencias=urgencias, dia=dia)
+        estadisticas = db.obtener_estadisticas(urgencias=urgencias, categoria=categoria, dia=dia)
     except Exception:
         logger.exception("Error obteniendo estadisticas")
         abort(500, description="No se pudieron obtener las estadisticas.")

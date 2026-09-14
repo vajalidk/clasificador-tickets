@@ -199,10 +199,16 @@
       </div>
     </div>
 
-    <div class="panel panel-admin">
-      <input type="password" id="campo-admin-token" placeholder="Token de administrador (opcional)" style="flex: 1; min-width: 220px;" />
-      <button class="boton secundario" id="boton-guardar-token">Activar modo administrador</button>
-      <span class="estado-admin" id="estado-admin">Modo lectura</span>
+    <div class="panel panel-admin" style="flex-direction: column; align-items: stretch; gap: 6px;">
+      <p style="margin: 0; font-size: 0.82rem; color: var(--text-muted);">
+        Ver los tickets no requiere nada. Para <strong>marcar un ticket como resuelto/pendiente</strong>
+        es obligatorio ingresar aquí el <code>ADMIN_TOKEN</code> configurado en el servidor.
+      </p>
+      <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <input type="password" id="campo-admin-token" placeholder="Token de administrador (obligatorio para modificar tickets)" style="flex: 1; min-width: 260px;" />
+        <button class="boton secundario" id="boton-guardar-token">Activar modo administrador</button>
+        <span class="estado-admin" id="estado-admin">Modo lectura</span>
+      </div>
     </div>
 
     <div class="tarjeta-tabla">

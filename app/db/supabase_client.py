@@ -143,47 +143,58 @@ def insertar_prediccion_dudosa(
         return dict(cur.fetchone())
 
 
-def obtener_estadisticas(urgencias: list[str] | None = None, dia: str | None = None) -> dict:
+def obtener_estadisticas(
+    urgencias: list[str] | None = None,
+    categoria: str | None = None,
+    dia: str | None = None,
+) -> dict:
     """Agregaciones para el dashboard: tickets por categoria, por urgencia,
     por dia en los ultimos 7 dias, confianza promedio y las clasificaciones
     mas recientes. Todas las agregaciones se calculan en SQL (no en
     Python) para aprovechar los indices en `categoria` y `fecha_hora` y no
     traer filas de mas a la aplicacion.
 
-    `urgencias` y `dia` habilitan el filtrado cruzado del dashboard (click
-    en la dona de urgencia / en un punto de la grafica de tendencia): TODAS
-    las agregaciones (categoria, urgencia, totales, confianza, recientes)
-    se recalculan con esos filtros aplicados, excepto `por_dia` — esa
-    grafica es el mecanismo de seleccion en si mismo, asi que siempre
-    muestra los ultimos 7 dias completos (solo respeta el filtro de
-    urgencia, no el de `dia`, para poder seguir eligiendo otro dia)."""
-    condiciones = []
-    parametros: list = []
-    if urgencias:
-        condiciones.append("urgencia = ANY(%s)")
-        parametros.append(urgencias)
-    if dia:
-        condiciones.append("DATE(fecha_hora) = %s")
-        parametros.append(dia)
-    where = f"WHERE {' AND '.join(condiciones)}" if condiciones else ""
+    `urgencias`, `categoria` y `dia` habilitan el filtrado cruzado del
+    dashboard (click en una barra de categoria / en la dona de urgencia /
+    en un punto de la grafica de tendencia): TODAS las agregaciones se
+    recalculan con esos filtros aplicados, **excepto la agregacion que es
+    el propio eje de seleccion de cada filtro** (`por_categoria` ignora el
+    filtro de `categoria`, `por_dia` ignora el filtro de `dia`) — asi el
+    usuario siempre puede seguir viendo/eligiendo todas las opciones de
+    esa grafica en particular, aunque las demas graficas ya esten
+    filtradas por ella."""
 
-    condiciones_dia_chart = list(condiciones)
-    parametros_dia_chart = list(parametros)
-    if dia:
-        # por_dia no se filtra por el dia seleccionado (ver docstring).
-        condiciones_dia_chart = condiciones_dia_chart[:-1]
-        parametros_dia_chart = parametros_dia_chart[:-1]
+    def construir_where(
+        incluir_urgencia: bool = True, incluir_categoria: bool = True, incluir_dia: bool = True
+    ) -> tuple[str, list]:
+        condiciones = []
+        parametros: list = []
+        if incluir_urgencia and urgencias:
+            condiciones.append("urgencia = ANY(%s)")
+            parametros.append(urgencias)
+        if incluir_categoria and categoria:
+            condiciones.append("categoria = %s")
+            parametros.append(categoria)
+        if incluir_dia and dia:
+            condiciones.append("DATE(fecha_hora) = %s")
+            parametros.append(dia)
+        where = f"WHERE {' AND '.join(condiciones)}" if condiciones else ""
+        return where, parametros
+
+    where_general, params_general = construir_where()
+    where_sin_categoria, params_sin_categoria = construir_where(incluir_categoria=False)
+    where_sin_dia, params_sin_dia = construir_where(incluir_dia=False)
 
     with _cursor() as cur:
         cur.execute(
             f"""
             SELECT categoria, COUNT(*) AS total
             FROM clasificaciones
-            {where}
+            {where_sin_categoria}
             GROUP BY categoria
             ORDER BY total DESC
             """,
-            parametros,
+            params_sin_categoria,
         )
         por_categoria = [dict(r) for r in cur.fetchall()]
 
@@ -195,7 +206,7 @@ def obtener_estadisticas(urgencias: list[str] | None = None, dia: str | None = N
             f"""
             SELECT urgencia, COUNT(*) AS total
             FROM clasificaciones
-            {where}
+            {where_general}
             GROUP BY urgencia
             ORDER BY CASE urgencia
                 WHEN 'alta' THEN 1
@@ -204,11 +215,13 @@ def obtener_estadisticas(urgencias: list[str] | None = None, dia: str | None = N
                 ELSE 4
             END
             """,
-            parametros,
+            params_general,
         )
         por_urgencia = [dict(r) for r in cur.fetchall()]
 
-        condiciones_ventana = ["fecha_hora >= (NOW() - INTERVAL '7 days')"] + condiciones_dia_chart
+        condiciones_ventana = ["fecha_hora >= (NOW() - INTERVAL '7 days')"]
+        if where_sin_dia:
+            condiciones_ventana.append(where_sin_dia.removeprefix("WHERE "))
         cur.execute(
             f"""
             SELECT DATE(fecha_hora) AS dia, COUNT(*) AS total
@@ -217,19 +230,26 @@ def obtener_estadisticas(urgencias: list[str] | None = None, dia: str | None = N
             GROUP BY dia
             ORDER BY dia ASC
             """,
-            parametros_dia_chart,
+            params_sin_dia,
         )
         por_dia = [{"dia": r["dia"].isoformat(), "total": r["total"]} for r in cur.fetchall()]
 
-        cur.execute(f"SELECT COUNT(*) AS total FROM clasificaciones {where}", parametros)
+        cur.execute(
+            f"SELECT COUNT(*) AS total FROM clasificaciones {where_general}", params_general
+        )
         total_clasificaciones = cur.fetchone()["total"]
 
-        cur.execute(f"SELECT COUNT(*) AS total FROM predicciones_dudosas {where}", parametros)
+        cur.execute(
+            f"SELECT COUNT(*) AS total FROM predicciones_dudosas {where_general}", params_general
+        )
         total_dudosas = cur.fetchone()["total"]
 
         cur.execute(
-            f"SELECT ROUND(AVG(confianza)::numeric, 2) AS promedio FROM clasificaciones {where}",
-            parametros,
+            f"""
+            SELECT ROUND(AVG(confianza)::numeric, 2) AS promedio
+            FROM clasificaciones {where_general}
+            """,
+            params_general,
         )
         fila_promedio = cur.fetchone()["promedio"]
         confianza_promedio = float(fila_promedio) if fila_promedio is not None else None
@@ -238,11 +258,11 @@ def obtener_estadisticas(urgencias: list[str] | None = None, dia: str | None = N
             f"""
             SELECT id, texto, categoria, urgencia, confianza, fecha_hora, nombre, correo, estado
             FROM clasificaciones
-            {where}
+            {where_general}
             ORDER BY fecha_hora DESC
             LIMIT 10
             """,
-            parametros,
+            params_general,
         )
         recientes = [_fila_ticket(r) for r in cur.fetchall()]
 

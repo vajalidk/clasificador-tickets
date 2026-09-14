@@ -272,6 +272,7 @@
     <div class="grid-graficas">
       <div class="tarjeta-grafica">
         <h2>Tickets por categoria</h2>
+        <p class="pista-interaccion">Click en una barra para filtrar por esa categoria</p>
         <div class="lienzo-grafica"><canvas id="grafica-categoria"></canvas></div>
       </div>
       <div class="tarjeta-grafica">
@@ -318,7 +319,9 @@
     // tabla de recientes) via /api/estadisticas?urgencia=...&dia=...
     let urgenciasActivas = new Set(URGENCIA_ORDEN);
     let diaSeleccionado = null; // "YYYY-MM-DD" o null
+    let categoriaSeleccionada = null; // string o null
     let diasIsoActuales = []; // paralelo a las etiquetas de la grafica de tendencia
+    let categoriasActuales = []; // paralelo a las barras de la grafica de categoria
 
     let chartCategoria = null;
     let chartUrgencia = null;
@@ -349,6 +352,9 @@
       if (urgenciasActivas.size < URGENCIA_ORDEN.length) {
         params.set("urgencia", Array.from(urgenciasActivas).join(","));
       }
+      if (categoriaSeleccionada) {
+        params.set("categoria", categoriaSeleccionada);
+      }
       if (diaSeleccionado) {
         params.set("dia", diaSeleccionado);
       }
@@ -371,9 +377,15 @@
       cargarEstadisticas();
     }
 
+    function alternarCategoria(categoria) {
+      categoriaSeleccionada = categoriaSeleccionada === categoria ? null : categoria;
+      cargarEstadisticas();
+    }
+
     function limpiarFiltros() {
       urgenciasActivas = new Set(URGENCIA_ORDEN);
       diaSeleccionado = null;
+      categoriaSeleccionada = null;
       cargarEstadisticas();
     }
 
@@ -386,6 +398,14 @@
         chips.push(`
           <button class="chip-filtro" id="chip-urgencia">
             Urgencia: ${urgenciasExcluidas.map(capitalizar).join(", ")} oculta(s)
+            <span class="x">×</span>
+          </button>
+        `);
+      }
+      if (categoriaSeleccionada) {
+        chips.push(`
+          <button class="chip-filtro" id="chip-categoria">
+            Categoria: ${capitalizar(categoriaSeleccionada)}
             <span class="x">×</span>
           </button>
         `);
@@ -410,6 +430,13 @@
       if (chipUrgencia) {
         chipUrgencia.addEventListener("click", () => {
           urgenciasActivas = new Set(URGENCIA_ORDEN);
+          cargarEstadisticas();
+        });
+      }
+      const chipCategoria = document.getElementById("chip-categoria");
+      if (chipCategoria) {
+        chipCategoria.addEventListener("click", () => {
+          categoriaSeleccionada = null;
           cargarEstadisticas();
         });
       }
@@ -465,6 +492,15 @@
 
     function renderizarGraficaCategoria(datos) {
       const categorias = datos.por_categoria || [];
+      categoriasActuales = categorias.map((c) => c.categoria);
+
+      // Barra seleccionada en color acento brillante; el resto, atenuadas
+      // (no ocultas: por_categoria siempre trae las 4, ver docstring del
+      // backend) para que se note cual esta activa como filtro.
+      const colores = categoriasActuales.map((cat) =>
+        categoriaSeleccionada && cat !== categoriaSeleccionada ? "#3a3f5c" : "#6c8cff"
+      );
+
       if (chartCategoria) chartCategoria.destroy();
       chartCategoria = new Chart(document.getElementById("grafica-categoria"), {
         type: "bar",
@@ -473,7 +509,7 @@
           datasets: [{
             label: "Tickets",
             data: categorias.map((c) => c.total),
-            backgroundColor: "#6c8cff",
+            backgroundColor: colores,
             borderRadius: 4,
             maxBarThickness: 32,
           }],
@@ -481,6 +517,12 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          interaction: { mode: "index", intersect: false },
+          onClick: (_evento, elementos) => {
+            if (!elementos.length) return;
+            const cat = categoriasActuales[elementos[0].index];
+            if (cat) alternarCategoria(cat);
+          },
           plugins: { legend: { display: false } },
           scales: {
             y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: COLOR_GRID } },
