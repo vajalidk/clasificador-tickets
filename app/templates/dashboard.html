@@ -40,7 +40,7 @@
       align-items: flex-start;
       flex-wrap: wrap;
       gap: 12px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
     h1 { font-size: 1.4rem; margin: 0 0 4px 0; }
     p.subtitulo { color: var(--text-muted); margin: 0; }
@@ -51,6 +51,36 @@
       white-space: nowrap;
     }
     .enlace-ticket:hover { text-decoration: underline; }
+
+    .barra-filtros {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+      min-height: 28px;
+    }
+    .chip-filtro {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(108, 140, 255, 0.15);
+      color: var(--accent);
+      border: none;
+      border-radius: 999px;
+      padding: 4px 6px 4px 12px;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+    .chip-filtro .x { font-weight: 700; padding: 0 4px; }
+    .boton-limpiar-filtros {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      cursor: pointer;
+      text-decoration: underline;
+    }
 
     .resumen {
       display: grid;
@@ -92,12 +122,44 @@
     .tarjeta-grafica.ancha { grid-column: 1 / -1; }
     .tarjeta-grafica h2 {
       font-size: 1rem;
-      margin: 0 0 12px 0;
+      margin: 0 0 4px 0;
       color: var(--text-muted);
       font-weight: 600;
     }
-    .lienzo-grafica { position: relative; height: 260px; }
-    .lienzo-grafica.tendencia { height: 240px; }
+    .pista-interaccion {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      opacity: 0.7;
+      margin: 0 0 10px 0;
+    }
+    .lienzo-grafica { position: relative; height: 240px; }
+    .lienzo-grafica.tendencia { height: 220px; }
+    .lienzo-grafica canvas { cursor: pointer; }
+
+    .leyenda-urgencia {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .item-leyenda {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 0.82rem;
+      color: var(--text);
+      cursor: pointer;
+      transition: opacity 0.15s ease, border-color 0.15s ease;
+    }
+    .item-leyenda .punto { width: 9px; height: 9px; border-radius: 50%; background: var(--color-leyenda); }
+    .item-leyenda:hover { border-color: var(--color-leyenda); }
+    .item-leyenda.inactivo { opacity: 0.4; }
+    .item-leyenda.inactivo .punto { background: var(--text-muted); }
 
     .tarjeta-tabla {
       background: var(--card-bg);
@@ -186,6 +248,8 @@
       <a href="/nuevo-ticket" class="enlace-ticket">+ Enviar un ticket</a>
     </div>
 
+    <div class="barra-filtros" id="barra-filtros"></div>
+
     <div class="resumen" id="resumen">
       <div class="tarjeta-resumen">
         <div class="valor" id="valor-total">-</div>
@@ -212,10 +276,13 @@
       </div>
       <div class="tarjeta-grafica">
         <h2>Tickets por urgencia</h2>
+        <p class="pista-interaccion">Click en una etiqueta para incluir/excluir</p>
         <div class="lienzo-grafica"><canvas id="grafica-urgencia"></canvas></div>
+        <div class="leyenda-urgencia" id="leyenda-urgencia"></div>
       </div>
       <div class="tarjeta-grafica ancha">
         <h2>Tickets por dia · ultimos 7 dias</h2>
+        <p class="pista-interaccion">Click en un punto para ver solo ese dia</p>
         <div class="lienzo-grafica tendencia"><canvas id="grafica-tendencia"></canvas></div>
       </div>
     </div>
@@ -245,6 +312,18 @@
     Chart.defaults.borderColor = COLOR_GRID;
     Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
 
+    // --- Estado de filtrado cruzado --------------------------------------
+    // Click en una urgencia de la dona, o en un dia de la grafica de
+    // tendencia, recalcula TODO el dashboard (tarjetas, ambas graficas,
+    // tabla de recientes) via /api/estadisticas?urgencia=...&dia=...
+    let urgenciasActivas = new Set(URGENCIA_ORDEN);
+    let diaSeleccionado = null; // "YYYY-MM-DD" o null
+    let diasIsoActuales = []; // paralelo a las etiquetas de la grafica de tendencia
+
+    let chartCategoria = null;
+    let chartUrgencia = null;
+    let chartTendencia = null;
+
     function capitalizar(texto) {
       if (!texto) return texto;
       return texto.charAt(0).toUpperCase() + texto.slice(1);
@@ -259,10 +338,95 @@
       return DIAS_SEMANA[fecha.getUTCDay()];
     }
 
+    function formatearDiaCorto(fechaIso) {
+      const partes = fechaIso.split("-").map(Number);
+      const fecha = new Date(Date.UTC(partes[0], partes[1] - 1, partes[2]));
+      return fecha.toLocaleDateString("es-MX", { day: "numeric", month: "short", timeZone: "UTC" });
+    }
+
+    function construirUrlEstadisticas() {
+      const params = new URLSearchParams();
+      if (urgenciasActivas.size < URGENCIA_ORDEN.length) {
+        params.set("urgencia", Array.from(urgenciasActivas).join(","));
+      }
+      if (diaSeleccionado) {
+        params.set("dia", diaSeleccionado);
+      }
+      const qs = params.toString();
+      return `/api/estadisticas${qs ? "?" + qs : ""}`;
+    }
+
+    function alternarUrgencia(urgencia) {
+      if (urgenciasActivas.has(urgencia)) {
+        if (urgenciasActivas.size === 1) return; // siempre debe quedar al menos una activa
+        urgenciasActivas.delete(urgencia);
+      } else {
+        urgenciasActivas.add(urgencia);
+      }
+      cargarEstadisticas();
+    }
+
+    function alternarDia(diaIso) {
+      diaSeleccionado = diaSeleccionado === diaIso ? null : diaIso;
+      cargarEstadisticas();
+    }
+
+    function limpiarFiltros() {
+      urgenciasActivas = new Set(URGENCIA_ORDEN);
+      diaSeleccionado = null;
+      cargarEstadisticas();
+    }
+
+    function renderizarBarraFiltros() {
+      const cont = document.getElementById("barra-filtros");
+      const chips = [];
+
+      const urgenciasExcluidas = URGENCIA_ORDEN.filter((u) => !urgenciasActivas.has(u));
+      if (urgenciasExcluidas.length) {
+        chips.push(`
+          <button class="chip-filtro" id="chip-urgencia">
+            Urgencia: ${urgenciasExcluidas.map(capitalizar).join(", ")} oculta(s)
+            <span class="x">×</span>
+          </button>
+        `);
+      }
+      if (diaSeleccionado) {
+        chips.push(`
+          <button class="chip-filtro" id="chip-dia">
+            Dia: ${formatearDiaCorto(diaSeleccionado)}
+            <span class="x">×</span>
+          </button>
+        `);
+      }
+
+      if (!chips.length) {
+        cont.innerHTML = "";
+        return;
+      }
+
+      cont.innerHTML = chips.join("") + '<button class="boton-limpiar-filtros" id="boton-limpiar">Limpiar filtros</button>';
+
+      const chipUrgencia = document.getElementById("chip-urgencia");
+      if (chipUrgencia) {
+        chipUrgencia.addEventListener("click", () => {
+          urgenciasActivas = new Set(URGENCIA_ORDEN);
+          cargarEstadisticas();
+        });
+      }
+      const chipDia = document.getElementById("chip-dia");
+      if (chipDia) {
+        chipDia.addEventListener("click", () => {
+          diaSeleccionado = null;
+          cargarEstadisticas();
+        });
+      }
+      document.getElementById("boton-limpiar").addEventListener("click", limpiarFiltros);
+    }
+
     async function cargarEstadisticas() {
       const estadoEl = document.getElementById("estado-carga");
       try {
-        const resp = await fetch("/api/estadisticas");
+        const resp = await fetch(construirUrlEstadisticas());
         if (!resp.ok) {
           const cuerpo = await resp.json().catch(() => ({}));
           throw new Error(cuerpo.error || `Error HTTP ${resp.status}`);
@@ -299,9 +463,10 @@
           : confianzaProm.toFixed(2);
     }
 
-    function renderizarGraficas(datos) {
+    function renderizarGraficaCategoria(datos) {
       const categorias = datos.por_categoria || [];
-      new Chart(document.getElementById("grafica-categoria"), {
+      if (chartCategoria) chartCategoria.destroy();
+      chartCategoria = new Chart(document.getElementById("grafica-categoria"), {
         type: "bar",
         data: {
           labels: categorias.map((c) => capitalizar(c.categoria)),
@@ -323,22 +488,39 @@
           },
         },
       });
+    }
 
-      // Orden y color fijos (alta/media/baja) para que la leyenda y los
-      // colores sean siempre los mismos sin importar el orden de los
-      // datos que devuelve la API.
+    function renderizarLeyendaUrgencia(urgenciasPorClave) {
+      const cont = document.getElementById("leyenda-urgencia");
+      cont.innerHTML = URGENCIA_ORDEN.map((u) => {
+        const activa = urgenciasActivas.has(u);
+        const total = urgenciasPorClave[u] || 0;
+        return `
+          <button class="item-leyenda ${activa ? "" : "inactivo"}" data-urgencia="${u}" style="--color-leyenda:${URGENCIA_COLOR[u]}">
+            <span class="punto"></span>${capitalizar(u)} (${total})
+          </button>
+        `;
+      }).join("");
+
+      cont.querySelectorAll("button[data-urgencia]").forEach((boton) => {
+        boton.addEventListener("click", () => alternarUrgencia(boton.dataset.urgencia));
+      });
+    }
+
+    function renderizarGraficaUrgencia(datos) {
       const urgenciasPorClave = Object.fromEntries(
         (datos.por_urgencia || []).map((u) => [u.urgencia, u.total])
       );
-      const urgenciasOrdenadas = URGENCIA_ORDEN.filter((u) => u in urgenciasPorClave);
+      const activas = URGENCIA_ORDEN.filter((u) => urgenciasActivas.has(u));
 
-      new Chart(document.getElementById("grafica-urgencia"), {
+      if (chartUrgencia) chartUrgencia.destroy();
+      chartUrgencia = new Chart(document.getElementById("grafica-urgencia"), {
         type: "doughnut",
         data: {
-          labels: urgenciasOrdenadas.map((u) => capitalizar(u)),
+          labels: activas.map(capitalizar),
           datasets: [{
-            data: urgenciasOrdenadas.map((u) => urgenciasPorClave[u]),
-            backgroundColor: urgenciasOrdenadas.map((u) => URGENCIA_COLOR[u]),
+            data: activas.map((u) => urgenciasPorClave[u] || 0),
+            backgroundColor: activas.map((u) => URGENCIA_COLOR[u]),
             borderColor: "#1a1f36",
             borderWidth: 2,
           }],
@@ -346,12 +528,24 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: { legend: { position: "bottom", labels: { boxWidth: 10, boxHeight: 10 } } },
+          plugins: { legend: { display: false } },
         },
       });
 
+      renderizarLeyendaUrgencia(urgenciasPorClave);
+    }
+
+    function renderizarGraficaTendencia(datos) {
       const porDia = datos.por_dia || [];
-      new Chart(document.getElementById("grafica-tendencia"), {
+      diasIsoActuales = porDia.map((d) => d.dia);
+
+      const coloresPunto = diasIsoActuales.map((d) =>
+        d === diaSeleccionado ? "#ffffff" : "#6c8cff"
+      );
+      const radios = diasIsoActuales.map((d) => (d === diaSeleccionado ? 6 : 4));
+
+      if (chartTendencia) chartTendencia.destroy();
+      chartTendencia = new Chart(document.getElementById("grafica-tendencia"), {
         type: "line",
         data: {
           labels: porDia.map((d) => etiquetaDia(d.dia)),
@@ -361,10 +555,11 @@
             borderColor: "#6c8cff",
             backgroundColor: "rgba(108, 140, 255, 0.1)",
             borderWidth: 2,
-            pointBackgroundColor: "#6c8cff",
+            pointBackgroundColor: coloresPunto,
             pointBorderColor: "#1a1f36",
             pointBorderWidth: 2,
-            pointRadius: 4,
+            pointRadius: radios,
+            pointHoverRadius: 7,
             fill: true,
             tension: 0.35,
           }],
@@ -372,6 +567,15 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          // intersect:false + mode:'index': el click cuenta con solo
+          // acercarse a la columna vertical de un dia, no hace falta
+          // acertarle al pixel exacto del punto (mucho mas facil de usar).
+          interaction: { mode: "index", intersect: false },
+          onClick: (_evento, elementos) => {
+            if (!elementos.length) return;
+            const diaIso = diasIsoActuales[elementos[0].index];
+            if (diaIso) alternarDia(diaIso);
+          },
           plugins: { legend: { display: false } },
           scales: {
             y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: COLOR_GRID } },
@@ -379,6 +583,12 @@
           },
         },
       });
+    }
+
+    function renderizarGraficas(datos) {
+      renderizarGraficaCategoria(datos);
+      renderizarGraficaUrgencia(datos);
+      renderizarGraficaTendencia(datos);
     }
 
     function badgeUrgencia(urgencia) {
@@ -397,7 +607,7 @@
       const filas = datos.recientes || [];
 
       if (!filas.length) {
-        contenedor.innerHTML = '<p class="sin-datos">Aun no hay clasificaciones registradas.</p>';
+        contenedor.innerHTML = '<p class="sin-datos">No hay clasificaciones que coincidan con estos filtros.</p>';
         return;
       }
 
@@ -421,6 +631,7 @@
     }
 
     function renderizar(datos) {
+      renderizarBarraFiltros();
       renderizarResumen(datos);
       renderizarGraficas(datos);
       renderizarRecientes(datos);

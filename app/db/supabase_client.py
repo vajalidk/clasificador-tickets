@@ -143,28 +143,59 @@ def insertar_prediccion_dudosa(
         return dict(cur.fetchone())
 
 
-def obtener_estadisticas() -> dict:
+def obtener_estadisticas(urgencias: list[str] | None = None, dia: str | None = None) -> dict:
     """Agregaciones para el dashboard: tickets por categoria, por urgencia,
     por dia en los ultimos 7 dias, confianza promedio y las clasificaciones
     mas recientes. Todas las agregaciones se calculan en SQL (no en
     Python) para aprovechar los indices en `categoria` y `fecha_hora` y no
-    traer filas de mas a la aplicacion."""
+    traer filas de mas a la aplicacion.
+
+    `urgencias` y `dia` habilitan el filtrado cruzado del dashboard (click
+    en la dona de urgencia / en un punto de la grafica de tendencia): TODAS
+    las agregaciones (categoria, urgencia, totales, confianza, recientes)
+    se recalculan con esos filtros aplicados, excepto `por_dia` — esa
+    grafica es el mecanismo de seleccion en si mismo, asi que siempre
+    muestra los ultimos 7 dias completos (solo respeta el filtro de
+    urgencia, no el de `dia`, para poder seguir eligiendo otro dia)."""
+    condiciones = []
+    parametros: list = []
+    if urgencias:
+        condiciones.append("urgencia = ANY(%s)")
+        parametros.append(urgencias)
+    if dia:
+        condiciones.append("DATE(fecha_hora) = %s")
+        parametros.append(dia)
+    where = f"WHERE {' AND '.join(condiciones)}" if condiciones else ""
+
+    condiciones_dia_chart = list(condiciones)
+    parametros_dia_chart = list(parametros)
+    if dia:
+        # por_dia no se filtra por el dia seleccionado (ver docstring).
+        condiciones_dia_chart = condiciones_dia_chart[:-1]
+        parametros_dia_chart = parametros_dia_chart[:-1]
+
     with _cursor() as cur:
-        cur.execute("""
+        cur.execute(
+            f"""
             SELECT categoria, COUNT(*) AS total
             FROM clasificaciones
+            {where}
             GROUP BY categoria
             ORDER BY total DESC
-            """)
+            """,
+            parametros,
+        )
         por_categoria = [dict(r) for r in cur.fetchall()]
 
         # Orden fijo (alta/media/baja) en vez de ORDER BY total DESC: el
         # dashboard le asigna un color semantico a cada urgencia (rojo,
         # naranja, verde) y necesita un orden estable para que la leyenda
         # y los colores no cambien de posicion segun los datos.
-        cur.execute("""
+        cur.execute(
+            f"""
             SELECT urgencia, COUNT(*) AS total
             FROM clasificaciones
+            {where}
             GROUP BY urgencia
             ORDER BY CASE urgencia
                 WHEN 'alta' THEN 1
@@ -172,34 +203,47 @@ def obtener_estadisticas() -> dict:
                 WHEN 'baja' THEN 3
                 ELSE 4
             END
-            """)
+            """,
+            parametros,
+        )
         por_urgencia = [dict(r) for r in cur.fetchall()]
 
-        cur.execute("""
+        condiciones_ventana = ["fecha_hora >= (NOW() - INTERVAL '7 days')"] + condiciones_dia_chart
+        cur.execute(
+            f"""
             SELECT DATE(fecha_hora) AS dia, COUNT(*) AS total
             FROM clasificaciones
-            WHERE fecha_hora >= (NOW() - INTERVAL '7 days')
+            WHERE {' AND '.join(condiciones_ventana)}
             GROUP BY dia
             ORDER BY dia ASC
-            """)
+            """,
+            parametros_dia_chart,
+        )
         por_dia = [{"dia": r["dia"].isoformat(), "total": r["total"]} for r in cur.fetchall()]
 
-        cur.execute("SELECT COUNT(*) AS total FROM clasificaciones")
+        cur.execute(f"SELECT COUNT(*) AS total FROM clasificaciones {where}", parametros)
         total_clasificaciones = cur.fetchone()["total"]
 
-        cur.execute("SELECT COUNT(*) AS total FROM predicciones_dudosas")
+        cur.execute(f"SELECT COUNT(*) AS total FROM predicciones_dudosas {where}", parametros)
         total_dudosas = cur.fetchone()["total"]
 
-        cur.execute("SELECT ROUND(AVG(confianza)::numeric, 2) AS promedio FROM clasificaciones")
+        cur.execute(
+            f"SELECT ROUND(AVG(confianza)::numeric, 2) AS promedio FROM clasificaciones {where}",
+            parametros,
+        )
         fila_promedio = cur.fetchone()["promedio"]
         confianza_promedio = float(fila_promedio) if fila_promedio is not None else None
 
-        cur.execute("""
+        cur.execute(
+            f"""
             SELECT id, texto, categoria, urgencia, confianza, fecha_hora, nombre, correo, estado
             FROM clasificaciones
+            {where}
             ORDER BY fecha_hora DESC
             LIMIT 10
-            """)
+            """,
+            parametros,
+        )
         recientes = [_fila_ticket(r) for r in cur.fetchall()]
 
     return {

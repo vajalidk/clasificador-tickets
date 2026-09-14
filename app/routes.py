@@ -19,6 +19,7 @@ conexion real a Postgres.
 
 import logging
 import os
+from datetime import datetime
 
 from flask import Blueprint, abort, jsonify, render_template, request
 
@@ -244,10 +245,24 @@ def endpoint_dashboard():
 
 @main_bp.route("/api/estadisticas", methods=["GET"])
 def endpoint_estadisticas():
-    """Datos agregados que consume el dashboard.
+    """Datos agregados que consume el dashboard. Admite filtrado cruzado:
+    `urgencia` (lista separada por comas, ej. "media,baja") y `dia`
+    (YYYY-MM-DD) para que un click en la dona de urgencia o en un punto de
+    la grafica de tendencia recalcule TODO el dashboard con ese filtro.
     ---
     tags:
       - Dashboard
+    parameters:
+      - in: query
+        name: urgencia
+        type: string
+        required: false
+        description: "Lista separada por comas, ej: media,baja"
+      - in: query
+        name: dia
+        type: string
+        required: false
+        description: "Fecha YYYY-MM-DD"
     responses:
       200:
         description: Estadisticas agregadas de clasificaciones
@@ -277,11 +292,26 @@ def endpoint_estadisticas():
               type: array
               items:
                 type: object
+      400:
+        description: Parametro de filtro invalido
       500:
         description: Error al consultar la base de datos
     """
+    urgencias = None
+    if request.args.get("urgencia"):
+        urgencias = [u.strip() for u in request.args["urgencia"].split(",") if u.strip()]
+        if not urgencias or any(u not in {"alta", "media", "baja"} for u in urgencias):
+            _abortar_400("El parametro 'urgencia' debe ser una lista de: alta, media, baja.")
+
+    dia = request.args.get("dia") or None
+    if dia:
+        try:
+            datetime.strptime(dia, "%Y-%m-%d")
+        except ValueError:
+            _abortar_400("El parametro 'dia' debe tener el formato YYYY-MM-DD.")
+
     try:
-        estadisticas = db.obtener_estadisticas()
+        estadisticas = db.obtener_estadisticas(urgencias=urgencias, dia=dia)
     except Exception:
         logger.exception("Error obteniendo estadisticas")
         abort(500, description="No se pudieron obtener las estadisticas.")

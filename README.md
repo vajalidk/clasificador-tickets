@@ -324,6 +324,18 @@ y `position: relative`, con `maintainAspectRatio: false` — nunca se le
 pone `max-height` directo al `<canvas>`, que es la causa mas comun de que
 un grafico se vea deforme al cambiar el ancho de la ventana.
 
+### 2.3.2.1 Filtrado cruzado interactivo en el dashboard
+
+`GET /api/estadisticas` acepta `urgencia` (lista separada por comas) y
+`dia` (`YYYY-MM-DD`). En el dashboard, click en una etiqueta de la dona de
+urgencia la incluye/excluye, y click en un punto de la grafica de
+tendencia filtra a ese dia — en ambos casos **todo** el dashboard
+(tarjetas, ambas graficas, tabla de recientes) se recalcula con ese
+filtro, no solo el elemento clickeado. `por_dia` es la unica agregacion
+que ignora el filtro de `dia` (es el mecanismo de seleccion, tiene que
+seguir mostrando los 7 dias para poder elegir otro). Los chips de filtro
+activo permiten quitar cada uno por separado o "Limpiar filtros".
+
 ### 2.3.3 `/tickets`: listado completo, filtros, y resolver tickets
 
 Pagina adicional para gestionar (no solo ver) los tickets:
