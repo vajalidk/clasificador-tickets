@@ -420,7 +420,17 @@ dias para que la grafica de "tickets por dia" se vea realista:
 python seed_demo_data.py                    # 60 tickets, ultimos 7 dias
 python seed_demo_data.py --cantidad 150 --dias 14
 python seed_demo_data.py --seed 42          # reproducible
+python seed_demo_data.py --prob-correo 0.5  # la mitad de los tickets sin correo
+python seed_demo_data.py --sin-contacto     # tickets anonimos (sin nombre/correo/asunto)
 ```
+
+Desde que existe el campo `asunto` (seccion 2.3.1), cada ticket generado
+tambien incluye nombre y un asunto acorde a su categoria (tomados de listas
+fijas, no de ningun servicio externo), y correo con una probabilidad
+configurable (`--prob-correo`, default 0.75) — asi la demo se ve como
+tickets reales enviados desde `/nuevo-ticket` en vez de aparecer todos como
+"Sin nombre". `--sin-contacto` recupera el comportamiento original
+(tickets anonimos) para quien lo prefiera.
 
 El resultado es indistinguible de tickets reales para `/dashboard` (usa
 el mismo modelo y las mismas tablas) — solo se genera en segundos en vez
