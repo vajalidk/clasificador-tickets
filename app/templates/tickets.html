@@ -400,11 +400,11 @@
           <td data-etiqueta="Categoria"><span class="badge categoria">${escaparHtml(capitalizar(t.categoria))}</span></td>
           <td data-etiqueta="Urgencia">${badgeUrgencia(t.urgencia)}</td>
           <td data-etiqueta="Confianza">${Number(t.confianza).toFixed(2)}</td>
-          <td data-etiqueta="Estado">
-            ${badgeEstado(t.estado)}
+          <td data-etiqueta="Estado">${badgeEstado(t.estado)}</td>
+          <td class="fecha-ticket" data-etiqueta="Fecha">
+            <div>${formatearFecha(t.fecha_hora)}</div>
             ${t.fecha_resuelto ? `<div class="fecha-resuelto">Resuelto: ${formatearFecha(t.fecha_resuelto)}</div>` : ""}
           </td>
-          <td class="fecha-ticket" data-etiqueta="Fecha">${formatearFecha(t.fecha_hora)}</td>
           <td data-etiqueta="Accion">
             ${tienesToken
               ? `<button class="boton secundario" data-id="${t.id}" data-estado="${t.estado}">${t.estado === "resuelto" ? "Marcar pendiente" : "Marcar resuelto"}</button>`
