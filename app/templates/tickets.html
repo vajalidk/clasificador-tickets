@@ -146,6 +146,41 @@
     @media (max-width: 480px) {
       .contenedor { padding: 16px; }
     }
+
+    /* Misma logica que en el dashboard: la tabla de 8 columnas no cabe en
+       un telefono ni con scroll horizontal (se corta a media columna), asi
+       que cada fila se apila como tarjeta debajo de este ancho. */
+    @media (max-width: 640px) {
+      table.tickets { min-width: 0; }
+      table.tickets thead { display: none; }
+      table.tickets, table.tickets tbody, table.tickets tr, table.tickets td {
+        display: block;
+        width: 100%;
+      }
+      table.tickets tr {
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 10px 12px;
+        margin-bottom: 10px;
+      }
+      table.tickets tr:last-child { margin-bottom: 0; }
+      table.tickets td {
+        border-bottom: none;
+        padding: 6px 0;
+      }
+      table.tickets td::before {
+        content: attr(data-etiqueta);
+        display: block;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        color: var(--text-muted);
+        margin-bottom: 3px;
+      }
+      table.tickets td:empty { display: none; }
+      .texto-ticket { max-width: none; }
+      table.tickets td[data-etiqueta="Accion"] button.boton { width: 100%; }
+    }
   </style>
 </head>
 <body>
@@ -344,17 +379,17 @@
 
       const filas = datos.tickets.map((t) => `
         <tr>
-          <td><span class="texto-ticket">${escaparHtml(t.texto)}</span></td>
-          <td class="col-persona">
+          <td data-etiqueta="Texto"><span class="texto-ticket">${escaparHtml(t.texto)}</span></td>
+          <td class="col-persona" data-etiqueta="De">
             ${t.nombre ? `<div class="nombre">${escaparHtml(t.nombre)}</div>` : '<div class="sin-dato">Sin nombre</div>'}
             ${t.correo ? `<div class="correo">${escaparHtml(t.correo)}</div>` : ""}
           </td>
-          <td><span class="badge categoria">${escaparHtml(capitalizar(t.categoria))}</span></td>
-          <td>${badgeUrgencia(t.urgencia)}</td>
-          <td>${Number(t.confianza).toFixed(2)}</td>
-          <td>${badgeEstado(t.estado)}</td>
-          <td class="fecha-ticket">${formatearFecha(t.fecha_hora)}</td>
-          <td>
+          <td data-etiqueta="Categoria"><span class="badge categoria">${escaparHtml(capitalizar(t.categoria))}</span></td>
+          <td data-etiqueta="Urgencia">${badgeUrgencia(t.urgencia)}</td>
+          <td data-etiqueta="Confianza">${Number(t.confianza).toFixed(2)}</td>
+          <td data-etiqueta="Estado">${badgeEstado(t.estado)}</td>
+          <td class="fecha-ticket" data-etiqueta="Fecha">${formatearFecha(t.fecha_hora)}</td>
+          <td data-etiqueta="Accion">
             ${tienesToken
               ? `<button class="boton secundario" data-id="${t.id}" data-estado="${t.estado}">${t.estado === "resuelto" ? "Marcar pendiente" : "Marcar resuelto"}</button>`
               : '<span class="sin-dato">—</span>'}

@@ -236,6 +236,39 @@
       .resumen { grid-template-columns: 1fr; }
       .tarjeta-resumen .valor { font-size: 1.4rem; }
     }
+
+    /* Debajo de este ancho la tabla no cabe ni tiene sentido con scroll
+       horizontal (columnas se cortan a media palabra). Se convierte cada
+       fila en una tarjeta apilada, mas legible en un telefono. */
+    @media (max-width: 600px) {
+      table.recientes { min-width: 0; }
+      table.recientes thead { display: none; }
+      table.recientes, table.recientes tbody, table.recientes tr, table.recientes td {
+        display: block;
+        width: 100%;
+      }
+      table.recientes tr {
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 10px 12px;
+        margin-bottom: 10px;
+      }
+      table.recientes tr:last-child { margin-bottom: 0; }
+      table.recientes td {
+        border-bottom: none;
+        padding: 6px 0;
+      }
+      table.recientes td::before {
+        content: attr(data-etiqueta);
+        display: block;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        color: var(--text-muted);
+        margin-bottom: 3px;
+      }
+      .texto-ticket { max-width: none; }
+    }
   </style>
 </head>
 <body>
@@ -655,10 +688,10 @@
 
       const filasHtml = filas.map((r) => `
         <tr>
-          <td><span class="texto-ticket">${escaparHtml(r.texto)}</span></td>
-          <td><span class="badge categoria">${escaparHtml(capitalizar(r.categoria))}</span></td>
-          <td>${badgeUrgencia(r.urgencia)}</td>
-          <td>${Number(r.confianza).toFixed(2)}</td>
+          <td data-etiqueta="Texto"><span class="texto-ticket">${escaparHtml(r.texto)}</span></td>
+          <td data-etiqueta="Categoria"><span class="badge categoria">${escaparHtml(capitalizar(r.categoria))}</span></td>
+          <td data-etiqueta="Urgencia">${badgeUrgencia(r.urgencia)}</td>
+          <td data-etiqueta="Confianza">${Number(r.confianza).toFixed(2)}</td>
         </tr>
       `).join("");
 
