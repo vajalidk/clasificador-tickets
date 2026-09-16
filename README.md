@@ -265,9 +265,16 @@ pensada para que alguien sin conocimientos tecnicos reporte un problema.
 pagina publica con la estetica de una "Mesa de Ayuda" corporativa (campos
 de Nombre/Correo opcionales, Asunto y Mensaje) que:
 
-1. Combina Asunto + Mensaje en un solo texto y lo envia via `fetch()` a
-   `POST /clasificar` (el mismo endpoint que ya existia, sin duplicar
-   logica de clasificacion ni de persistencia).
+1. Envia Asunto y Mensaje como campos separados a `POST /clasificar` (el
+   mismo endpoint que ya existia, sin duplicar logica de clasificacion ni
+   de persistencia). El backend le suma el Asunto al Mensaje solo para
+   alimentar al modelo (mas contexto = mejor clasificacion), pero los
+   guarda por separado: `asunto` se usa como titulo corto en las tablas de
+   `/dashboard` y `/tickets`, y `texto` conserva limpio el detalle escrito
+   por la persona. Si no se llena el Asunto (o el ticket viene de la API
+   directamente, ej. `seed_demo_data.py`), el titulo se genera solo con la
+   primera oracion del texto (`_generar_titulo` en
+   [`app/db/supabase_client.py`](app/db/supabase_client.py)).
 2. Muestra el resultado como una confirmacion de "ticket recibido",
    revelando de forma transparente la categoria/urgencia/confianza que el
    modelo detecto — una decision deliberada de este proyecto de
@@ -362,6 +369,13 @@ Pagina adicional para gestionar (no solo ver) los tickets:
   accidente con un token vacio en ambos lados). El token se pide una vez
   en `/tickets` y se guarda en `localStorage` del navegador (nunca en el
   repo ni en la base de datos).
+- **Fecha de resolucion**: al marcar un ticket como `resuelto` se guarda
+  `fecha_resuelto = NOW()`; si el administrador lo revierte a `pendiente`
+  (por ejemplo, se resolvio por error), esa fecha se limpia de nuevo a
+  `NULL`. No hay un campo separado para "editar" la fecha a mano — revertir
+  y volver a resolver ya cubre el caso de corregir un error, sin agregar
+  una interfaz de edicion extra para un dato que solo tiene sentido si
+  refleja el ultimo cambio real de estado.
 
 ### 2.4 Base de datos (Supabase / Postgres)
 

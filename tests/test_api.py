@@ -90,6 +90,20 @@ def test_clasificar_guarda_nombre_y_correo_opcionales(client, mock_db):
     assert kwargs["correo"] == "ana@ejemplo.com"
 
 
+def test_clasificar_guarda_asunto_opcional(client, mock_db):
+    resp = client.post(
+        "/clasificar",
+        json={"texto": "No puedo entrar a mi cuenta", "asunto": "Problema de acceso"},
+    )
+
+    assert resp.status_code == 200
+    _args, kwargs = mock_db.insertar_clasificacion.call_args
+    assert kwargs["asunto"] == "Problema de acceso"
+    # El texto guardado es el mensaje limpio, sin el asunto concatenado.
+    args, _kwargs = mock_db.insertar_clasificacion.call_args
+    assert args[0] == "No puedo entrar a mi cuenta"
+
+
 def test_tickets_html_responde_200(client):
     resp = client.get("/tickets")
 

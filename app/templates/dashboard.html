@@ -191,6 +191,10 @@
       vertical-align: middle;
     }
     table.recientes tr:last-child td { border-bottom: none; }
+    .titulo-ticket {
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
     .texto-ticket {
       max-width: 420px;
       white-space: normal;
@@ -198,6 +202,8 @@
       line-height: 1.4;
       display: inline-block;
       vertical-align: middle;
+      color: var(--text-muted);
+      font-size: 0.92em;
     }
     .tarjeta-tabla .encabezado-tabla {
       display: flex;
@@ -688,7 +694,10 @@
 
       const filasHtml = filas.map((r) => `
         <tr>
-          <td data-etiqueta="Texto"><span class="texto-ticket">${escaparHtml(r.texto)}</span></td>
+          <td data-etiqueta="Ticket">
+            <div class="titulo-ticket">${escaparHtml(r.titulo)}</div>
+            <div class="texto-ticket">${escaparHtml(r.texto)}</div>
+          </td>
           <td data-etiqueta="Categoria"><span class="badge categoria">${escaparHtml(capitalizar(r.categoria))}</span></td>
           <td data-etiqueta="Urgencia">${badgeUrgencia(r.urgencia)}</td>
           <td data-etiqueta="Confianza">${Number(r.confianza).toFixed(2)}</td>
@@ -698,7 +707,7 @@
       contenedor.innerHTML = `
         <table class="recientes">
           <thead>
-            <tr><th>Texto</th><th>Categoria</th><th>Urgencia</th><th>Confianza</th></tr>
+            <tr><th>Ticket</th><th>Categoria</th><th>Urgencia</th><th>Confianza</th></tr>
           </thead>
           <tbody>${filasHtml}</tbody>
         </table>

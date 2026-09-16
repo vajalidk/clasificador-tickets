@@ -15,6 +15,7 @@ requests concurrentes con pocos workers/threads de gunicorn.
 
 import logging
 import os
+import re
 from contextlib import contextmanager
 from datetime import datetime, timezone
 
@@ -100,13 +101,14 @@ def insertar_clasificacion(
     fecha_hora: datetime | None = None,
     nombre: str | None = None,
     correo: str | None = None,
+    asunto: str | None = None,
 ) -> dict:
     """`fecha_hora` es opcional y normalmente se omite (se usa el momento
     actual). Solo se pasa explicitamente desde `seed_demo_data.py`, para
     poder distribuir tickets de demostracion en los ultimos N dias y que
     la grafica de "tickets por dia" del dashboard se vea realista.
 
-    `nombre`/`correo` son opcionales: solo los manda el formulario
+    `nombre`/`correo`/`asunto` son opcionales: solo los manda el formulario
     /nuevo-ticket (seccion 2.3.1); un cliente que use la API directamente
     (Swagger, curl, integraciones) puede omitirlos sin problema."""
     fecha_hora = fecha_hora or datetime.now(timezone.utc)
@@ -114,11 +116,11 @@ def insertar_clasificacion(
         cur.execute(
             """
             INSERT INTO clasificaciones
-                (texto, categoria, urgencia, confianza, fecha_hora, nombre, correo)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+                (texto, categoria, urgencia, confianza, fecha_hora, nombre, correo, asunto)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING id, fecha_hora
             """,
-            (texto, categoria, urgencia, confianza, fecha_hora, nombre, correo),
+            (texto, categoria, urgencia, confianza, fecha_hora, nombre, correo, asunto),
         )
         return dict(cur.fetchone())
 
@@ -256,7 +258,8 @@ def obtener_estadisticas(
 
         cur.execute(
             f"""
-            SELECT id, texto, categoria, urgencia, confianza, fecha_hora, nombre, correo, estado
+            SELECT id, texto, asunto, categoria, urgencia, confianza, fecha_hora,
+                   nombre, correo, estado, fecha_resuelto
             FROM clasificaciones
             {where_general}
             ORDER BY fecha_hora DESC
@@ -277,6 +280,28 @@ def obtener_estadisticas(
     }
 
 
+LARGO_MAXIMO_TITULO = 80
+
+# Separa por punto/signo de cierre seguido de espacio, para no cortar a la
+# mitad de una abreviatura pegada a la siguiente palabra (poco frecuente en
+# estos tickets, pero mas seguro que separar por cualquier ".").
+_PATRON_FIN_ORACION = re.compile(r"(?<=[.!?])\s+")
+
+
+def _generar_titulo(texto: str, asunto: str | None) -> str:
+    """El titulo mostrado en las tablas es el "Asunto" que la persona
+    escribio en el formulario; si no lo lleno (o el ticket viene de la API
+    directamente, ej. seed_demo_data.py), se genera uno automatico con la
+    primera oracion del texto, truncada si hace falta."""
+    if asunto:
+        return asunto
+
+    primera_oracion = _PATRON_FIN_ORACION.split(texto.strip(), maxsplit=1)[0]
+    if len(primera_oracion) > LARGO_MAXIMO_TITULO:
+        return primera_oracion[:LARGO_MAXIMO_TITULO].rstrip() + "…"
+    return primera_oracion
+
+
 def _fila_ticket(r: dict) -> dict:
     """Serializa una fila de `clasificaciones` a un dict JSON-friendly,
     compartido entre `obtener_estadisticas` (recientes) y
@@ -284,6 +309,7 @@ def _fila_ticket(r: dict) -> dict:
     return {
         "id": r["id"],
         "texto": r["texto"],
+        "titulo": _generar_titulo(r["texto"], r.get("asunto")),
         "categoria": r["categoria"],
         "urgencia": r["urgencia"],
         "confianza": r["confianza"],
@@ -291,6 +317,7 @@ def _fila_ticket(r: dict) -> dict:
         "nombre": r["nombre"],
         "correo": r["correo"],
         "estado": r["estado"],
+        "fecha_resuelto": r["fecha_resuelto"].isoformat() if r.get("fecha_resuelto") else None,
     }
 
 
@@ -340,7 +367,8 @@ def listar_clasificaciones(
 
         cur.execute(
             f"""
-            SELECT id, texto, categoria, urgencia, confianza, fecha_hora, nombre, correo, estado
+            SELECT id, texto, asunto, categoria, urgencia, confianza, fecha_hora,
+                   nombre, correo, estado, fecha_resuelto
             FROM clasificaciones
             {where}
             ORDER BY {clausula_orden}
@@ -355,16 +383,28 @@ def listar_clasificaciones(
 
 def actualizar_estado_ticket(ticket_id: int, estado: str) -> dict | None:
     """Marca un ticket como 'pendiente' o 'resuelto'. Devuelve None si el
-    id no existe (para que el endpoint pueda responder 404)."""
+    id no existe (para que el endpoint pueda responder 404).
+
+    Al pasar a 'resuelto' se guarda `fecha_resuelto = NOW()`; al revertir a
+    'pendiente' se limpia a NULL. Asi, si un administrador se equivoca al
+    resolver un ticket, revertirlo y volver a resolverlo ya corrige la
+    fecha sin necesitar una edicion manual aparte."""
     with _cursor(commit=True) as cur:
         cur.execute(
             """
             UPDATE clasificaciones
-            SET estado = %s
+            SET estado = %s,
+                fecha_resuelto = CASE WHEN %s = 'resuelto'
+                    THEN (NOW() AT TIME ZONE 'utc') ELSE NULL END
             WHERE id = %s
-            RETURNING id, estado
+            RETURNING id, estado, fecha_resuelto
             """,
-            (estado, ticket_id),
+            (estado, estado, ticket_id),
         )
         fila = cur.fetchone()
-        return dict(fila) if fila else None
+        if fila is None:
+            return None
+        resultado = dict(fila)
+        if resultado.get("fecha_resuelto") is not None:
+            resultado["fecha_resuelto"] = resultado["fecha_resuelto"].isoformat()
+        return resultado

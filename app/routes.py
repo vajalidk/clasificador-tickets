@@ -34,6 +34,7 @@ main_bp = Blueprint("main", __name__)
 MAX_TEXTO_LENGTH = 2000
 MAX_NOMBRE_LENGTH = 120
 MAX_CORREO_LENGTH = 150
+MAX_ASUNTO_LENGTH = 150
 UMBRAL_CONFIANZA_DUDOSA = 0.6
 
 
@@ -58,6 +59,9 @@ def endpoint_clasificar():
             texto:
               type: string
               example: "No puedo acceder a mi cuenta desde ayer, es urgente"
+            asunto:
+              type: string
+              example: "Problema para iniciar sesion"
             nombre:
               type: string
               example: "Ana Garcia"
@@ -87,11 +91,17 @@ def endpoint_clasificar():
     """
     payload = request.get_json(silent=True)
     texto = _validar_texto(payload)
+    asunto = _validar_opcional(payload, "asunto", MAX_ASUNTO_LENGTH)
     nombre = _validar_opcional(payload, "nombre", MAX_NOMBRE_LENGTH)
     correo = _validar_opcional(payload, "correo", MAX_CORREO_LENGTH)
 
-    resultado = clasificar(texto)
-    _persistir_clasificacion(texto, resultado, nombre, correo)
+    # El "asunto" se le suma al texto solo para la clasificacion (le da mas
+    # contexto al modelo), pero se guarda por separado: `texto` queda limpio
+    # con el detalle que escribio la persona, y `asunto` se usa como titulo
+    # corto en las tablas del dashboard/tickets (ver _generar_titulo).
+    texto_para_clasificar = f"{asunto}. {texto}" if asunto else texto
+    resultado = clasificar(texto_para_clasificar)
+    _persistir_clasificacion(texto, resultado, nombre, correo, asunto)
 
     return jsonify(resultado), 200
 
@@ -141,7 +151,11 @@ def _abortar_400(mensaje: str):
 
 
 def _persistir_clasificacion(
-    texto: str, resultado: dict, nombre: str | None = None, correo: str | None = None
+    texto: str,
+    resultado: dict,
+    nombre: str | None = None,
+    correo: str | None = None,
+    asunto: str | None = None,
 ) -> None:
     """Guarda la clasificacion en `clasificaciones` y, si la confianza es
     baja, tambien en `predicciones_dudosas` para revision humana posterior
@@ -160,6 +174,7 @@ def _persistir_clasificacion(
             resultado["confianza"],
             nombre=nombre,
             correo=correo,
+            asunto=asunto,
         )
         if resultado["confianza"] < UMBRAL_CONFIANZA_DUDOSA:
             db.insertar_prediccion_dudosa(
@@ -498,6 +513,17 @@ def endpoint_actualizar_estado(ticket_id: int):
     responses:
       200:
         description: Estado actualizado
+        schema:
+          type: object
+          properties:
+            id:
+              type: integer
+            estado:
+              type: string
+              example: "resuelto"
+            fecha_resuelto:
+              type: string
+              description: "Fecha ISO 8601, o null si el estado es 'pendiente'"
       400:
         description: Estado invalido
       401:

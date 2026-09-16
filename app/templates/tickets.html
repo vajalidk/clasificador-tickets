@@ -114,7 +114,16 @@
       vertical-align: top;
     }
     table.tickets tr:last-child td { border-bottom: none; }
-    .texto-ticket { max-width: 360px; white-space: normal; word-break: break-word; line-height: 1.4; display: inline-block; }
+    .titulo-ticket { font-weight: 600; margin-bottom: 3px; }
+    .texto-ticket {
+      max-width: 360px;
+      white-space: normal;
+      word-break: break-word;
+      line-height: 1.4;
+      display: inline-block;
+      color: var(--text-muted);
+      font-size: 0.92em;
+    }
     .col-persona { min-width: 140px; }
     .col-persona .nombre { font-weight: 600; }
     .col-persona .correo { color: var(--text-muted); font-size: 0.82rem; }
@@ -136,6 +145,7 @@
     .badge.estado-resuelto { background: rgba(62, 207, 142, 0.15); color: var(--baja); }
 
     .fecha-ticket { color: var(--text-muted); font-size: 0.82rem; white-space: nowrap; }
+    .fecha-resuelto { color: var(--text-muted); font-size: 0.78rem; margin-top: 4px; }
 
     .paginacion { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; font-size: 0.85rem; color: var(--text-muted); }
     .paginacion .botones { display: flex; gap: 8px; }
@@ -379,7 +389,10 @@
 
       const filas = datos.tickets.map((t) => `
         <tr>
-          <td data-etiqueta="Texto"><span class="texto-ticket">${escaparHtml(t.texto)}</span></td>
+          <td data-etiqueta="Ticket">
+            <div class="titulo-ticket">${escaparHtml(t.titulo)}</div>
+            <div class="texto-ticket">${escaparHtml(t.texto)}</div>
+          </td>
           <td class="col-persona" data-etiqueta="De">
             ${t.nombre ? `<div class="nombre">${escaparHtml(t.nombre)}</div>` : '<div class="sin-dato">Sin nombre</div>'}
             ${t.correo ? `<div class="correo">${escaparHtml(t.correo)}</div>` : ""}
@@ -387,7 +400,10 @@
           <td data-etiqueta="Categoria"><span class="badge categoria">${escaparHtml(capitalizar(t.categoria))}</span></td>
           <td data-etiqueta="Urgencia">${badgeUrgencia(t.urgencia)}</td>
           <td data-etiqueta="Confianza">${Number(t.confianza).toFixed(2)}</td>
-          <td data-etiqueta="Estado">${badgeEstado(t.estado)}</td>
+          <td data-etiqueta="Estado">
+            ${badgeEstado(t.estado)}
+            ${t.fecha_resuelto ? `<div class="fecha-resuelto">Resuelto: ${formatearFecha(t.fecha_resuelto)}</div>` : ""}
+          </td>
           <td class="fecha-ticket" data-etiqueta="Fecha">${formatearFecha(t.fecha_hora)}</td>
           <td data-etiqueta="Accion">
             ${tienesToken
@@ -401,7 +417,7 @@
         <table class="tickets">
           <thead>
             <tr>
-              <th>Texto</th><th>De</th><th>Categoria</th><th>Urgencia</th>
+              <th>Ticket</th><th>De</th><th>Categoria</th><th>Urgencia</th>
               <th>Confianza</th><th>Estado</th><th>Fecha</th><th>Accion</th>
             </tr>
           </thead>

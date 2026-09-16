@@ -21,8 +21,15 @@ CREATE TABLE IF NOT EXISTS clasificaciones (
     -- Datos opcionales de quien envia el ticket (formulario /nuevo-ticket).
     nombre      TEXT,
     correo      TEXT,
+    -- Titulo corto opcional (campo "Asunto" del formulario). Si viene vacio,
+    -- la app genera uno automaticamente a partir de la primera oracion de
+    -- `texto` (ver _generar_titulo en app/db/supabase_client.py).
+    asunto      TEXT,
     -- Ciclo de vida del ticket: 'pendiente' -> 'resuelto'.
-    estado      TEXT NOT NULL DEFAULT 'pendiente' CHECK (estado IN ('pendiente', 'resuelto'))
+    estado      TEXT NOT NULL DEFAULT 'pendiente' CHECK (estado IN ('pendiente', 'resuelto')),
+    -- Se llena al marcar 'resuelto' y se limpia si se revierte a
+    -- 'pendiente' (ver actualizar_estado_ticket).
+    fecha_resuelto TIMESTAMPTZ
 );
 
 -- Los filtros mas comunes del dashboard/listado son "agregar por
