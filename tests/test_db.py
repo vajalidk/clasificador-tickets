@@ -7,21 +7,32 @@ prueba indirectamente via tests/test_api.py con la base de datos mockeada.
 
 from datetime import datetime, timezone
 
-from app.db.supabase_client import _fila_ticket, _generar_titulo
+from app.db.supabase_client import _fila_ticket, _generar_titulo_y_detalle
 
 
-def test_generar_titulo_usa_asunto_si_existe():
-    assert _generar_titulo("cualquier texto de detalle", "Mi asunto") == "Mi asunto"
+def test_generar_titulo_usa_asunto_si_existe_y_detalle_es_el_texto_completo():
+    titulo, detalle = _generar_titulo_y_detalle("cualquier texto de detalle", "Mi asunto")
+    assert titulo == "Mi asunto"
+    assert detalle == "cualquier texto de detalle"
 
 
-def test_generar_titulo_usa_primera_oracion_si_no_hay_asunto():
+def test_generar_titulo_usa_primera_oracion_y_detalle_es_el_resto():
     texto = "No puedo entrar a mi cuenta. Ya intente resetear la contrasena."
-    assert _generar_titulo(texto, None) == "No puedo entrar a mi cuenta."
+    titulo, detalle = _generar_titulo_y_detalle(texto, None)
+    assert titulo == "No puedo entrar a mi cuenta."
+    assert detalle == "Ya intente resetear la contrasena."
+
+
+def test_generar_titulo_de_una_sola_oracion_no_deja_detalle_duplicado():
+    texto = "Se me olvido mi contrasena y no puedo entrar."
+    titulo, detalle = _generar_titulo_y_detalle(texto, None)
+    assert titulo == texto
+    assert detalle == ""
 
 
 def test_generar_titulo_trunca_oracion_larga():
     texto = "a" * 200
-    titulo = _generar_titulo(texto, None)
+    titulo, _detalle = _generar_titulo_y_detalle(texto, None)
     assert titulo.endswith("…")
     assert len(titulo) == 81  # 80 caracteres + elipsis
 
@@ -47,6 +58,8 @@ def _fila_base(**overrides) -> dict:
 def test_fila_ticket_genera_titulo_cuando_no_hay_asunto():
     resultado = _fila_ticket(_fila_base())
     assert resultado["titulo"] == "Algo paso con mi factura."
+    assert resultado["detalle"] == ""
+    assert resultado["texto"] == "Algo paso con mi factura."
 
 
 def test_fila_ticket_serializa_fecha_resuelto_como_iso():

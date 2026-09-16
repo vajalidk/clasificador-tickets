@@ -288,28 +288,44 @@ LARGO_MAXIMO_TITULO = 80
 _PATRON_FIN_ORACION = re.compile(r"(?<=[.!?])\s+")
 
 
-def _generar_titulo(texto: str, asunto: str | None) -> str:
-    """El titulo mostrado en las tablas es el "Asunto" que la persona
-    escribio en el formulario; si no lo lleno (o el ticket viene de la API
-    directamente, ej. seed_demo_data.py), se genera uno automatico con la
-    primera oracion del texto, truncada si hace falta."""
+def _truncar(cadena: str, largo_maximo: int) -> str:
+    if len(cadena) > largo_maximo:
+        return cadena[:largo_maximo].rstrip() + "…"
+    return cadena
+
+
+def _generar_titulo_y_detalle(texto: str, asunto: str | None) -> tuple[str, str]:
+    """El titulo mostrado en negritas en las tablas es el "Asunto" que la
+    persona escribio en el formulario; en ese caso el detalle (texto
+    secundario debajo) es el mensaje completo, sin nada repetido.
+
+    Si no hay asunto (o el ticket viene de la API directamente, ej.
+    seed_demo_data.py), el titulo se genera con la primera oracion del
+    texto, y el detalle es el resto — asi no se muestra la misma oracion
+    dos veces cuando el titulo es "generado" en vez de escrito a mano."""
     if asunto:
-        return asunto
+        return asunto, texto
 
     primera_oracion = _PATRON_FIN_ORACION.split(texto.strip(), maxsplit=1)[0]
-    if len(primera_oracion) > LARGO_MAXIMO_TITULO:
-        return primera_oracion[:LARGO_MAXIMO_TITULO].rstrip() + "…"
-    return primera_oracion
+    resto = texto.strip()[len(primera_oracion) :].strip()
+    return _truncar(primera_oracion, LARGO_MAXIMO_TITULO), resto
 
 
 def _fila_ticket(r: dict) -> dict:
     """Serializa una fila de `clasificaciones` a un dict JSON-friendly,
     compartido entre `obtener_estadisticas` (recientes) y
-    `listar_clasificaciones` (listado completo con filtros)."""
+    `listar_clasificaciones` (listado completo con filtros).
+
+    `texto` siempre es el mensaje completo tal como se guardo (para quien
+    consuma la API directamente); `titulo`/`detalle` son una version ya
+    partida para mostrar en las tablas del dashboard (titulo en negritas +
+    detalle secundario debajo, ver _generar_titulo_y_detalle)."""
+    titulo, detalle = _generar_titulo_y_detalle(r["texto"], r.get("asunto"))
     return {
         "id": r["id"],
         "texto": r["texto"],
-        "titulo": _generar_titulo(r["texto"], r.get("asunto")),
+        "titulo": titulo,
+        "detalle": detalle,
         "categoria": r["categoria"],
         "urgencia": r["urgencia"],
         "confianza": r["confianza"],

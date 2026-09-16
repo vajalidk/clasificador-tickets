@@ -696,7 +696,7 @@
         <tr>
           <td data-etiqueta="Ticket">
             <div class="titulo-ticket">${escaparHtml(r.titulo)}</div>
-            <div class="texto-ticket">${escaparHtml(r.texto)}</div>
+            ${r.detalle ? `<div class="texto-ticket">${escaparHtml(r.detalle)}</div>` : ""}
           </td>
           <td data-etiqueta="Categoria"><span class="badge categoria">${escaparHtml(capitalizar(r.categoria))}</span></td>
           <td data-etiqueta="Urgencia">${badgeUrgencia(r.urgencia)}</td>

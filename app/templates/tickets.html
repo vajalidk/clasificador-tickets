@@ -391,7 +391,7 @@
         <tr>
           <td data-etiqueta="Ticket">
             <div class="titulo-ticket">${escaparHtml(t.titulo)}</div>
-            <div class="texto-ticket">${escaparHtml(t.texto)}</div>
+            ${t.detalle ? `<div class="texto-ticket">${escaparHtml(t.detalle)}</div>` : ""}
           </td>
           <td class="col-persona" data-etiqueta="De">
             ${t.nombre ? `<div class="nombre">${escaparHtml(t.nombre)}</div>` : '<div class="sin-dato">Sin nombre</div>'}
