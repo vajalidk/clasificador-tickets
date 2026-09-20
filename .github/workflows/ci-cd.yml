@@ -19,7 +19,7 @@ jobs:
     name: Lint (black / isort / flake8)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-python@v5
         with:
@@ -36,7 +36,7 @@ jobs:
     name: Escaneo de secretos (gitleaks)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           # gitleaks escanea todo el historial, no solo el ultimo commit
           fetch-depth: 0
@@ -50,7 +50,7 @@ jobs:
     name: Tests (pytest)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-python@v5
         with:
@@ -64,7 +64,7 @@ jobs:
     name: Build de la imagen Docker (validacion, sin push ni credenciales)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Build de la imagen (no se publica a ningun registry)
         run: docker build -t clasificador-tickets:ci .
